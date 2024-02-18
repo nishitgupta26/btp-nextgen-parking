@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function ManagerSignIn() {
+export default function SignUp() {
   return (
     <div>
-      ManagerSignIn
+      Sign up
     </div>
   )
 }
