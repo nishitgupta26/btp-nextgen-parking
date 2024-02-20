@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import "./home.css";
 export default function Home() {
-  const [selectedRole, setSelectedRole] = useState(null);
-
   return (
     <div className="min-h-screen flex flex-col">
       <div className="bg-slate-300">
