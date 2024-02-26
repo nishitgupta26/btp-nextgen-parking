@@ -32,7 +32,7 @@ export default function Header() {
             </li>
           </Link>
           <Link to='/sign-in'>
-            <li className=' text-slate-200 hover:underline'> Employee Sign in</li>
+            <li className=' text-slate-200 hover:underline'>Sign In</li>
           </Link>
 
         </ul>
