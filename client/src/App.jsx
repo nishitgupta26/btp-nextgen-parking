@@ -6,6 +6,7 @@ import About from './pages/About.jsx';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Profile from './pages/Profile.jsx';
+import LocationAccess from './components/LocationAccess.jsx';
 
 export default function App() {
   return (
