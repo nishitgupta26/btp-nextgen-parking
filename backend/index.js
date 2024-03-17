@@ -16,7 +16,7 @@ app.use(cors())
 
 const port =  3001;
 
-// Not using mongoose@6
+
 //  using mongoose@6.10.0 temporarily to fix error - https://stackoverflow.com/a/75638135
 
 

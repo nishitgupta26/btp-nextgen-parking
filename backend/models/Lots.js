@@ -5,7 +5,7 @@ const lotSchema = new mongoose.Schema({
     name: { type: String, required: true },
     location: { type: String, required: true },
     type: { type: String, enum: ['closed', 'mixed', 'open'], required: true },
-    owner : { type: mongoose.Schema.Types.ObjectId, ref: 'Owner', required: true },
+    owner : { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 
     twoWheelerCapacity: { type: Number, required: true },
     fourWheelerCapacity: { type: Number, required: true },
@@ -23,11 +23,13 @@ const lotSchema = new mongoose.Schema({
     contactNumber: { type: String, required: true },
     email: { type: String, required: false },
 
-    amenities: { type: [String] },
+    amenities: [{ type: String }],
 
-    availableSpots: { type: Number, required: true },
-    location: { type: String, required: true },
-    // Add more fields as needed
+    availableSpots: { type: Number, required: true }, // number of empty slots right now
+    isOpen: { type: Boolean, default: true }, // is the parking lot open right now?
+
+    approved: { type: Boolean, default: false },
+
 });
 
 module.exports = mongoose.model("Lot", lotSchema);
