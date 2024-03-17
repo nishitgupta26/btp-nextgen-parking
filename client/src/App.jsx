@@ -7,6 +7,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Profile from './pages/Profile.jsx';
 import LocationAccess from './components/LocationAccess.jsx';
+import ParkingCard from './components/ParkingCard.jsx';
 
 export default function App() {
   return (
@@ -18,6 +19,8 @@ export default function App() {
         <Route path='/sign-up' element={<SignUp />} />
         <Route path='/about' element={<About />} />
         <Route path='/profile' element={<Profile />} />
+        {/* temporary route to show the card */}
+        <Route path='/pcard' element={<ParkingCard />} />
       </Routes>
     </BrowserRouter>
   );
