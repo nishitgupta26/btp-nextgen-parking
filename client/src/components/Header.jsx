@@ -1,10 +1,10 @@
 import { FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import "./header.css";
+import HeaderCSS from "./header.module.css";
 
 export default function Header() {
   return (
-    <header className='shadow-md'>
+    <header className={`shadow-md ${HeaderCSS.head}`}>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
         <Link to='/'>
           <h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>

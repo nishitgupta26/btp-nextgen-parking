@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import LocationAccess from "../components/LocationAccess";
-import Header from "../components/Header";
+import LocationAccess from "../../components/LocationAccess";
+import Header from "../../components/Header";
 import Cookies from 'universal-cookie';
 
 export default function Home() {
