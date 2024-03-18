@@ -8,7 +8,7 @@ const Users = require("../models/Users");
 const { body, validationResult, check } = require("express-validator");
 // const multer = require("multer");
 // const fs = require("fs");
-const DatauriParser = require("datauri/parser");
+// const DatauriParser = require("datauri/parser");
 const Validator = require("../middleware/Validator");
 require("dotenv").config();
 
@@ -34,11 +34,18 @@ router.get("/getlots", async (req, res) => {
 // Add a new parking lot - POST - "/api/lots/addlot" - REQUIRES LOGIN
 router.post("/addlot", fetchuser, Validator // middleware
         , async (req, res) => {
-            const errors = validationResult(req);
+            
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
-    } else {
-        const otherAmmenities = [req.body.amm1,req.body.amm2,req.body.amm3];
+    }
+    else if(req.user.role !== "owner") 
+    {
+        return res.status(401).send("Not Allowed");
+    }
+    
+    else {
+        // let otherAmmenities = [req.body.amm1,req.body.amm2,req.body.amm3];
 
         const newLot = new Lots({
             name: req.body.name,

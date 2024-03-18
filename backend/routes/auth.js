@@ -18,6 +18,7 @@ router.post("/createuser",
         min: 5,
       }),
     body("name", "name must be atleast 2 characters").isLength({ min: 2 }),
+    body("role", "invalid role").isIn(['user', 'admin', 'owner', 'manager']),
 
 ],
 async(req,res) => {

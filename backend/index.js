@@ -25,7 +25,8 @@ connectDB();
 
 
 //   available routes
-// app.use("/api/auth", require("./routes/auth"));
+app.use("/api/auth", require("./routes/auth.js"));
+app.use("/api/lots", require("./routes/lots.js"));
 
 app.listen(port, function () {
     console.log("listening on port " + port);
