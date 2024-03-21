@@ -1,7 +1,80 @@
 import React, { useState } from "react";
+import { useNavigate} from 'react-router-dom'
 import "./signIn.css";
+
 export default function SignIn() {
+  const [formData, setformData] = useState({});
+  const [loginData, setLoginData] = useState({});
+
+  const [error, setError] = useState(null);
+  const [loginError, setLoginError] = useState(null);
+
+  const [loading, setLoading] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+
+
   const [type, setType] = useState("User");
+  const[loginType, setLoginType] = useState("User");
+
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+        setLoginLoading(true);
+        const response = await fetch("/api/auth/createuser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...formData, type }),
+      });
+      const data = await response.json();
+      console.log(data);
+
+      if (data.success === false) {
+        setLoginError(data.message);
+      } else {
+        if(type === "Owner") navigate('/OwnerProfile.jsx');
+        else if(type === "Manager") navigate('/ManagerProfile.jsx');
+        else if(type === "User") navigate('/UserProfile.jsx'); 
+        else navigate('/AdminProfile.jsx');
+      }
+    } catch (error) {
+      setLoginError(error.message);
+    } finally {
+      setLoginLoading(false); 
+    }
+  }
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...loginData, type: loginType }),
+      });
+      const data = await response.json();
+      console.log(data);
+
+      if (data.success === false) {
+        setError(data.message);
+      } else {
+        if(loginType === "Owner") navigate('/OwnerProfile.jsx');
+        else if(loginType === "Manager") navigate('/ManagerProfile.jsx');
+        else if(loginType === "User") navigate('/UserProfile.jsx'); 
+        else navigate('/AdminProfile.jsx');
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div class="outer">
@@ -9,18 +82,18 @@ export default function SignIn() {
         <input type="checkbox" id="chk" aria-hidden="true" />
 
         <div class="login">
-          <form class="form">
+          <form class="form" onSubmit={handleSignIn}>
             <label for="chk" aria-hidden="true">
               Log in
             </label>
-            <input
+            <input onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
               class="input"
               type="email"
               name="email"
               placeholder="Email"
               required=""
             />
-            <input
+            <input onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
               class="input"
               type="password"
               name="pswd"
@@ -33,8 +106,8 @@ export default function SignIn() {
                   <input
                     type="radio"
                     name="radio"
-                    onChange={(e) => setType("User")}
-                    checked = {type === "User"}
+                    onChange = {(e) => setLoginType("User")}
+                    checked = {loginType === "User"}
                   />
                   <span>User</span>
                 </label>
@@ -42,8 +115,8 @@ export default function SignIn() {
                   <input
                     type="radio"
                     name="radio"
-                    onChange={(e) => setType("Owner")}
-                    checked = {type === "Owner"}
+                    onChange = {(e) => setLoginType("Owner")}
+                    checked = {loginType === "Owner"}
                   />
                   <span>Owner</span>
                 </label>
@@ -51,8 +124,8 @@ export default function SignIn() {
                   <input
                     type="radio"
                     name="radio"
-                    onChange={(e) => setType("Manager")}
-                    checked = {type === "Manager"}
+                    onChange = {(e) => setLoginType("Manager")}
+                    checked = {loginType === "Manager"}
                   />
                   <span>Manager</span>
                 </label>
@@ -60,37 +133,39 @@ export default function SignIn() {
                   <input
                     type="radio"
                     name="radio"
-                    onChange={(e) => setType("Admin")}
-                    checked = {type === "Admin"}
+                    onChange = {(e) => setLoginType("Admin")}
+                    checked = {loginType === "Admin"}
                   />
                   <span>Admin</span>
                 </label>
               </form>
             </div>
-            <button>Log in</button>
+            <button>{loginLoading ? 'Loading...': 'Log in'}</button>
           </form>
+
+          {loginError && <p className='text-red-500 mt-5'>{loginError}</p>}
         </div>
 
         <div class="register">
-          <form class="form">
+          <form class="form" onSubmit={handleRegister}>
             <label for="chk" aria-hidden="true">
               Register
             </label>
-            <input
+            <input onChange={(e) => setformData({ ...formData, name: e.target.value })}
               class="input"
               type="text"
               name="txt"
               placeholder="Username"
               required=""
             />
-            <input
+            <input onChange={(e) => setformData({ ...formData, email: e.target.value })}
               class="input"
               type="email"
               name="email"
               placeholder="Email"
               required=""
             />
-            <input
+            <input onChange={(e) => setformData({ ...formData, password: e.target.value })}
               class="input"
               type="password"
               name="pswd"
@@ -137,8 +212,10 @@ export default function SignIn() {
                 </label>
               </form>
             </div>
-            <button>Register</button>
+            <button>{loading ? 'Loading...': 'Register'}</button>
           </form>
+
+          {error && <p className='text-red-500 mt-5'>{error}</p>}
         </div>
       </div>
     </div>

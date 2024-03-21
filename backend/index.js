@@ -5,6 +5,8 @@ const connectDB = require('./config/db.js');
 
 var cors = require('cors')
 
+console.log('Server started');
+
 
 
 const app = express();

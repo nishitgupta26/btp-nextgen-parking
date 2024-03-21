@@ -11,7 +11,6 @@ const lotSchema = new mongoose.Schema({
     fourWheelerCapacity: { type: Number, required: true },
     chargingPorts: { type: Number, required: true },
 
-    // What more fields do we need?
     securityGuard: { type: Boolean, default: false },
     surveillanceCamera: { type: Boolean, default: false },
 

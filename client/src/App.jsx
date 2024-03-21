@@ -5,10 +5,11 @@ import Home from './pages/Home/Home.jsx';
 import About from './pages/About/About.jsx';
 import SignIn from './pages/SignIn-SignUp/SignIn.jsx';
 import SignUp from './pages/SignIn-SignUp/SignUp.jsx';
-import Profile from './pages/Profile.jsx';
-import LocationAccess from './components/LocationAccess.jsx';
 import ParkingCard from './components/ParkingCard.jsx';
-import Manager from './pages/Manager/Manager.jsx';
+import ManagerProfile from './pages/Profile/ManagerProfile.jsx';
+import OwnerProfile from './pages/Profile/OwnerProfile.jsx';
+import UserProfile from './pages/Profile/UserProfile.jsx';
+import AdminProfile from './pages/Profile/AdminProfile.jsx';
 
 export default function App() {
   return (
@@ -19,8 +20,10 @@ export default function App() {
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/sign-up' element={<SignUp />} />
         <Route path='/about' element={<About />} />
-        <Route path='/profile' element={<Profile />} />
-        <Route path='/manager' element={<Manager />} />
+        <Route path='/owner-profile' element={<OwnerProfile />} />
+        <Route path='/manager-profile' element={<ManagerProfile />} />
+        <Route path='/user-profile' element={<UserProfile />} />
+        <Route path='/user-profile' element={<AdminProfile />} />
         {/* temporary route to show the card */}
         <Route path='/pcard' element={<ParkingCard />} />
       </Routes>
