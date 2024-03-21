@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate} from 'react-router-dom'
 import "./signIn.css";
+const host = "http://localhost:3001";
 
 export default function SignIn() {
   const [formData, setformData] = useState({});
@@ -21,42 +22,15 @@ export default function SignIn() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-        setLoginLoading(true);
-        const response = await fetch("/api/auth/createuser", {
+        setLoading(true);
+        console.log(formData);
+        console.log(type);
+        const response = await fetch(`${host}/api/auth/createuser`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...formData, type }),
-      });
-      const data = await response.json();
-      console.log(data);
-
-      if (data.success === false) {
-        setLoginError(data.message);
-      } else {
-        if(type === "Owner") navigate('/OwnerProfile.jsx');
-        else if(type === "Manager") navigate('/ManagerProfile.jsx');
-        else if(type === "User") navigate('/UserProfile.jsx'); 
-        else navigate('/AdminProfile.jsx');
-      }
-    } catch (error) {
-      setLoginError(error.message);
-    } finally {
-      setLoginLoading(false); 
-    }
-  }
-
-  const handleSignIn = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...loginData, type: loginType }),
+        body: JSON.stringify({ ...formData, role: type }),
       });
       const data = await response.json();
       console.log(data);
@@ -64,15 +38,44 @@ export default function SignIn() {
       if (data.success === false) {
         setError(data.message);
       } else {
-        if(loginType === "Owner") navigate('/OwnerProfile.jsx');
-        else if(loginType === "Manager") navigate('/ManagerProfile.jsx');
-        else if(loginType === "User") navigate('/UserProfile.jsx'); 
-        else navigate('/AdminProfile.jsx');
+        if(type === "Owner") navigate('/owner-profile');
+        else if(type === "Manager") navigate('/manager-profile');
+        else if(type === "User") navigate('/user-profile'); 
+        else navigate('/admin-profile');
       }
     } catch (error) {
       setError(error.message);
     } finally {
-      setLoading(false);
+      setLoading(false); 
+    }
+  }
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      setLoginLoading(true);
+      const response = await fetch(`${host}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...loginData, role: loginType }),
+      });
+      const data = await response.json();
+      console.log(data);
+
+      if (data.success === false) {
+        setLoginError(data.message);
+      } else {
+        if(loginType === "Owner") navigate('/owner-profile');
+        else if(loginType === "Manager") navigate('/manager-profile');
+        else if(loginType === "User") navigate('/user-profile'); 
+        else navigate('/admin-profile');
+      }
+    } catch (error) {
+      setLoginError(error.message);
+    } finally {
+      setLoginLoading(false);
     }
   }
 
