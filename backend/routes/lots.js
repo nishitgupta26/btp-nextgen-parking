@@ -4,7 +4,7 @@ const express = require("express");
 const fetchuser = require("../middleware/fetchuser");
 const router = express.Router();
 const Lots = require("../models/Lots");
-const Users = require("../models/Users");
+const User = require("../models/Users");
 const { body, validationResult, check } = require("express-validator");
 // const multer = require("multer");
 // const fs = require("fs");
@@ -32,15 +32,17 @@ router.get("/getlots", async (req, res) => {
 
 
 // Add a new parking lot - POST - "/api/lots/addlot" - REQUIRES LOGIN
-router.post("/addlot", fetchuser, Validator // middleware
-        , async (req, res) => {
+router.post("/addlot", fetchuser, async (req, res) => {
             
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    else if(req.user.role !== "owner") 
+    const userdata = await User.findById(req.user.id).select("-password");
+    if(userdata.role !== "owner" && userdata.role !== "admin") 
     {
+        console.log(req.user);
+        console.log(userRole);
         return res.status(401).send("Not Allowed");
     }
     
@@ -68,12 +70,12 @@ router.post("/addlot", fetchuser, Validator // middleware
             contactNumber: req.body.contactNumber,
             email: req.body.email,
 
-            amenities: otherAmmenities,
+            amenities: req.body.amenities,
 
             availableSpots: req.body.availableSpots,
             isOpen: req.body.isOpen,
         });
-
+        
         newLot.save((err, lot) => {
             if(err)
             {

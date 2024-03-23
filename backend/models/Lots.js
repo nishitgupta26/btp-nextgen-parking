@@ -14,7 +14,7 @@ const lotSchema = new mongoose.Schema({
     securityGuard: { type: Boolean, default: false },
     surveillanceCamera: { type: Boolean, default: false },
 
-    parkingRate: { type: Number, required: false },
+    parkingRate: { type: Number, required: false, default:30 },
 
     openingHours: { type: String, required: true },
     closingHours: { type: String, required: true },
@@ -22,12 +22,12 @@ const lotSchema = new mongoose.Schema({
     contactNumber: { type: String, required: true },
     email: { type: String, required: false },
 
-    amenities: [{ type: String }],
+    amenities: [{ type: String , required : false }],
 
     availableSpots: { type: Number, required: true }, // number of empty slots right now
-    isOpen: { type: Boolean, default: true }, // is the parking lot open right now?
+    isOpen: { type: Boolean, default: true, required: false }, // is the parking lot open right now?
 
-    approved: { type: Boolean, default: false },
+    approved: { type: Boolean, default: false, required: false},
 
 });
 

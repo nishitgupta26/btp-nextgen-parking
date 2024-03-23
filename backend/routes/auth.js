@@ -165,4 +165,47 @@ router.get('/getalluser', async (req, res) => {
     }
 });
 
+// ROUTE-5 //update a user - PUT - "/api/auth/updateuser " - REQUIRES LOGIN
+router.put('/updateuser',fetchuser,async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { name, role, password } = req.body;
+
+        // Find the user by ID
+        const user = await User.findById(userId);
+
+        // If user not found, return error
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        // Update the user's name and role
+        user.name = name;
+        user.role = role;
+        if(password && password.trim() !== '') 
+        {
+            bcrypt.hash(req.body.password, 10, async function (error, hash) {
+                if(error)
+                {
+                    return res.status(400).json({ errors: "internal server error" });
+                }
+                else{
+                    user.password = hash;
+                }
+            });
+        }
+       
+
+
+        // Save the updated user
+        await user.save();
+
+        res.json({ message: "User updated successfully" });
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 module.exports = router;
