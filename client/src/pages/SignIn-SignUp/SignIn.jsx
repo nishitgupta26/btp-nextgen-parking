@@ -1,59 +1,61 @@
 import React, { useState } from "react";
 import { useNavigate} from 'react-router-dom'
 import "./signIn.css";
-const host = "http://localhost:3001";
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from '../../redux/User/userSlice.js';
+import Cookies from 'universal-cookie';
 
 export default function SignIn() {
+  const host = "http://localhost:3001";
   const [formData, setformData] = useState({});
   const [loginData, setLoginData] = useState({});
 
-  const [error, setError] = useState(null);
-  const [loginError, setLoginError] = useState(null);
-
-  const [loading, setLoading] = useState(false);
-  const [loginLoading, setLoginLoading] = useState(false);
-
-
+  const { loading, error } = useSelector((state) => state.user);
   const [type, setType] = useState("User");
   const[loginType, setLoginType] = useState("User");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const cookies = new Cookies();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-        setLoading(true);
-        console.log(formData);
-        console.log(type);
-        const response = await fetch(`${host}/api/auth/createuser`, {
+      dispatch(signInStart());
+      const response = await fetch(`${host}/api/auth/createuser`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...formData, role: type }),
+        body: JSON.stringify({ ...formData, role: type }), // Include role in formData
       });
       const data = await response.json();
-      console.log(data);
-
-      if (data.success === false) {
-        setError(data.message);
+  
+      if (data.error) {
+        dispatch(signInFailure(data.error));
       } else {
-        if(type === "Owner") navigate('/owner-profile');
-        else if(type === "Manager") navigate('/manager-profile');
-        else if(type === "User") navigate('/user-profile'); 
+        cookies.set('access_token', data.authtoken);
+        const { password, name, ...userData } = formData;
+        dispatch(signInSuccess({ ...userData, role: type }));
+
+        if (type === "Owner") navigate('/owner-profile');
+        else if (type === "Manager") navigate('/manager-profile');
+        else if (type === "User") navigate('/user-profile');
         else navigate('/admin-profile');
       }
     } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false); 
+      dispatch(signInFailure(error.message));
     }
-  }
+  }  
 
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      setLoginLoading(true);
+      dispatch(signInStart());
       const response = await fetch(`${host}/api/auth/login`, {
         method: "POST",
         headers: {
@@ -62,20 +64,21 @@ export default function SignIn() {
         body: JSON.stringify({ ...loginData, role: loginType }),
       });
       const data = await response.json();
-      console.log(data);
 
-      if (data.success === false) {
-        setLoginError(data.message);
+      if (data.errors) {
+        dispatch(signInFailure(data.errors));
       } else {
+        cookies.set('access_token', data.authtoken);
+        const { password, ...userData } = loginData;
+        dispatch(signInSuccess({ ...userData, role: loginType }));
+        
         if(loginType === "Owner") navigate('/owner-profile');
         else if(loginType === "Manager") navigate('/manager-profile');
         else if(loginType === "User") navigate('/user-profile'); 
         else navigate('/admin-profile');
       }
     } catch (error) {
-      setLoginError(error.message);
-    } finally {
-      setLoginLoading(false);
+      dispatch(signInFailure(error.message));
     }
   }
 
@@ -143,10 +146,10 @@ export default function SignIn() {
                 </label>
               </form>
             </div>
-            <button>{loginLoading ? 'Loading...': 'Log in'}</button>
+            <button>{loading ? 'Loading...': 'Log in'}</button>
           </form>
 
-          {loginError && <p className='text-red-500 mt-5'>{loginError}</p>}
+          {error && <p className='text-red-500 mt-5 text-center'>{error}</p>}
         </div>
 
         <div class="register">

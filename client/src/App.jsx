@@ -9,6 +9,7 @@ import ManagerProfile from './pages/Profile/ManagerProfile.jsx';
 import OwnerProfile from './pages/Profile/OwnerProfile.jsx';
 import UserProfile from './pages/Profile/UserProfile.jsx';
 import AdminProfile from './pages/Profile/AdminProfile.jsx';
+import PrivateRoute from './components/PrivateRoute.jsx';
 
 export default function App() {
   return (
@@ -18,10 +19,13 @@ export default function App() {
         <Route path='/' element={<Home />} />
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/about' element={<About />} />
-        <Route path='/owner-profile' element={<OwnerProfile />} />
-        <Route path='/manager-profile' element={<ManagerProfile />} />
-        <Route path='/user-profile' element={<UserProfile />} />
-        <Route path='/admin-profile' element={<AdminProfile />} />
+        
+        <Route element={<PrivateRoute />}>
+          <Route path='/owner-profile' element={<OwnerProfile />} />
+          <Route path='/manager-profile' element={<ManagerProfile />} />
+          <Route path='/user-profile' element={<UserProfile />} />
+          <Route path='/admin-profile' element={<AdminProfile />} />
+        </Route>
         {/* temporary route to show the card */}
         <Route path='/pcard' element={<ParkingCard />} />
       </Routes>

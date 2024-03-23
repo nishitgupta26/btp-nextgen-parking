@@ -1,8 +1,28 @@
 import { FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import HeaderCSS from "./header.module.css";
+import { useSelector } from 'react-redux';
 
 export default function Header() {
+  const { currentUser } = useSelector((state) => state.user);
+
+  const getProfileLink = () => {
+    if (!currentUser) {
+      return '/sign-in'; // Redirect to sign-in if user is not logged in
+    } else {
+      switch (currentUser.role) {
+        case 'Admin':
+          return '/admin-profile';
+        case 'Manager':
+          return '/manager-profile';
+        case 'Owner':
+          return '/owner-profile';
+        default:
+          return '/user-profile';
+      }
+    }
+  };
+
   return (
     <header className={`shadow-md ${HeaderCSS.head}`}>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
@@ -31,8 +51,11 @@ export default function Header() {
               About
             </li>
           </Link>
-          <Link to='/sign-in'>
-            <li className=' text-slate-200 hover:underline'>Sign In</li>
+
+          <Link to={getProfileLink()}>
+            <li className='text-slate-200 hover:underline'>
+              {currentUser ? 'Profile' : 'Sign In'}
+            </li>
           </Link>
 
         </ul>
