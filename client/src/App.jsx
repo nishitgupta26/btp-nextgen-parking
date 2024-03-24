@@ -10,6 +10,7 @@ import OwnerProfile from './pages/Profile/OwnerProfile.jsx';
 import UserProfile from './pages/Profile/UserProfile.jsx';
 import AdminProfile from './pages/Profile/AdminProfile.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
+import CreateListing from './pages/CreateListing.jsx';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <Route path='/manager-profile' element={<ManagerProfile />} />
           <Route path='/user-profile' element={<UserProfile />} />
           <Route path='/admin-profile' element={<AdminProfile />} />
+          <Route path='/create-listing' element={<CreateListing />} />
         </Route>
         {/* temporary route to show the card */}
         <Route path='/pcard' element={<ParkingCard />} />
