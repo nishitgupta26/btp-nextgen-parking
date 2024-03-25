@@ -15,8 +15,8 @@ const lotSchema = new mongoose.Schema({
 
   parkingRate: { type: Number, required: false, default: 30 },
 
-  openingHours: { type: String, required: true },
-  closingHours: { type: String, required: true },
+    openingHours: { type: String, required: true },
+    closingHours: { type: String, required: true },
 
   contactNumber: { type: String, required: false },
   email: { type: String, required: false },
