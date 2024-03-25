@@ -1,5 +1,6 @@
 import { React, useState } from "react";
 import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateListing() {
   const [parkingType, setParkingType] = useState("Closed");
@@ -7,6 +8,7 @@ export default function CreateListing() {
   const [formData, setFormData] = useState({});
   const host = "http://localhost:3001";
   const cookies = new Cookies();
+  const navigate = useNavigate();
 
   const formatTime = (timeString) => {
     // Split the time string into hours and minutes
@@ -33,6 +35,7 @@ export default function CreateListing() {
           type: parkingType.toLowerCase(),
           isOpen: status === "Open",
           surveillanceCamera: formData.surveillanceCamera === "on",
+          securityGuard: formData.securityGuard === "on",
           openingHours: formatTime(formData.openingTime),
           closingHours: formatTime(formData.closingTime),
         }),
@@ -40,6 +43,7 @@ export default function CreateListing() {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
+        navigate("/owner-profile");
       } else {
         const errorMessage = await response.text();
         console.error(errorMessage);
