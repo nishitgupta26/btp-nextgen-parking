@@ -1,34 +1,32 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const lotSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  location: { type: String, required: true },
+  type: { type: String, enum: ["closed", "mixed", "open"], required: true },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 
-    name: { type: String, required: true },
-    location: { type: String, required: true },
-    type: { type: String, enum: ['closed', 'mixed', 'open'], required: true },
-    owner : { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  twoWheelerCapacity: { type: Number, required: true },
+  fourWheelerCapacity: { type: Number, required: true },
+  chargingPorts: { type: Number, required: true },
 
-    twoWheelerCapacity: { type: Number, required: true },
-    fourWheelerCapacity: { type: Number, required: true },
-    chargingPorts: { type: Number, required: true },
+  securityGuard: { type: Boolean, default: false },
+  surveillanceCamera: { type: Boolean, default: false },
 
-    securityGuard: { type: Boolean, default: false },
-    surveillanceCamera: { type: Boolean, default: false },
+  parkingRate: { type: Number, required: false, default: 30 },
 
-    parkingRate: { type: Number, required: false, default:30 },
+  openingHours: { type: String, required: true },
+  closingHours: { type: String, required: true },
 
-    openingHours: { type: String, required: true },
-    closingHours: { type: String, required: true },
+  contactNumber: { type: String, required: false },
+  email: { type: String, required: false },
 
-    contactNumber: { type: String, required: true },
-    email: { type: String, required: false },
+  amenities: [{ type: String, required: false }],
 
-    amenities: [{ type: String , required : false }],
+  availableSpots: { type: Number, required: false }, // number of empty slots right now
+  isOpen: { type: Boolean, default: true, required: true }, // is the parking lot open right now?
 
-    availableSpots: { type: Number, required: true }, // number of empty slots right now
-    isOpen: { type: Boolean, default: true, required: false }, // is the parking lot open right now?
-
-    approved: { type: Boolean, default: false, required: false},
-
+  approved: { type: Boolean, default: false, required: false },
 });
 
 module.exports = mongoose.model("Lot", lotSchema);

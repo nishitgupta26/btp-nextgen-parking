@@ -39,10 +39,8 @@ router.post("/addlot", fetchuser, async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
     const userdata = await User.findById(req.user.id).select("-password");
-    if(userdata.role !== "owner" && userdata.role !== "admin") 
+    if(userdata.role !== "Owner" && userdata.role !== "Admin") 
     {
-        console.log(req.user);
-        console.log(userRole);
         return res.status(401).send("Not Allowed");
     }
     
