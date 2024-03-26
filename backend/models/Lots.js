@@ -15,8 +15,8 @@ const lotSchema = new mongoose.Schema({
 
   parkingRate: { type: Number, required: false, default: 30 },
 
-    openingHours: { type: String, required: true },
-    closingHours: { type: String, required: true },
+  openingHours: { type: String, required: true },
+  closingHours: { type: String, required: true },
 
   contactNumber: { type: String, required: false },
   email: { type: String, required: false },
@@ -27,6 +27,9 @@ const lotSchema = new mongoose.Schema({
   isOpen: { type: Boolean, default: true, required: true }, // is the parking lot open right now?
 
   approved: { type: Boolean, default: false, required: false },
+
+  // an array of managers who can manage this lot
+  managers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" , required: false}],
 });
 
 module.exports = mongoose.model("Lot", lotSchema);

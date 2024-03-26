@@ -154,10 +154,10 @@ router.get("/getownerlots", fetchuser, async (req, res) => {
 });
 
 
-// show details of a particular lot - GET - "/api/lots/getlot"
-router.get("/getlot", async (req, res) => {
+// show details of a particular lot - GET - "/api/lots/getlot" - REQUIRES LOGIN
+router.get("/getlot/:id", async (req, res) => {
     try {
-        const lot = await Lots.findById(req.body.lotid);
+        const lot = await Lots.findById(req.params.id);
         if(!lot) {
             return res.status(404).send("Not Found");
         }
