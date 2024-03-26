@@ -39,7 +39,7 @@ router.post("/addlot", fetchuser, async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
     const userdata = await User.findById(req.user.id).select("-password");
-    if(userdata.role !== "Owner" && userdata.role !== "Admin") 
+    if(userdata.role.toLowerCase() !== "owner" && userdata.role.toLowerCase() !== "admin") 
     {
         return res.status(401).send("Not Allowed");
     }
@@ -73,6 +73,12 @@ router.post("/addlot", fetchuser, async (req, res) => {
             availableSpots: req.body.availableSpots,
             isOpen: req.body.isOpen,
         });
+
+        // find if new lot is already saved
+        const lot = await Lots.findOne({name: req.body.name, location: req.body.location});
+        if(lot) {
+            return res.status(400).send("Lot already exists");
+        }
         
         newLot.save((err, lot) => {
             if(err)
@@ -114,6 +120,7 @@ router.put("/updatelot/:id", fetchuser, async (req, res) => {
 
 
 // TODO :: add option for admin to delete parking lots as well
+
 // Delete a parking lot - DELETE - "/api/lots/deletelot" - REQUIRES LOGIN
 router.delete("/deletelot/:id", fetchuser, async (req, res) => {
     try {
@@ -129,6 +136,17 @@ router.delete("/deletelot/:id", fetchuser, async (req, res) => {
             console.log("Owner is deleting the lot");
             res.json("Deleted Successfully");
         }
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+// show all lots of a particular owner - GET - "/api/lots/getownerlots" - REQUIRES LOGIN
+router.get("/getownerlots", fetchuser, async (req, res) => {
+    try {
+        const lots = await Lots.find({owner: req.user.id});
+        res.json(lots);
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");
