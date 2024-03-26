@@ -1,15 +1,34 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import Cookies from "universal-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function CreateListing() {
-  const [parkingType, setParkingType] = useState("Closed");
-  const [status, setStatus] = useState("Open");
+export default function UpdateListing() {
   const [formData, setFormData] = useState({});
 
   const host = "http://localhost:3001";
   const cookies = new Cookies();
   const navigate = useNavigate();
+  const params = useParams();
+
+  useEffect(() => {
+    const fetchListing = async () => {
+      try {
+        const listingId = params.listingId;
+        const res = await fetch(`${host}/api/lots/getlot/${listingId}`);
+        const data = await res.json();
+        if (data.success === false) {
+          console.log(data.message);
+          return;
+        }
+        setFormData(data);
+        console.log(formData);
+      } catch (error) {
+        console.error("Error fetching listing:", error);
+      }
+    };
+
+    fetchListing();
+  }, [params.listingId]);
 
   const formatTime = (timeString) => {
     // Split the time string into hours and minutes
@@ -25,20 +44,17 @@ export default function CreateListing() {
     e.preventDefault();
     try {
       const authToken = cookies.get("access_token");
-      const response = await fetch(`${host}/api/lots/addlot`, {
-        method: "POST",
+      const listingId = params.listingId;
+      const response = await fetch(`${host}/api/lots/updatelot/${listingId}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "auth-token": authToken,
         },
         body: JSON.stringify({
           ...formData,
-          type: parkingType.toLowerCase(),
-          isOpen: status === "Open",
-          surveillanceCamera: formData.surveillanceCamera === "on",
-          securityGuard: formData.securityGuard === "on",
-          openingHours: formatTime(formData.openingTime),
-          closingHours: formatTime(formData.closingTime),
+          openingHours: formatTime(formData.openingHours),
+          closingHours: formatTime(formData.closingHours),
         }),
       });
       if (response.ok) {
@@ -57,7 +73,7 @@ export default function CreateListing() {
   return (
     <main className="p-3 max-w-4xl mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">
-        Create a Listing
+        Update Listing
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
@@ -69,6 +85,7 @@ export default function CreateListing() {
             id="name"
             maxLength="62"
             minLength="5"
+            value={formData.name || ""}
             required
           />
           <input
@@ -79,6 +96,7 @@ export default function CreateListing() {
             placeholder="location"
             className="border p-3 rounded-lg"
             id="location"
+            value={formData.location || ""}
             required
           />
           <div className="flex gap-6 flex-wrap">
@@ -89,8 +107,8 @@ export default function CreateListing() {
                 type="radio"
                 id="closed"
                 className="w-5"
-                onChange={(e) => setParkingType("Closed")}
-                checked={parkingType === "Closed"}
+                onChange={(e) => setFormData({ ...formData, type: "closed" })}
+                checked={formData.type === "closed"}
               />
               <span>Closed</span>
             </div>
@@ -99,8 +117,8 @@ export default function CreateListing() {
                 type="radio"
                 id="mixed"
                 className="w-5"
-                onChange={(e) => setParkingType("Mixed")}
-                checked={parkingType === "Mixed"}
+                onChange={(e) => setFormData({ ...formData, type: "mixed" })}
+                checked={formData.type === "mixed"}
               />
               <span>Mixed</span>
             </div>
@@ -109,8 +127,8 @@ export default function CreateListing() {
                 type="radio"
                 id="open"
                 className="w-5"
-                onChange={(e) => setParkingType("Open")}
-                checked={parkingType === "Open"}
+                onChange={(e) => setFormData({ ...formData, type: "open" })}
+                checked={formData.type === "open"}
               />
               <span>Open</span>
             </div>
@@ -129,6 +147,7 @@ export default function CreateListing() {
                 min="0"
                 max="5000"
                 required
+                value={formData.twoWheelerCapacity || ""}
                 className="p-3 border border-gray-300 rounded-lg"
               />
               <p>twoWheelerCapacity</p>
@@ -146,6 +165,7 @@ export default function CreateListing() {
                 min="0"
                 max="5000"
                 required
+                value={formData.fourWheelerCapacity || ""}
                 className="p-3 border border-gray-300 rounded-lg"
               />
               <p>fourWheelerCapacity</p>
@@ -158,6 +178,7 @@ export default function CreateListing() {
                 min="0"
                 max="5000"
                 required
+                value={formData.chargingPorts || ""}
                 className="p-3 border border-gray-300 rounded-lg"
               />
               <p>chargingPorts</p>
@@ -167,11 +188,15 @@ export default function CreateListing() {
               <div className="flex gap-2">
                 <input
                   onChange={(e) =>
-                    setFormData({ ...formData, securityGuard: e.target.value })
+                    setFormData({
+                      ...formData,
+                      securityGuard: e.target.checked,
+                    })
                   }
                   type="checkbox"
                   id="security"
                   className="w-5"
+                  checked={formData.securityGuard || false}
                 />
                 <span>securityGuard</span>
               </div>
@@ -180,12 +205,13 @@ export default function CreateListing() {
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      surveillanceCamera: e.target.value,
+                      surveillanceCamera: e.target.checked,
                     })
                   }
                   type="checkbox"
                   id="surveillance"
                   className="w-5"
+                  checked={formData.surveillanceCamera || false}
                 />
                 <span>surveillanceCamera</span>
               </div>
@@ -200,7 +226,7 @@ export default function CreateListing() {
               }
               type="number"
               id="parkingRate"
-              defaultValue={30}
+              value={formData.parkingRate || ""}
               required
               className="p-3 border border-gray-300 rounded-lg"
             />
@@ -212,22 +238,24 @@ export default function CreateListing() {
 
           <input
             onChange={(e) =>
-              setFormData({ ...formData, openingTime: e.target.value })
+              setFormData({ ...formData, openingHours: e.target.value })
             }
             type="text"
             placeholder="Opening time (hh : mm)"
             className="border p-3 rounded-lg"
             id="openingTime"
+            value={formData.openingHours || ""}
             required
           />
           <input
             onChange={(e) =>
-              setFormData({ ...formData, closingTime: e.target.value })
+              setFormData({ ...formData, closingHours: e.target.value })
             }
             type="text"
             placeholder="Closing time (hh : mm)"
             className="border p-3 rounded-lg"
             id="closingTime"
+            value={formData.closingHours || ""}
             required
           />
 
@@ -238,8 +266,8 @@ export default function CreateListing() {
                 type="radio"
                 id="Open"
                 className="w-5"
-                onChange={(e) => setStatus("Open")}
-                checked={status === "Open"}
+                onChange={(e) => setFormData({ ...formData, isOpen: true })}
+                checked={formData.isOpen === true}
               />
               <span>Open</span>
             </div>
@@ -249,13 +277,13 @@ export default function CreateListing() {
                 type="radio"
                 id="Closed"
                 className="w-5"
-                onChange={(e) => setStatus("Closed")}
-                checked={status === "Closed"}
+                onChange={(e) => setFormData({ ...formData, isOpen: false })}
+                checked={formData.isOpen === false}
               />
               <span>Closed</span>
             </div>
             <button className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
-              Create Listing
+              Update Listing
             </button>
           </div>
         </div>
