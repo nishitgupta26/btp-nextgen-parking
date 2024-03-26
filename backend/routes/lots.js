@@ -119,8 +119,6 @@ router.put("/updatelot/:id", fetchuser, async (req, res) => {
 
 
 
-// TODO :: add option for admin to delete parking lots as well
-
 // Delete a parking lot - DELETE - "/api/lots/deletelot" - REQUIRES LOGIN
 router.delete("/deletelot/:id", fetchuser, async (req, res) => {
     try {
