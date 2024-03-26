@@ -154,5 +154,19 @@ router.get("/getownerlots", fetchuser, async (req, res) => {
 });
 
 
+// show details of a particular lot - GET - "/api/lots/getlot"
+router.get("/getlot", async (req, res) => {
+    try {
+        const lot = await Lots.findById(req.body.lotid);
+        if(!lot) {
+            return res.status(404).send("Not Found");
+        }
+        res.json(lot);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
 
 module.exports = router;
