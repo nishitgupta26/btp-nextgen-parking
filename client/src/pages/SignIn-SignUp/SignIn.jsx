@@ -149,7 +149,7 @@ export default function SignIn() {
             <button>{loading ? 'Loading...': 'Log in'}</button>
           </form>
 
-          {error && <p className='text-red-500 mt-5 text-center'>{error}</p>}
+          {error && alert(error)}
         </div>
 
         <div class="register">

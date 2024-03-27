@@ -1,9 +1,9 @@
 import React from "react";
 import BgImg from "../img/parkingSlotCardBg.png";
-export default function ParkingCard() {
+export default function ParkingCard({lot}) {
   return (
-    <div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full ">
+    <>
+      {/* <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full "> */}
         <div class="relative mx-auto w-full ">
           <a
             href="#"
@@ -26,44 +26,38 @@ export default function ParkingCard() {
               </div>
 
               <div class="mt-4">
-                <h2
-                  class="font-medium text-base md:text-lg text-gray-800 line-clamp-1"
-                  title="New York"
-                >
-                  [Parking Space Name]
+                <h2 class="font-medium text-base md:text-lg text-gray-800 line-clamp-1">
+                  {lot.parkingSpaceName}
                 </h2>
-                <p
-                  class="mt-2 text-sm text-gray-800 line-clamp-1"
-                  title="New York, NY 10004, United States"
-                >
-                  [Parking Space Address]
+                <p class="mt-2 text-sm text-gray-800 line-clamp-1">
+                  {lot.location}
                 </p>
               </div>
 
               <div class="grid grid-cols-2 grid-rows-2 gap-4 mt-8">
                 <p class="inline-flex flex-col text-gray-800">
                   <span class=" text-base font-semibold mt-2 xl:mt-0">
-                    Covered/Open Parking
+                    Type of Parking
                   </span>
-                  <span class="mt-2 xl:mt-0">Covered</span>
+                  <span class="mt-2 xl:mt-0">{lot.type}</span>
                 </p>
                 <p class="inline-flex flex-col text-gray-800">
                   <span class=" text-base font-semibold mt-2 xl:mt-0">
                     EV charging
                   </span>
-                  <span class="mt-2 xl:mt-0">Yes</span>
+                  <span class="mt-2 xl:mt-0">{lot.chargingPorts!==0 ?  "Yes" : "No"}</span>
                 </p>
                 <p class="inline-flex flex-col text-gray-800">
                   <span class=" text-base font-semibold mt-2 xl:mt-0">
                     Operating Hours
                   </span>
-                  <span class="mt-2 xl:mt-0">[00:00] to [00:00]</span>
+                  <span class="mt-2 xl:mt-0">{lot.openingHours} to {lot.closingHours}</span>
                 </p>
                 <p class="inline-flex flex-col text-gray-800">
                   <span class=" text-base font-semibold mt-2 xl:mt-0">
                     Camera Surveillance
                   </span>
-                  <span class="mt-2 xl:mt-0">Yes/No</span>
+                  <span class="mt-2 xl:mt-0">{lot.surveillanceCamera ? "Yes" : "No"}</span>
                 </p>
               </div>
 
@@ -88,17 +82,15 @@ export default function ParkingCard() {
                 <div class="flex justify-end">
                   <p class="inline-block font-semibold text-primary whitespace-nowrap leading-tight rounded-xl">
                     <span class="text-lg uppercase text-semibold">₹ </span>
-                    <span class="text-lg">3,200</span>
+                    <span class="text-lg">{lot.parkingRate}</span>
                   </p>
                 </div>
               </div>
             </div>
           </a>
         </div>
-
-        {/* ///////////auto */}
-      </div>
-    </div>
+      {/* </div> */}
+    </>
   );
 }
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import LocationAccess from "../../components/LocationAccess";
 import Header from "../../components/Header";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
+import ParkingCard from "../../components/ParkingCard";
 
 export default function Home() {
   const cookies = new Cookies();
@@ -11,6 +12,8 @@ export default function Home() {
 
   const checkLocationPermission = async () => {
     const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
+
+
     return permissionStatus.state;
   }
 
@@ -35,8 +38,30 @@ export default function Home() {
     checkAndClearCookies();
   }, []);
 
+  // code to fetch parkingslots data from backend
+  //   const [parkingSlots, setparkingSlots] = useState([]);
+
+  // // useEffect to fetch all parking lots
+  // useEffect(() =>{
+  //   fetch(`${import.meta.env.MONGO_URI}/api/lots/getlots`)
+  //   .then(res => res.json())
+  //   .then(data => setparkingSlots(data))
+  // }, []);
+
+// Dummy data for parking slots
+  const parkingSlots = [
+    { id: 1, parkingSpaceName: "space 1", location: "Location 1", type : "Covered",chargingPorts: 8, openingHours:"8:00",closingHours: "20:00", surveillanceCamera :"Yes",parkingRate: 30 },
+    { id: 2, parkingSpaceName: "space 2", location: "Location 2", type : "Mixed",chargingPorts: 0, openingHours:"9:00",closingHours: "2:00", surveillanceCamera :"No",parkingRate: 40 },
+    { id: 3, parkingSpaceName: "space 3", location: "Location 3", type : "open",chargingPorts: 8, openingHours:"8:00",closingHours: "20:00", surveillanceCamera :"Yes",parkingRate: 60 },
+    { id: 4, parkingSpaceName: "space 4", location: "Location 4", type : "Mixed",chargingPorts: 4, openingHours:"9:00",closingHours: "2:00", surveillanceCamera :"No",parkingRate: 35 },
+    { id: 5, parkingSpaceName: "space 5", location: "Location 5", type : "Covered",chargingPorts: 8, openingHours:"8:00",closingHours: "20:00", surveillanceCamera :"Yes",parkingRate: 15 },
+    { id: 6, parkingSpaceName: "space 6", location: "Location 6", type : "open",chargingPorts: 0, openingHours:"9:00",closingHours: "2:00", surveillanceCamera :"No",parkingRate: 25 },
+    { id: 7, parkingSpaceName: "space 7", location: "Location 7", type : "open",chargingPorts: 8, openingHours:"8:00",closingHours: "20:00", surveillanceCamera :"Yes",parkingRate: 45 },
+    { id: 8, parkingSpaceName: "space 8", location: "Location 8", type : "Mixed",chargingPorts: 0, openingHours:"9:00",closingHours: "2:00", surveillanceCamera :"No",parkingRate: 20 },
+  ];
+
   return (
-    <div className="relative h-screen overflow-hidden">
+    <div className="relative h-screen">
       <Header />
       <div
         className={`absolute inset-0 bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg ${
@@ -50,8 +75,11 @@ export default function Home() {
           </div>
         </div>
       )}
-      <div className="h-screen flex justify-center items-center">
-        <h1 className="text-4xl text-center mt-8">Welcome to SmartPark</h1>
+      <div className="mt-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-20">
+        {/* <h1 className="text-4xl text-center mt-8">Welcome to SmartPark</h1> */}
+        {parkingSlots.map((lot) => (
+          <ParkingCard key={lot.id} lot={lot} />
+        ))}
       </div>
     </div>
   );
