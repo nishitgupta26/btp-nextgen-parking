@@ -32,4 +32,6 @@ const lotSchema = new mongoose.Schema({
   managers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" , required: false}],
 });
 
+
+
 module.exports = mongoose.model("Lot", lotSchema);

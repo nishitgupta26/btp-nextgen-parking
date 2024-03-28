@@ -36,10 +36,13 @@ router.post("/addmanager", fetchuser, async (req, res) => {
 
     // find the user with email targetmanager
     const Manager = await User.findOne({email: targetmanager});
+    console.log(Manager)
     if(!Manager)
     {
         return res.status(404).send("User not found");
     }
+
+    // TODO: dont add manager if already exists in manager of that lot;
 
     // add the manager to the lot
     Lots.findByIdAndUpdate(req.body.lotid, {$push: {managers: Manager._id}}, function(err, docs){
@@ -48,14 +51,15 @@ router.post("/addmanager", fetchuser, async (req, res) => {
             return res.status(500).send(err);
         }
         else{
-            return res.json(docs);
+            return res.json("manager added successfullt");
         }
     });
 
-    if(userdata.role.toLowerCase() === "user")
+    console.log(Manager._id);
+    if(Manager.role.toLowerCase() === "user")
     {
         // update the user to manager
-        User.findByIdAndUpdate(req.user.id, {role: "Manager"}, function(err, docs){
+        User.findByIdAndUpdate(Manager._id, {role: "Manager"}, function(err, docs){
             if(err)
             {
                 console.log(err);
