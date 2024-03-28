@@ -22,6 +22,7 @@ export default function OwnerProfile() {
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
+  const [showListings, setShowListings] = useState(true);
   //console.log(currentUser);
 
   const handleSignOut = async () => {
@@ -72,6 +73,7 @@ export default function OwnerProfile() {
       if (res.ok) {
         const data = await res.json();
         setUserListings(data);
+        setShowListings(true);
       } else {
         setShowListingsError(true);
       }
@@ -96,6 +98,10 @@ export default function OwnerProfile() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleShowManagers = async () => {
+    setShowListings(false);
   };
 
   return (
@@ -152,14 +158,20 @@ export default function OwnerProfile() {
         {updateSuccess ? "User is updated successfully!" : ""}
       </p>
 
-      <button onClick={handleShowListings} className="text-green-700 w-full">
-        Show Listings
-      </button>
+      <div className="flex justify-between mt-5">
+        <button onClick={handleShowListings} className="text-green-700">
+          Show Listings
+        </button>
+        <button onClick={handleShowManagers} className="text-blue-700">
+          Show Managers
+        </button>
+      </div>
+
       <p className="text-red-700 mt-5">
         {showListingsError ? "Error showing listings" : ""}
       </p>
 
-      {userListings && userListings.length > 0 && (
+      {showListings && userListings && userListings.length > 0 && (
         <div className="flex flex-col gap-4">
           <h1 className="text-center mt-7 text-2xl font-semibold">
             Your Listings
@@ -187,6 +199,12 @@ export default function OwnerProfile() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {!showListings && (
+        <div>
+          <h1>Managers</h1>
         </div>
       )}
     </div>

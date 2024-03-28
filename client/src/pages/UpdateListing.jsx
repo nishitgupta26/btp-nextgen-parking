@@ -9,6 +9,7 @@ export default function UpdateListing() {
   const cookies = new Cookies();
   const navigate = useNavigate();
   const params = useParams();
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -55,6 +56,35 @@ export default function UpdateListing() {
           ...formData,
           openingHours: formatTime(formData.openingHours),
           closingHours: formatTime(formData.closingHours),
+        }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        navigate("/owner-profile");
+      } else {
+        const errorMessage = await response.text();
+        console.error(errorMessage);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleManager = async (e) => {
+    e.preventDefault();
+    try {
+      const authToken = cookies.get("access_token");
+      const listingId = params.listingId;
+      const response = await fetch(`${host}/api/manager/addmanager`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": authToken,
+        },
+        body: JSON.stringify({
+          lotid: listingId,
+          manageremail: email,
         }),
       });
       if (response.ok) {
@@ -216,26 +246,26 @@ export default function UpdateListing() {
                 <span>surveillanceCamera</span>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="flex flex-col flex-1 gap-4">
-          <div className="flex items-center gap-2">
-            <input
-              onChange={(e) =>
-                setFormData({ ...formData, parkingRate: e.target.value })
-              }
-              type="number"
-              id="parkingRate"
-              value={formData.parkingRate || ""}
-              required
-              className="p-3 border border-gray-300 rounded-lg"
-            />
-            <div className="flex flex-col items-center">
-              <p>parking Rate</p>
-              <span className="text-xs">(per hour in Rs)</span>
+
+            <div className="flex items-center gap-2">
+              <input
+                onChange={(e) =>
+                  setFormData({ ...formData, parkingRate: e.target.value })
+                }
+                type="number"
+                id="parkingRate"
+                value={formData.parkingRate || ""}
+                required
+                className="p-3 border border-gray-300 rounded-lg"
+              />
+              <div className="flex flex-col items-center">
+                <p>parking Rate</p>
+                <span className="text-xs">(per hour in Rs)</span>
+              </div>
             </div>
           </div>
-
+        </div>
+        <div className="flex flex-col flex-1 gap-4 ml-6">
           <input
             onChange={(e) =>
               setFormData({ ...formData, openingHours: e.target.value })
@@ -282,10 +312,32 @@ export default function UpdateListing() {
               />
               <span>Closed</span>
             </div>
-            <button className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
-              Update Listing
-            </button>
           </div>
+
+          <div className="text-center mt-3">
+            <p className="text-xl text-blue-700 font-semibold">
+              Add new manager
+            </p>
+          </div>
+
+          <input
+            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder="emailID of manager"
+            className="border p-3 rounded-lg"
+            id="location"
+          />
+
+          <button
+            onClick={handleManager}
+            className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80 mt-2"
+          >
+            ADD THIS MANAGER
+          </button>
+
+          <button className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80 mt-2">
+            Update Listing
+          </button>
         </div>
       </form>
     </main>
