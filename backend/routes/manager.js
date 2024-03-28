@@ -147,39 +147,6 @@ router.get("/getmanagers/:id", fetchuser, async (req, res) => {
 
 });
 
-// ROUTE-4 :: let manager update a lot - PUT - "/api/manager/updatelot" - REQUIRES LOGIN
-router.put("/updatelot/:id", fetchuser, async (req, res) => {
-    const {name, location, type, twoWheelerCapacity, fourWheelerCapacity, chargingPorts, securityGuard, surveillanceCamera, parkingRate, openingHours, closingHours, contactNumber, email, amenities, availableSpots, isOpen} = req.body;
-    const newLot = {name, location, type, twoWheelerCapacity, fourWheelerCapacity, chargingPorts, securityGuard, surveillanceCamera, parkingRate, openingHours, closingHours, contactNumber, email, amenities, availableSpots, isOpen};
-    const userdata = await User.findById(req.user.id).select("-password");
-    const TargetLot = await Lots.findById(req.params.id);
-    if(!TargetLot)
-    {
-        return res.status(404).send("Lot not found");
-    }
-    if(userdata.role.toLowerCase() !== "manager")
-    {
-        return res.status(401).send("Not Allowed");
-    }
-    if(!TargetLot.managers.includes(req.user.id))
-    {
-        return res.status(401).send("Not Allowed");
-    }
-    // update the lot with newLot
-    Lots.findByIdAndUpdate(req.params.id, newLot, function(err, docs){
-        if(err)
-        {
-            console.log(err);
-            return res.status(500).send(err);
-        }
-        else
-        {
-            return res.json(docs);
-        }
-    });
-});
-
-
 
 
 

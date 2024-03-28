@@ -180,8 +180,11 @@ router.put('/updateuser',fetchuser,async (req, res) => {
         }
 
         // Update the user's name and role
-        user.name = name;
-        user.role = role;
+        if(name && name.trim() !== '')
+            user.name = name;
+        // if role is empty then do not update it
+        if(role && role.trim() !== '')
+            user.role = role;
         if(password && password.trim() !== '') 
         {
             bcrypt.hash(req.body.password, 10, async function (error, hash) {
