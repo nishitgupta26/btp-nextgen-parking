@@ -55,40 +55,44 @@ export default function CreateListing() {
   };
 
   return (
-    <main className="p-3 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-7">
-        Create a Listing
-      </h1>
+    <div className="p-4 max-w-full min-h-screen mx-auto bg-[#F9FAFB]">
+      <div className=" rounded-md p-1 my-7">
+        <h1 className="text-3xl font-semibold text-center underline underline-offset-4 decoration-[#252e37]">Create a New Listing </h1>
+      </div>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
+          <p className="font-medium">Parking Space Name</p>
           <input
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             type="text"
-            placeholder="Name"
-            className="border p-3 rounded-lg"
+            placeholder="Parking Space Name"
+            className="border p-3 rounded-lg  shadow-inner"
             id="name"
             maxLength="62"
             minLength="5"
             required
           />
+
+          <p className="font-medium">Location:</p>
           <input
             onChange={(e) =>
               setFormData({ ...formData, location: e.target.value })
             }
             type="text"
-            placeholder="location"
-            className="border p-3 rounded-lg"
+            placeholder="Location"
+            className="border p-3 rounded-lg  shadow-inner"
             id="location"
             required
           />
+
           <div className="flex gap-6 flex-wrap">
-            <div className="flex gap-2">Parking Type:</div>
+            <div className="flex gap-2 font-medium">Parking Type:</div>
 
             <div className="flex gap-2">
               <input
                 type="radio"
                 id="closed"
-                className="w-5"
+                className="w-5  shadow-inner"
                 onChange={(e) => setParkingType("Closed")}
                 checked={parkingType === "Closed"}
               />
@@ -98,7 +102,7 @@ export default function CreateListing() {
               <input
                 type="radio"
                 id="mixed"
-                className="w-5"
+                className="w-5  shadow-inner"
                 onChange={(e) => setParkingType("Mixed")}
                 checked={parkingType === "Mixed"}
               />
@@ -108,7 +112,7 @@ export default function CreateListing() {
               <input
                 type="radio"
                 id="open"
-                className="w-5"
+                className="w-5  shadow-inner"
                 onChange={(e) => setParkingType("Open")}
                 checked={parkingType === "Open"}
               />
@@ -117,23 +121,7 @@ export default function CreateListing() {
           </div>
           <div className="flex flex-wrap gap-6">
             <div className="flex items-center gap-2">
-              <input
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    twoWheelerCapacity: e.target.value,
-                  })
-                }
-                type="number"
-                id="twoWheelerCapacity"
-                min="0"
-                max="5000"
-                required
-                className="p-3 border border-gray-300 rounded-lg"
-              />
-              <p>twoWheelerCapacity</p>
-            </div>
-            <div className="flex items-center gap-2">
+              <p>Four Wheeler Capacity:</p>
               <input
                 onChange={(e) =>
                   setFormData({
@@ -143,28 +131,17 @@ export default function CreateListing() {
                 }
                 type="number"
                 id="fourWheelerCapacity"
-                min="0"
+                placeholder="Four Wheeler Capacity"
+                // min="0"
                 max="5000"
                 required
-                className="p-3 border border-gray-300 rounded-lg"
+                className="p-3 border border-gray-300 rounded-lg  shadow-inner"
               />
-              <p>fourWheelerCapacity</p>
-              <input
-                onChange={(e) =>
-                  setFormData({ ...formData, chargingPorts: e.target.value })
-                }
-                type="number"
-                id="chargingPorts"
-                min="0"
-                max="5000"
-                required
-                className="p-3 border border-gray-300 rounded-lg"
-              />
-              <p>chargingPorts</p>
             </div>
-
-            <div className="flex gap-6 flex-wrap">
+          </div>
+          <div className="flex gap-6 flex-wrap">
               <div className="flex gap-2">
+              <span className="font-medium">Security Guard ?</span>
                 <input
                   onChange={(e) =>
                     setFormData({ ...formData, securityGuard: e.target.value })
@@ -173,9 +150,10 @@ export default function CreateListing() {
                   id="security"
                   className="w-5"
                 />
-                <span>securityGuard</span>
               </div>
               <div className="flex gap-2">
+                
+              <span className="font-medium">CCTV Surveillance ?</span>
                 <input
                   onChange={(e) =>
                     setFormData({
@@ -187,46 +165,30 @@ export default function CreateListing() {
                   id="surveillance"
                   className="w-5"
                 />
-                <span>surveillanceCamera</span>
               </div>
             </div>
-          </div>
         </div>
         <div className="flex flex-col flex-1 gap-4">
-          <div className="flex items-center gap-2">
-            <input
-              onChange={(e) =>
-                setFormData({ ...formData, parkingRate: e.target.value })
-              }
-              type="number"
-              id="parkingRate"
-              defaultValue={30}
-              required
-              className="p-3 border border-gray-300 rounded-lg"
-            />
-            <div className="flex flex-col items-center">
-              <p>parking Rate</p>
-              <span className="text-xs">(per hour in Rs)</span>
-            </div>
-          </div>
-
+          <p className="font-medium">Opening time (hh : mm):</p>
           <input
             onChange={(e) =>
               setFormData({ ...formData, openingTime: e.target.value })
             }
-            type="text"
+            type="time"
             placeholder="Opening time (hh : mm)"
-            className="border p-3 rounded-lg"
+            className="border p-3 rounded-lg  shadow-inner"
             id="openingTime"
             required
           />
+
+          <p className="font-medium">Closing time (hh : mm):</p>
           <input
             onChange={(e) =>
               setFormData({ ...formData, closingTime: e.target.value })
             }
-            type="text"
+            type="time"
             placeholder="Closing time (hh : mm)"
-            className="border p-3 rounded-lg"
+            className="border p-3 rounded-lg  shadow-inner"
             id="closingTime"
             required
           />
@@ -237,7 +199,7 @@ export default function CreateListing() {
               <input
                 type="radio"
                 id="Open"
-                className="w-5"
+                className="w-5  shadow-inner"
                 onChange={(e) => setStatus("Open")}
                 checked={status === "Open"}
               />
@@ -248,18 +210,52 @@ export default function CreateListing() {
               <input
                 type="radio"
                 id="Closed"
-                className="w-5"
+                className="w-5  shadow-inner"
                 onChange={(e) => setStatus("Closed")}
                 checked={status === "Closed"}
               />
               <span>Closed</span>
             </div>
-            <button className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
-              Create Listing
-            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <p className="font-medium">Two Wheeler Capacity:</p>
+            <input
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  twoWheelerCapacity: e.target.value,
+                })
+              }
+              type="number"
+              id="twoWheelerCapacity"
+              // min="0"
+              max="5000"
+              placeholder="Two Wheeler Capacity:"
+              required
+              className="p-3 border border-gray-300 rounded-lg  shadow-inner"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <p>No. of EV Charging Ports:</p>
+            <input
+              onChange={(e) =>
+                setFormData({ ...formData, chargingPorts: e.target.value })
+              }
+              type="number"
+              id="chargingPorts"
+              // min="0"
+              max="5000"
+              required
+              className="p-3 border border-gray-300 rounded-lg  shadow-inner"
+            />
           </div>
         </div>
       </form>
-    </main>
+
+      <button className="p-3 min-w-full my-7 shadow-inner bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
+        Create Listing
+      </button>
+    </div>
   );
 }

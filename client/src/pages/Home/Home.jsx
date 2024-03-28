@@ -75,7 +75,7 @@ export default function Home() {
           </div>
         </div>
       )}
-      <div className="mt-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-20">
+      <div className="mt-14 ml-4 mr-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
         {/* <h1 className="text-4xl text-center mt-8">Welcome to SmartPark</h1> */}
         {parkingSlots.map((lot) => (
           <ParkingCard key={lot.id} lot={lot} />
