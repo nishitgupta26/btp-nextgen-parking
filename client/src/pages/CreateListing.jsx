@@ -3,9 +3,13 @@ import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateListing() {
-  const [parkingType, setParkingType] = useState("Closed");
-  const [status, setStatus] = useState("Open");
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    openingHours: "",
+    closingHours: "",
+    surveillanceCamera: false,
+    securityGuard: false,
+    isOpen: false,
+  });
 
   const host = "http://localhost:3001";
   const cookies = new Cookies();
@@ -33,12 +37,8 @@ export default function CreateListing() {
         },
         body: JSON.stringify({
           ...formData,
-          type: parkingType.toLowerCase(),
-          isOpen: status === "Open",
-          surveillanceCamera: formData.surveillanceCamera === "on",
-          securityGuard: formData.securityGuard === "on",
-          openingHours: formatTime(formData.openingTime),
-          closingHours: formatTime(formData.closingTime),
+          openingHours: formatTime(formData.openingHours),
+          closingHours: formatTime(formData.closingHours),
         }),
       });
       if (response.ok) {
@@ -57,7 +57,9 @@ export default function CreateListing() {
   return (
     <div className="p-4 max-w-full min-h-screen mx-auto bg-[#F9FAFB]">
       <div className=" rounded-md p-1 my-7">
-        <h1 className="text-3xl font-semibold text-center underline underline-offset-4 decoration-[#252e37]">Create a New Listing </h1>
+        <h1 className="text-3xl font-semibold text-center underline underline-offset-4 decoration-[#252e37]">
+          Create a New Listing{" "}
+        </h1>
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
@@ -93,8 +95,8 @@ export default function CreateListing() {
                 type="radio"
                 id="closed"
                 className="w-5  shadow-inner"
-                onChange={(e) => setParkingType("Closed")}
-                checked={parkingType === "Closed"}
+                onChange={(e) => setFormData({ ...formData, type: "closed" })}
+                checked={formData.type === "closed"}
               />
               <span>Closed</span>
             </div>
@@ -103,8 +105,8 @@ export default function CreateListing() {
                 type="radio"
                 id="mixed"
                 className="w-5  shadow-inner"
-                onChange={(e) => setParkingType("Mixed")}
-                checked={parkingType === "Mixed"}
+                onChange={(e) => setFormData({ ...formData, type: "mixed" })}
+                checked={formData.type === "mixed"}
               />
               <span>Mixed</span>
             </div>
@@ -113,8 +115,8 @@ export default function CreateListing() {
                 type="radio"
                 id="open"
                 className="w-5  shadow-inner"
-                onChange={(e) => setParkingType("Open")}
-                checked={parkingType === "Open"}
+                onChange={(e) => setFormData({ ...formData, type: "open" })}
+                checked={formData.type === "open"}
               />
               <span>Open</span>
             </div>
@@ -140,39 +142,43 @@ export default function CreateListing() {
             </div>
           </div>
           <div className="flex gap-6 flex-wrap">
-              <div className="flex gap-2">
+            <div className="flex gap-2">
               <span className="font-medium">Security Guard ?</span>
-                <input
-                  onChange={(e) =>
-                    setFormData({ ...formData, securityGuard: e.target.value })
-                  }
-                  type="checkbox"
-                  id="security"
-                  className="w-5"
-                />
-              </div>
-              <div className="flex gap-2">
-                
-              <span className="font-medium">CCTV Surveillance ?</span>
-                <input
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      surveillanceCamera: e.target.value,
-                    })
-                  }
-                  type="checkbox"
-                  id="surveillance"
-                  className="w-5"
-                />
-              </div>
+              <input
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    securityGuard: e.target.checked,
+                  })
+                }
+                type="checkbox"
+                id="security"
+                className="w-5"
+                checked={formData.securityGuard || false}
+              />
             </div>
+            <div className="flex gap-2">
+              <span className="font-medium">CCTV Surveillance ?</span>
+              <input
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    surveillanceCamera: e.target.checked,
+                  })
+                }
+                type="checkbox"
+                id="surveillance"
+                className="w-5"
+                checked={formData.surveillanceCamera || false}
+              />
+            </div>
+          </div>
         </div>
         <div className="flex flex-col flex-1 gap-4">
           <p className="font-medium">Opening time (hh : mm):</p>
           <input
             onChange={(e) =>
-              setFormData({ ...formData, openingTime: e.target.value })
+              setFormData({ ...formData, openingHours: e.target.value })
             }
             type="time"
             placeholder="Opening time (hh : mm)"
@@ -184,7 +190,7 @@ export default function CreateListing() {
           <p className="font-medium">Closing time (hh : mm):</p>
           <input
             onChange={(e) =>
-              setFormData({ ...formData, closingTime: e.target.value })
+              setFormData({ ...formData, closingHours: e.target.value })
             }
             type="time"
             placeholder="Closing time (hh : mm)"
@@ -200,8 +206,8 @@ export default function CreateListing() {
                 type="radio"
                 id="Open"
                 className="w-5  shadow-inner"
-                onChange={(e) => setStatus("Open")}
-                checked={status === "Open"}
+                onChange={(e) => setFormData({ ...formData, isOpen: true })}
+                checked={formData.isOpen === true}
               />
               <span>Open</span>
             </div>
@@ -211,8 +217,8 @@ export default function CreateListing() {
                 type="radio"
                 id="Closed"
                 className="w-5  shadow-inner"
-                onChange={(e) => setStatus("Closed")}
-                checked={status === "Closed"}
+                onChange={(e) => setFormData({ ...formData, isOpen: false })}
+                checked={formData.isOpen === false}
               />
               <span>Closed</span>
             </div>
@@ -253,7 +259,10 @@ export default function CreateListing() {
         </div>
       </form>
 
-      <button className="p-3 min-w-full my-7 shadow-inner bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
+      <button
+        onClick={handleSubmit}
+        className="p-3 min-w-full my-7 shadow-inner bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
+      >
         Create Listing
       </button>
     </div>
