@@ -17,7 +17,7 @@ export default function UserProfile() {
   const dispatch = useDispatch();
   const [formData, setformData] = useState({});
   const authtoken = cookies.get("access_token");
-  //console.log(currentUser);
+  // console.log(currentUser);
 
   const handleSignOut = async () => {
     try {
@@ -75,7 +75,7 @@ export default function UserProfile() {
             </div>
             <div className="flex flex-col items-start justify-center">
               <span className="text-gray-500 my-2">John Doe</span>
-              <span className="text-gray-500 my-2"> johndoe@test.com</span>
+              <span className="text-gray-500 my-2"> {currentUser.email}</span>
               <span className="text-gray-500 my-2">+91-1234567890</span>
             </div>
           </div>
