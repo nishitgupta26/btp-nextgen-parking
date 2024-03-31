@@ -143,7 +143,15 @@ router.get("/getmanagers/:id", fetchuser, async (req, res) => {
 
     // return all managers of the TargetLot
     Managers = TargetLot.managers;
-    return res.json(Managers);
+
+    // return all users with id in Managers
+    let managerDetails = [];
+    for(let i=0; i<Managers.length; i++)
+    {
+        const manager = await User.findById(Managers[i]).select('name');
+        managerDetails.push(manager);
+    }
+    return res.json(managerDetails);
 
 });
 

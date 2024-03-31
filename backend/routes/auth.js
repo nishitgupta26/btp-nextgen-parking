@@ -169,7 +169,7 @@ router.get('/getalluser', async (req, res) => {
 router.put('/updateuser',fetchuser,async (req, res) => {
     try {
         const userId = req.user.id;
-        const { name, role, password } = req.body;
+        const { name, password } = req.body;
 
         // Find the user by ID
         const user = await User.findById(userId);
@@ -179,12 +179,9 @@ router.put('/updateuser',fetchuser,async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        // Update the user's name and role
+        // Update the user's name if not empty
         if(name && name.trim() !== '')
             user.name = name;
-        // if role is empty then do not update it
-        if(role && role.trim() !== '')
-            user.role = role;
         if(password && password.trim() !== '') 
         {
             bcrypt.hash(req.body.password, 10, async function (error, hash) {
