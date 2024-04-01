@@ -12,6 +12,7 @@ import AdminProfile from "./pages/Profile/AdminProfile.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import CreateListing from "./pages/CreateListing.jsx";
 import UpdateListing from "./pages/UpdateListing.jsx";
+import UpdateManagers from "./pages/UpdateManagers.jsx";
 
 export default function App() {
   return (
@@ -31,6 +32,10 @@ export default function App() {
           <Route
             path="/update-listing/:listingId"
             element={<UpdateListing />}
+          />
+          <Route
+            path="/update-managers/:listingId"
+            element={<UpdateManagers />}
           />
         </Route>
         {/* temporary route to show the card */}

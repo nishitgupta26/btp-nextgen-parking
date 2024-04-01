@@ -10,6 +10,7 @@ export default function UpdateListing() {
   const navigate = useNavigate();
   const params = useParams();
   const [email, setEmail] = useState("");
+  const listingId = params.listingId;
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -45,7 +46,6 @@ export default function UpdateListing() {
     e.preventDefault();
     try {
       const authToken = cookies.get("access_token");
-      const listingId = params.listingId;
       const response = await fetch(`${host}/api/lots/updatelot/${listingId}`, {
         method: "PUT",
         headers: {
@@ -56,35 +56,6 @@ export default function UpdateListing() {
           ...formData,
           openingHours: formatTime(formData.openingHours),
           closingHours: formatTime(formData.closingHours),
-        }),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        navigate("/owner-profile");
-      } else {
-        const errorMessage = await response.text();
-        console.error(errorMessage);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleManager = async (e) => {
-    e.preventDefault();
-    try {
-      const authToken = cookies.get("access_token");
-      const listingId = params.listingId;
-      const response = await fetch(`${host}/api/manager/addmanager`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": authToken,
-        },
-        body: JSON.stringify({
-          lotid: listingId,
-          manageremail: email,
         }),
       });
       if (response.ok) {
@@ -314,29 +285,18 @@ export default function UpdateListing() {
             </div>
           </div>
 
-          <div className="text-center mt-3">
-            <p className="text-xl text-blue-700 font-semibold">
-              Add new manager
-            </p>
-          </div>
-
-          <input
-            onChange={(e) => setEmail(e.target.value)}
-            type="text"
-            placeholder="emailID of manager"
-            className="border p-3 rounded-lg"
-            id="location"
-          />
-
           <button
-            onClick={handleManager}
+            onClick={() => navigate(`/update-managers/${listingId}`)}
             className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80 mt-2"
           >
-            ADD THIS MANAGER
+            ADD/DELETE MANAGERS
           </button>
 
-          <button className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80 mt-2">
-            Update Listing
+          <button
+            onClick={handleSubmit()}
+            className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80 mt-2"
+          >
+            UPDATE LISTING
           </button>
         </div>
       </form>

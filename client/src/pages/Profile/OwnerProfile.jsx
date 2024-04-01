@@ -158,12 +158,9 @@ export default function OwnerProfile() {
         {updateSuccess ? "User is updated successfully!" : ""}
       </p>
 
-      <div className="flex justify-between mt-5">
+      <div className="flex justify-center mt-5">
         <button onClick={handleShowListings} className="text-green-700">
           Show Listings
-        </button>
-        <button onClick={handleShowManagers} className="text-blue-700">
-          Show Managers
         </button>
       </div>
 
