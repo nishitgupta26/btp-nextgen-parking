@@ -13,13 +13,20 @@ import PrivateRoute from "./components/PrivateRoute.jsx";
 import CreateListing from "./pages/CreateListing.jsx";
 import UpdateListing from "./pages/UpdateListing.jsx";
 import UpdateManagers from "./pages/UpdateManagers.jsx";
+import { useState } from "react";
+import { useEffect } from "react";
+
 
 export default function App() {
+  const [isOverlay, setOverlay] = useState(false);
+  // useEffect(() => {
+  //   console.log(isOverlay);
+  // },[isOverlay]);
   return (
     <BrowserRouter>
-      {/* <Header /> */}
+      {isOverlay && <Header />}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home isOverlay={isOverlay} setOverlay={setOverlay}/>} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/about" element={<About />} />
 

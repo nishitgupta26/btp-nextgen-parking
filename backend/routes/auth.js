@@ -32,7 +32,7 @@ async(req,res) => {
     User.findOne({email: req.body.email}, async(err, result) => {
         if(err) {
             console.log(err);
-            return res.status(400).json({ errors: "internal server error" });
+            return res.status(400).json({ errors: "Internal server error" });
         }
         else
         {
@@ -44,7 +44,7 @@ async(req,res) => {
                     if(error) 
                     {
                         console.log(error);
-                        res.status(400).json({ errors: "internal server error" });
+                        res.status(400).json({ errors: "Internal server error" });
                     }
                     else
                     {
@@ -100,13 +100,13 @@ router.post('/login',
         User.findOne({email: req.body.email}, async function (err, foundUser) {
             if(err) {
                 console.log(err);
-                return res.status(400).json({ errors: "internal server error" });
+                return res.status(400).json({ errors: "Internal server error" });
             }
             else
             {
                 // if not found any user return error
                 if (!foundUser) {
-                    return res.status(400).json({ errors: "login with valid credentials" });
+                    return res.status(400).json({ errors: "Login with valid credentials" });
                 }
                 else
                 {
@@ -114,7 +114,7 @@ router.post('/login',
                     // compare the password provided and the hash stored in our database
                     const result = await bcrypt.compare(req.body.password, foundUser.password);
                     if(result === false) {
-                        return res.status(400).json({ errors: "login with valid credentials" });
+                        return res.status(400).json({ errors: "Login with valid credentials" });
                     }
                     else if(result === true) 
                     {
@@ -149,7 +149,7 @@ fetchuser, async (req, res) => {
     }
     catch(err){
         console.log(err);
-        return res.status(400).json({ errors: "error occoured" });
+        return res.status(400).json({ errors: "Error occoured" });
     }
 } );
 
@@ -161,7 +161,7 @@ router.get('/getalluser', async (req, res) => {
     }
     catch(err){
         console.log(err);
-        return res.status(400).json({ errors: "error occoured" });
+        return res.status(400).json({ errors: "Error occoured" });
     }
 });
 
@@ -187,7 +187,7 @@ router.put('/updateuser',fetchuser,async (req, res) => {
             bcrypt.hash(req.body.password, 10, async function (error, hash) {
                 if(error)
                 {
-                    return res.status(400).json({ errors: "internal server error" });
+                    return res.status(400).json({ errors: "Internal server error" });
                 }
                 else{
                     user.password = hash;

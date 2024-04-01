@@ -9,6 +9,9 @@ import {
   signOutUserFailure,
 } from "../../redux/User/userSlice.js";
 import Cookies from "universal-cookie";
+import Header from "../../components/Header.jsx";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function UserProfile() {
   const host = "http://localhost:3001";
@@ -32,6 +35,21 @@ export default function UserProfile() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
+      // Password length validation
+    if (formData.password.length>0 && formData.password.length < 8) {
+      // Display an error message or toast indicating the password length requirement
+      return toast.error("Password must be at least 8 characters long", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+    else{
       dispatch(updateUserStart());
       const res = await fetch(`${host}/api/auth/updateuser`, {
         method: "PUT",
@@ -50,6 +68,7 @@ export default function UserProfile() {
 
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
+    }
     } catch (error) {
       dispatch(updateUserFailure(error.message));
     }
@@ -57,6 +76,7 @@ export default function UserProfile() {
 
   return (
     <div className="min-h-screen max-w-screen mx-auto bg-[#F9FAFB]">
+      {/* <Header /> */}
       <div className="px-7 flex flex-col lg:flex-row gap-8 items-center lg:h-screen min-h-screen">
         <div className="flex flex-col items-center lg:w-2/6 flex-grow w-full h-5/6 shadow-lg rounded-lg bg-white  mt-7 lg:mt-0">
           <div className="items-center m-4 rounded-full overflow-hidden w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64">

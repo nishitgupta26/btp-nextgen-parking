@@ -25,11 +25,10 @@ export default function SignIn() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    try {
-      // Password length validation
-    if (formData.password.length < 8) {
+    // Password length validation
+    if (formData.password.length < 5) {
       // Display an error message or toast indicating the password length requirement
-      return toast.error("Password must be at least 8 characters long", {
+      return toast.error("Password must be at least 5 characters long", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: false,
@@ -40,8 +39,8 @@ export default function SignIn() {
         theme: "dark",
       });
     }
-
-    // Email existence validation -> Need to be done in the backend
+    try {
+      // Email existence validation -> Need to be done in the backend
       dispatch(signInStart());
       const response = await fetch(`${host}/api/auth/createuser`, {
         method: "POST",
@@ -51,9 +50,20 @@ export default function SignIn() {
         body: JSON.stringify({ ...formData, role: type }), // Include role in formData
       });
       const data = await response.json();
-
+      
       if (data.error) {
         dispatch(signInFailure(data.error));
+        console.log(data.error);
+        return toast.error(data.error, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       } else {
         cookies.set("access_token", data.authtoken);
         const { password, name, ...userData } = formData;
@@ -71,6 +81,20 @@ export default function SignIn() {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+    // Password length validation
+    if (loginData.password.length < 5) {
+      // Display an error message or toast indicating the password length requirement
+      return toast.error("Password must be at least 5 characters long", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
     try {
       dispatch(signInStart());
       const response = await fetch(`${host}/api/auth/login`, {
@@ -85,7 +109,7 @@ export default function SignIn() {
       if (data.errors) {
         dispatch(signInFailure(data.errors));
         // Render toast only when there's an error during login attempt
-        toast.error("Invalid Credentials!", {
+        toast.error(data.errors, {
           position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
@@ -237,24 +261,6 @@ export default function SignIn() {
                     checked={type === "Owner"}
                   />
                   <span>Owner</span>
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="radio"
-                    onChange={(e) => setType("Manager")}
-                    checked={type === "Manager"}
-                  />
-                  <span>Manager</span>
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="radio"
-                    onChange={(e) => setType("Admin")}
-                    checked={type === "Admin"}
-                  />
-                  <span>Admin</span>
                 </label>
               </form>
             </div>
