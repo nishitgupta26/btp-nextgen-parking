@@ -82,7 +82,7 @@ router.post("/addmanager", fetchuser, async (req, res) => {
 router.delete("/removemanager", fetchuser, async (req, res) => {
 
     const userdata = await User.findById(req.user.id).select("-password");
-    const targetmanager = req.body.manageremail;
+    const targetmanager = req.body.managerid;
 
     if(userdata.role.toLowerCase() !== "owner" && userdata.role.toLowerCase() !== "admin")
     {
@@ -102,7 +102,7 @@ router.delete("/removemanager", fetchuser, async (req, res) => {
         return res.status(401).send("Not Allowed");
     }
     // find the user with email targetmanager
-    const Manager = await User.findOne({email: targetmanager});
+    const Manager = await User.findById(targetmanager);
     if(!Manager)
     {
         return res.status(404).send("User not found");
@@ -117,7 +117,7 @@ router.delete("/removemanager", fetchuser, async (req, res) => {
         }
         else
         {
-            return res.json(docs);
+            return res.json("manager removed successfully");
         }
     }
     );
