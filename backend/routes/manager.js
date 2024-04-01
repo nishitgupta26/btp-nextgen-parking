@@ -50,9 +50,7 @@ router.post("/addmanager", fetchuser, async (req, res) => {
             console.log(err);
             return res.status(500).send(err);
         }
-        else{
-            return res.json("manager added successfullt");
-        }
+        
     });
 
     console.log(Manager._id);
@@ -70,6 +68,10 @@ router.post("/addmanager", fetchuser, async (req, res) => {
                 return res.json(docs);
             }
         });
+    }
+    else
+    {
+        return res.json("manager added successfullt");
     }
     
 });
