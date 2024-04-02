@@ -18,7 +18,7 @@ import { useEffect } from "react";
 import ViewListing from "./pages/ViewListing.jsx";
 
 export default function App() {
-  const [isOverlay, setOverlay] = useState(false);
+  const [isOverlay, setOverlay] = useState(true);
   // useEffect(() => {
   //   console.log(isOverlay);
   // },[isOverlay]);

@@ -1,6 +1,8 @@
 import { React, useState } from "react";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CreateListing() {
   const [formData, setFormData] = useState({
@@ -43,7 +45,16 @@ export default function CreateListing() {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        toast.info("Parking listed successfully!", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         navigate("/owner-profile");
       } else {
         const errorMessage = await response.text();

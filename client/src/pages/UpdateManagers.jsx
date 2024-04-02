@@ -99,7 +99,7 @@ export default function UpdateManagers() {
   };
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
+    <div className="p-3 max-w-screen min-h-screen mx-auto">
       {managers.length > 0 ? (
         <div className="flex flex-col gap-4">
           <h1 className="text-center mt-7 text-2xl font-semibold">

@@ -142,7 +142,7 @@ export default function SignIn() {
         <div class="login">
           <form class="form" onSubmit={handleSignIn}>
             <label for="chk" aria-hidden="true">
-              Log in
+              Login
             </label>
             <input
               onChange={(e) =>

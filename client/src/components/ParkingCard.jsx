@@ -9,63 +9,66 @@ export default function ParkingCard({lot}) {
             href="#"
             class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full"
           >
-            <div class="shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-4 rounded-lg bg-white">
-              <div class="flex justify-center relative rounded-lg overflow-hidden h-52">
+            <div class="border border-slate-400 rounded-lg bg-white overflow-hidden">
+              <div class="flex justify-center relative rounded-none overflow-hidden h-52">
                 <div class="transition-transform duration-500 transform ease-in-out hover:scale-110 w-full">
                   <div class="absolute inset-0 bg-black ">
                     <img
                       src={BgImg}
                       alt="Parking Space"
-                      class="w-full h-full object-cover"
+                      class="w-full h-full object-cover rounded-none"
                     />
                   </div>
                 </div>
-                <span class="absolute top-0 left-0 inline-flex mt-3 ml-3 px-3 py-2 rounded-lg z-10 bg-red-500 text-sm font-medium text-white select-none">
+                {/* <span class="absolute top-0 left-0 inline-flex mt-3 ml-3 px-3 py-2 rounded-lg z-10 bg-red-500 text-sm font-medium text-white select-none">
                   Featured
-                </span>
+                </span> */}
+                {lot.chargingPorts!==0 && <span class="absolute top-0 left-0 inline-flex mt-3 ml-3 px-2 py-1 rounded-lg z-10 bg-white text-sm font-semibold border-2 border-green-600 text-green-600 select-none">
+                  EV
+                </span>}
               </div>
-
-              <div class="mt-4">
+              <div className="m-3">
+              <div class="mt-4 flex flex-row justify-between items-center">
                 <h2 class="font-medium text-base md:text-lg text-gray-800 line-clamp-1">
                   {lot.parkingSpaceName}
                 </h2>
-                <p class="mt-2 text-sm text-gray-800 line-clamp-1">
+                <p class="text-sm text-gray-800">
                   {lot.location}
                 </p>
               </div>
 
-              <div class="grid grid-cols-2 grid-rows-2 gap-4 mt-8">
+              <div class="grid grid-cols-2 grid-rows-2 gap-4 mt-4">
                 <p class="inline-flex flex-col text-gray-800">
-                  <span class=" text-base font-semibold mt-2 xl:mt-0">
+                  <span class=" text-sm font-medium mt-2 xl:mt-0">
                     Type of Parking
                   </span>
-                  <span class="mt-2 xl:mt-0">{lot.type}</span>
+                  <span class="text-sm text-slate-600 mt-2 xl:mt-0">{lot.type}</span>
                 </p>
-                <p class="inline-flex flex-col text-gray-800">
+                {/* <p class="inline-flex flex-col text-gray-800">
                   <span class=" text-base font-semibold mt-2 xl:mt-0">
-                    EV charging
+                    Security Guard
                   </span>
                   <span class="mt-2 xl:mt-0">{lot.chargingPorts!==0 ?  "Yes" : "No"}</span>
-                </p>
+                </p> */}
                 <p class="inline-flex flex-col text-gray-800">
-                  <span class=" text-base font-semibold mt-2 xl:mt-0">
+                  <span class=" text-sm font-medium  mt-2 xl:mt-0">
                     Operating Hours
                   </span>
-                  <span class="mt-2 xl:mt-0">{lot.openingHours} to {lot.closingHours}</span>
+                  <span class="text-sm text-slate-600 mt-2 xl:mt-0">{lot.openingHours} to {lot.closingHours}</span>
                 </p>
                 <p class="inline-flex flex-col text-gray-800">
-                  <span class=" text-base font-semibold mt-2 xl:mt-0">
+                  <span class=" text-sm font-medium  mt-2 xl:mt-0">
                     Camera Surveillance
                   </span>
-                  <span class="mt-2 xl:mt-0">{lot.surveillanceCamera ? "Yes" : "No"}</span>
+                  <span class="text-sm text-slate-600 mt-2 xl:mt-0">{lot.surveillanceCamera ? "Yes" : "No"}</span>
                 </p>
               </div>
 
-              <div class="grid grid-cols-2 mt-8">
+              <div class="grid grid-cols-2 mt-8 items-center">
                 <div class="flex items-center ">
                   <button
                     type="button"
-                    class="shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 18 21"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round" 
                       aria-hidden="true"  class="icon icon-tabler icons-tabler-outline icon-tabler-car-garage w-3.5 h-3.5 me-2">
@@ -85,6 +88,7 @@ export default function ParkingCard({lot}) {
                     <span class="text-lg">{lot.parkingRate}</span>
                   </p>
                 </div>
+              </div>
               </div>
             </div>
           </a>

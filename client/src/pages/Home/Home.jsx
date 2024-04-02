@@ -43,6 +43,7 @@ export default function Home({ isOverlay, setOverlay }) {
   useEffect(() => {
     // Disable scrolling when overlay is rendered
     if (!latitude && !longitude) {
+      setOverlay(false);
       document.body.style.overflow = "hidden";
     } 
     else {
@@ -172,7 +173,7 @@ export default function Home({ isOverlay, setOverlay }) {
           </div>
         </div>
       )}
-      <div className="mt-14 ml-4 mr-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
+      <div className="mt-14 ml-4 mr-4 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10">
         {/* <h1 className="text-4xl text-center mt-8">Welcome to SmartPark</h1> */}
         {parkingSlots.map((lot) => (
           <ParkingCard key={lot.id} lot={lot} />

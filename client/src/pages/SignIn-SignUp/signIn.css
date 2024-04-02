@@ -3,7 +3,7 @@
     justify-content: center;
     height: 90vh;
     align-items: center;
-    background-color: #343858;
+    /* background-color: #343858; */
   }
 .main {
   position: relative;
@@ -15,7 +15,8 @@
   max-width: 60vh;
   overflow: hidden;
   border-radius: 12px;
-  box-shadow: 7px 7px 10px 3px #24004628;
+  border: 2px solid #255861 !important;
+  /* box-shadow: 7px 7px 10px 3px #24004628; */
 }
 
 .form {
@@ -137,7 +138,7 @@ label {
   }
   
   .container label input:checked + span:before {
-    box-shadow: inset 0 0 0 0.4375em #00005c;
+    /* box-shadow: inset 0 0 0 0.4375em #00005c; */
   }
   
   .container label span {
@@ -163,7 +164,7 @@ label {
     border-radius: 50%;
     margin-right: 0.375em;
     transition: 0.25s ease;
-    box-shadow: inset 0 0 0 0.125em #00005c;
+    /* box-shadow: inset 0 0 0 0.125em #00005c; */
   }
   .login form container label span{
     color:#d6d6e5;
