@@ -102,7 +102,7 @@ export default function SignIn() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...loginData, role: loginType }),
+        body: JSON.stringify({ ...loginData }),
       });
       const data = await response.json();
 
@@ -126,9 +126,9 @@ export default function SignIn() {
           signInSuccess({ ...userData, role: data.role, name: data.name })
         );
 
-        if (loginType === "Owner") navigate("/owner-profile");
-        else if (loginType === "Manager") navigate("/manager-profile");
-        else if (loginType === "User") navigate("/user-profile");
+        if (data.role === "Owner") navigate("/owner-profile");
+        else if (data.role === "Manager") navigate("/manager-profile");
+        else if (data.role === "User") navigate("/user-profile");
         else navigate("/admin-profile");
       }
     } catch (error) {
