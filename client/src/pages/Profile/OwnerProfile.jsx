@@ -75,6 +75,18 @@ export default function OwnerProfile() {
       if (res.ok) {
         const data = await res.json();
         setUserListings(data);
+        if(userListings.length === 0){
+          toast.error("No Listings Available", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        }
         setShowListings(true);
       } else {
         setShowListingsError(true);
@@ -96,6 +108,16 @@ export default function OwnerProfile() {
         const data = await res.json();
         // console.log(data);
         setUserListings(userListings.filter((listing) => listing._id !== id));
+        toast.info(data, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     } catch (error) {
       console.log(error);
@@ -154,17 +176,6 @@ export default function OwnerProfile() {
               id="username"
               className="border p-3 rounded-lg"
             />
-
-            <input defaultValue={currentUser.email}
-              onChange={(e) =>
-                setformData({ ...formData, email: e.target.value })
-              }
-              type="email"
-              placeholder="E-mail"
-              id="email"
-              className="border p-3 rounded-lg"
-            />
-
             <input
               onChange={(e) =>
                 setformData({ ...formData, password: e.target.value })
