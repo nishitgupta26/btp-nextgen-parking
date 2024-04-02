@@ -68,7 +68,7 @@ export default function CreateListing() {
   return (
     <div className="p-4 max-w-full min-h-screen mx-auto bg-[#F9FAFB]">
       <div className=" rounded-md p-1 my-7">
-        <h1 className="text-3xl font-semibold text-center underline underline-offset-4 decoration-[#252e37]">
+        <h1 className="text-3xl font-semibold text-center mb-4">
           Create a New Listing{" "}
         </h1>
       </div>
@@ -79,7 +79,7 @@ export default function CreateListing() {
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             type="text"
             placeholder="Parking Space Name"
-            className="border p-3 rounded-lg  shadow-inner"
+            className="border border-slate-400 p-3 rounded-lg"
             id="name"
             maxLength="62"
             minLength="5"
@@ -93,7 +93,7 @@ export default function CreateListing() {
             }
             type="text"
             placeholder="Location"
-            className="border p-3 rounded-lg  shadow-inner"
+            className="border p-3 rounded-lg border-slate-400"
             id="location"
             required
           />
@@ -105,7 +105,7 @@ export default function CreateListing() {
               <input
                 type="radio"
                 id="closed"
-                className="w-5  shadow-inner"
+                className="w-5  border-slate-400"
                 onChange={(e) => setFormData({ ...formData, type: "closed" })}
                 checked={formData.type === "closed"}
               />
@@ -115,7 +115,7 @@ export default function CreateListing() {
               <input
                 type="radio"
                 id="mixed"
-                className="w-5  shadow-inner"
+                className="w-5  border-slate-400"
                 onChange={(e) => setFormData({ ...formData, type: "mixed" })}
                 checked={formData.type === "mixed"}
               />
@@ -125,7 +125,7 @@ export default function CreateListing() {
               <input
                 type="radio"
                 id="open"
-                className="w-5  shadow-inner"
+                className="w-5  border-slate-400"
                 onChange={(e) => setFormData({ ...formData, type: "open" })}
                 checked={formData.type === "open"}
               />
@@ -148,7 +148,7 @@ export default function CreateListing() {
                 // min="0"
                 max="5000"
                 required
-                className="p-3 border border-gray-300 rounded-lg  shadow-inner"
+                className="p-3 border rounded-lg  border-slate-400"
               />
             </div>
           </div>
@@ -193,7 +193,7 @@ export default function CreateListing() {
             }
             type="time"
             placeholder="Opening time (hh : mm)"
-            className="border p-3 rounded-lg  shadow-inner"
+            className="border p-3 rounded-lg  border-slate-400"
             id="openingTime"
             required
           />
@@ -205,7 +205,7 @@ export default function CreateListing() {
             }
             type="time"
             placeholder="Closing time (hh : mm)"
-            className="border p-3 rounded-lg  shadow-inner"
+            className="border p-3 rounded-lg  border-slate-400"
             id="closingTime"
             required
           />
@@ -216,7 +216,7 @@ export default function CreateListing() {
               <input
                 type="radio"
                 id="Open"
-                className="w-5  shadow-inner"
+                className="w-5  border-slate-400"
                 onChange={(e) => setFormData({ ...formData, isOpen: true })}
                 checked={formData.isOpen === true}
               />
@@ -227,7 +227,7 @@ export default function CreateListing() {
               <input
                 type="radio"
                 id="Closed"
-                className="w-5  shadow-inner"
+                className="w-5 border-slate-400"
                 onChange={(e) => setFormData({ ...formData, isOpen: false })}
                 checked={formData.isOpen === false}
               />
@@ -249,7 +249,7 @@ export default function CreateListing() {
               max="5000"
               placeholder="Two Wheeler Capacity:"
               required
-              className="p-3 border border-gray-300 rounded-lg  shadow-inner"
+              className="p-3 border rounded-lg border-slate-400"
             />
           </div>
 
@@ -264,18 +264,19 @@ export default function CreateListing() {
               // min="0"
               max="5000"
               required
-              className="p-3 border border-gray-300 rounded-lg  shadow-inner"
+              className="p-3 border rounded-lg border-slate-400"
             />
           </div>
         </div>
       </form>
-
+      <div className="flex items-center justify-center">
       <button
         onClick={handleSubmit}
-        className="p-3 min-w-full my-7 shadow-inner bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
+        className="p-3 w-full md:w-1/5 sm:w-1/3 my-7 border border-slate-400 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
       >
         Create Listing
       </button>
+      </div>
     </div>
   );
 }
