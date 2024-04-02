@@ -128,7 +128,8 @@ router.post('/login',
                         // generating authorization token using jwt and sending it to user
                         const authtoken = jwt.sign(data, JWT_SECRET);
 
-                        res.json({ authtoken });
+                        //  return the found user name and authtoken
+                        res.json({ authtoken: authtoken, name: foundUser.name });
                     }
                 }
             }

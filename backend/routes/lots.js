@@ -152,7 +152,7 @@ router.get("/getownerlots", fetchuser, async (req, res) => {
 });
 
 
-// show details of a particular lot - GET - "/api/lots/getlot" - REQUIRES LOGIN
+// show details of a particular lot - GET - "/api/lots/getlot" - DOES NOT REQUIRES LOGIN
 router.get("/getlot/:id", async (req, res) => {
     try {
         const lot = await Lots.findById(req.params.id);
