@@ -15,7 +15,7 @@ import UpdateListing from "./pages/UpdateListing.jsx";
 import UpdateManagers from "./pages/UpdateManagers.jsx";
 import { useState } from "react";
 import { useEffect } from "react";
-
+import ViewListing from "./pages/ViewListing.jsx";
 
 export default function App() {
   const [isOverlay, setOverlay] = useState(false);
@@ -26,7 +26,10 @@ export default function App() {
     <BrowserRouter>
       {isOverlay && <Header />}
       <Routes>
-        <Route path="/" element={<Home isOverlay={isOverlay} setOverlay={setOverlay}/>} />
+        <Route
+          path="/"
+          element={<Home isOverlay={isOverlay} setOverlay={setOverlay} />}
+        />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/about" element={<About />} />
 
@@ -44,6 +47,8 @@ export default function App() {
             path="/update-managers/:listingId"
             element={<UpdateManagers />}
           />
+
+          <Route path="/view-listing/:listingId" element={<ViewListing />} />
         </Route>
         {/* temporary route to show the card */}
         <Route path="/pcard" element={<ParkingCard />} />
