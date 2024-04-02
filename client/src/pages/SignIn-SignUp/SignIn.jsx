@@ -50,7 +50,7 @@ export default function SignIn() {
         body: JSON.stringify({ ...formData, role: type }), // Include role in formData
       });
       const data = await response.json();
-      
+
       if (data.error) {
         dispatch(signInFailure(data.error));
         console.log(data.error);
@@ -66,7 +66,7 @@ export default function SignIn() {
         });
       } else {
         cookies.set("access_token", data.authtoken);
-        const { password, name, ...userData } = formData;
+        const { password, ...userData } = formData;
         dispatch(signInSuccess({ ...userData, role: type }));
 
         if (type === "Owner") navigate("/owner-profile");
@@ -122,7 +122,9 @@ export default function SignIn() {
       } else {
         cookies.set("access_token", data.authtoken);
         const { password, ...userData } = loginData;
-        dispatch(signInSuccess({ ...userData, role: loginType }));
+        dispatch(
+          signInSuccess({ ...userData, role: loginType, name: data.name })
+        );
 
         if (loginType === "Owner") navigate("/owner-profile");
         else if (loginType === "Manager") navigate("/manager-profile");

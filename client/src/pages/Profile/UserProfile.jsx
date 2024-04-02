@@ -20,7 +20,7 @@ export default function UserProfile() {
   const dispatch = useDispatch();
   const [formData, setformData] = useState({});
   const authtoken = cookies.get("access_token");
-  // console.log(currentUser);
+  console.log(currentUser);
 
   const handleSignOut = async () => {
     try {
@@ -36,39 +36,38 @@ export default function UserProfile() {
     e.preventDefault();
     try {
       // Password length validation
-    if (formData.password.length>0 && formData.password.length < 8) {
-      // Display an error message or toast indicating the password length requirement
-      return toast.error("Password must be at least 8 characters long", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    }
-    else{
-      dispatch(updateUserStart());
-      const res = await fetch(`${host}/api/auth/updateuser`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": authtoken, // Use the correct header name and format for the token
-        },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      console.log(data);
-      if (data.error) {
-        dispatch(updateUserFailure(data.error));
-        return;
-      }
+      if (formData.password.length > 0 && formData.password.length < 8) {
+        // Display an error message or toast indicating the password length requirement
+        return toast.error("Password must be at least 8 characters long", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else {
+        dispatch(updateUserStart());
+        const res = await fetch(`${host}/api/auth/updateuser`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": authtoken, // Use the correct header name and format for the token
+          },
+          body: JSON.stringify(formData),
+        });
+        const data = await res.json();
+        console.log(data);
+        if (data.error) {
+          dispatch(updateUserFailure(data.error));
+          return;
+        }
 
-      dispatch(updateUserSuccess(data));
-      setUpdateSuccess(true);
-    }
+        dispatch(updateUserSuccess(data));
+        setUpdateSuccess(true);
+      }
     } catch (error) {
       dispatch(updateUserFailure(error.message));
     }
@@ -107,8 +106,13 @@ export default function UserProfile() {
           </button>
         </div>
         <div className="flex flex-col items-center justify-center lg:w-4/6 flex-grow w-full h-5/6 shadow-lg rounded-lg bg-white p-4 mb-7 lg:mb-0">
-          <h1 className="text-2xl font-semibold text-center my-7">Update Profile</h1>
-          <form onSubmit={handleUpdate} className="flex flex-col gap-4 lg:gap-8 w-3/4">
+          <h1 className="text-2xl font-semibold text-center my-7">
+            Update Profile
+          </h1>
+          <form
+            onSubmit={handleUpdate}
+            className="flex flex-col gap-4 lg:gap-8 w-3/4"
+          >
             <input
               onChange={(e) =>
                 setformData({ ...formData, name: e.target.value })
