@@ -114,6 +114,7 @@ export default function UserProfile() {
             className="flex flex-col gap-4 lg:gap-8 w-3/4"
           >
             <input
+              defaultValue={currentUser.name}
               onChange={(e) =>
                 setformData({ ...formData, name: e.target.value })
               }
@@ -124,6 +125,7 @@ export default function UserProfile() {
             />
 
             <input
+              defaultValue={currentUser.email}
               onChange={(e) =>
                 setformData({ ...formData, email: e.target.value })
               }

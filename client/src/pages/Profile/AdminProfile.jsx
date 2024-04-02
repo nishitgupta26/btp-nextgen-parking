@@ -88,6 +88,7 @@ export default function AdminProfile() {
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
       <form onSubmit={handleUpdate} className="flex flex-col gap-4">
         <input
+          defaultValue={currentUser.name}
           onChange={(e) => setformData({ ...formData, name: e.target.value })}
           type="text"
           placeholder="username"
@@ -96,6 +97,7 @@ export default function AdminProfile() {
         />
 
         <input
+          defaultValue={currentUser.email}
           onChange={(e) => setformData({ ...formData, email: e.target.value })}
           type="email"
           placeholder="email"
