@@ -188,6 +188,7 @@ export default function OwnerProfile() {
             <div className="flex flex-col justify-center sm:flex-row sm:justify-between">
               <button
                 disabled={loading}
+                type="submit"
                 className="bg-slate-700 text-white w-full my-2 sm:mr-2 rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
               >
                 {loading ? "Loading..." : "Update Profile"}
@@ -198,7 +199,7 @@ export default function OwnerProfile() {
               >
                 Create Listing
               </Link>
-              <button onClick={handleShowListings} className="bg-slate-700 text-white rounded-lg p-3  w-full  my-2 sm:ml-2 uppercase hover:opacity-95">
+              <button type="button" onClick={handleShowListings} className="bg-slate-700 text-white rounded-lg p-3  w-full  my-2 sm:ml-2 uppercase hover:opacity-95">
                 Show Listings
               </button>
             </div>
