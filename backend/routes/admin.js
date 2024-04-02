@@ -57,8 +57,8 @@ router.delete("/deletelot", fetchuser, async (req, res) =>
 });
 
 
-// ROUTE-3 :: show all listings that are not approved - GET - "/api/admin/deleteuser" - REQUIRES LOGIN
-router.get("/showlistings", fetchuser, async (req, res) =>
+// ROUTE-3 :: show all listings that are not approved - GET - "/api/admin/showpending" - REQUIRES LOGIN
+router.get("/showpending", fetchuser, async (req, res) =>
 {
     const userdata = await User.findById(req.user.id).select("-password");
 
