@@ -50,8 +50,6 @@ export default function App() {
 
           <Route path="/view-listing/:listingId" element={<ViewListing />} />
         </Route>
-        {/* temporary route to show the card */}
-        <Route path="/pcard" element={<ParkingCard />} />
       </Routes>
     </BrowserRouter>
   );

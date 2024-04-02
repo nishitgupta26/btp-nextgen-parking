@@ -50,16 +50,46 @@ export default function OwnerProfile() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       if (data.error) {
         dispatch(updateUserFailure(data.error));
+        
+        toast.error(data.error, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         return;
       }
-
       dispatch(updateUserSuccess(data));
+      toast.info(data.message, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+      toast.error(error.message, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
@@ -75,7 +105,9 @@ export default function OwnerProfile() {
       if (res.ok) {
         const data = await res.json();
         setUserListings(data);
-        if(userListings.length === 0){
+        setShowListings(true);
+        console.log(userListings);
+        if(userListings.length == 0){
           toast.error("No Listings Available", {
           position: "top-center",
           autoClose: 3000,
@@ -87,7 +119,6 @@ export default function OwnerProfile() {
           theme: "light",
         });
         }
-        setShowListings(true);
       } else {
         setShowListingsError(true);
       }
@@ -127,11 +158,11 @@ export default function OwnerProfile() {
   const handleShowManagers = async () => {
     setShowListings(false);
   };
-
+//bg-[#F9FAFB]
   return (
-    <div className="min-h-screen max-w-screen mx-auto bg-[#F9FAFB]">
+    <div className="min-h-screen max-w-screen mx-auto bg-white">
       <div className="px-7 flex flex-col lg:flex-row gap-8 items-center lg:h-screen min-h-screen">
-        <div className="flex flex-col items-center lg:w-2/6 flex-grow w-full h-5/6 shadow-lg rounded-lg bg-white mt-7 lg:mt-0">
+        <div className="flex flex-col items-center lg:w-2/6 flex-grow w-full h-5/6  border border-slate-400 rounded-lg bg-white mt-7 lg:mt-0">
           <div className="items-center m-4 rounded-full overflow-hidden w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64">
             <img
               className="object-cover w-full h-full rounded-full"
@@ -159,7 +190,7 @@ export default function OwnerProfile() {
             Sign Out
           </button>
         </div>
-        <div className="flex flex-col items-center justify-center lg:w-4/6 flex-grow w-full h-5/6 shadow-lg rounded-lg bg-white p-4 mb-7 lg:mb-0">
+        <div className="flex flex-col items-center justify-center lg:w-4/6 flex-grow w-full h-5/6 border border-slate-400 rounded-lg bg-white p-4 mb-7 lg:mb-0">
           <h1 className="text-2xl font-semibold text-center my-7">
             Update Profile
           </h1>
@@ -207,18 +238,9 @@ export default function OwnerProfile() {
         </div>
       </div>
 
-      {/* <p className="text-red-700 mt-5">{error ? error : ""}</p>
-      <p className="text-green-700 mt-5">
-        {updateSuccess ? "User is updated successfully!" : ""}
-      </p> */}
-{/* 
-      <p className="text-red-700 mt-5">
-        {showListingsError ? "Error showing listings" : ""}
-      </p> */}
-
       {showListings && userListings && userListings.length > 0 && (
         <div className="flex flex-col gap-4">
-          <h1 className="text-center mt-7 text-2xl font-semibold">
+          <h1 className="text-center text-2xl font-semibold">
             Your Listings
           </h1>
           
@@ -226,11 +248,12 @@ export default function OwnerProfile() {
           {userListings.map((listing) => (
             <div
               key={listing._id}
-              className="border rounded-lg p-3 flex justify-between items-center gap-4"
+              className=" border border-slate-400 bg-white rounded-lg p-3 flex justify-between items-center gap-4"
             >
               <div className="flex flex-col">
                 <p className="font-medium">{listing.name}</p>
                 <p className="text-slate-500">{listing.location}</p>
+                {listing.approved ? <p className="text-green-500">Approved</p> : <p className="text-red-500">Pending</p>}
               </div>
 
               <div className="flex flex-row item-center gap-2">
