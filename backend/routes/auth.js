@@ -129,7 +129,7 @@ router.post('/login',
                         const authtoken = jwt.sign(data, JWT_SECRET);
 
                         //  return the found user name and authtoken
-                        res.json({ authtoken: authtoken, name: foundUser.name });
+                        res.json({ authtoken: authtoken, name: foundUser.name, role: foundUser.role });
                     }
                 }
             }
