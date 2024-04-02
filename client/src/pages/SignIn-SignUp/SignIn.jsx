@@ -123,7 +123,7 @@ export default function SignIn() {
         cookies.set("access_token", data.authtoken);
         const { password, ...userData } = loginData;
         dispatch(
-          signInSuccess({ ...userData, role: loginType, name: data.name })
+          signInSuccess({ ...userData, role: data.role, name: data.name })
         );
 
         if (loginType === "Owner") navigate("/owner-profile");
