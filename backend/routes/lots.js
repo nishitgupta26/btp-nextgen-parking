@@ -14,15 +14,9 @@ require("dotenv").config();
 
 // ROUTE-1 :: get all parking lots listed - GET - "/api/lots/getlots" - DOES NOT REQUIRES LOGIN
 router.get("/getlots", async (req, res) => {
-    Lots.find({}, async (err, lots) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).send(err);
-      } else {
+        const lots = await Lots.find({approved: true});
         return res.json(lots);
-      }
     });
-});
 
 // ROUTE-2 :: get nearby parking lots - GET - "/api/lots/getnearbylots" - DOES NOT REQUIRES LOGIN
 // TODO :: implement this route
