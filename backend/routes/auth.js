@@ -167,7 +167,7 @@ router.get('/getalluser', async (req, res) => {
 });
 
 // ROUTE-5 //update a user - PUT - "/api/auth/updateuser " - REQUIRES LOGIN
-router.put('/updateuser',fetchuser,async (req, res) => {
+router.put('/updateuser', fetchuser, async (req, res) => {
     try {
         const userId = req.user.id;
         const { name, password } = req.body;
@@ -181,22 +181,16 @@ router.put('/updateuser',fetchuser,async (req, res) => {
         }
 
         // Update the user's name if not empty
-        if(name && name.trim() !== '')
+        if (name && name.trim() !== '') {
             user.name = name;
-        if(password && password.trim() !== '') 
-        {
-            bcrypt.hash(req.body.password, 10, async function (error, hash) {
-                if(error)
-                {
-                    return res.status(400).json({ errors: "Internal server error" });
-                }
-                else{
-                    user.password = hash;
-                }
-            });
         }
-       
 
+        // Update the user's password if not empty
+        if (password && password.trim() !== '') {
+            // Generate a hash for the new password
+            const hash = await bcrypt.hash(password, 10);
+            user.password = hash;
+        }
 
         // Save the updated user
         await user.save();
