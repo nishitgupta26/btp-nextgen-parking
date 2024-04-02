@@ -30,6 +30,7 @@ connectDB();
 app.use("/api/auth", require("./routes/auth.js"));
 app.use("/api/lots", require("./routes/lots.js"));
 app.use("/api/manager", require("./routes/manager.js"));
+app.use("/api/admin", require("./routes/admin.js"));
 
 app.listen(port, function () {
     console.log("listening on port " + port);
