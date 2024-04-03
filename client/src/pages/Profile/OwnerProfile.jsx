@@ -25,7 +25,7 @@ export default function OwnerProfile() {
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
   const [showListings, setShowListings] = useState(true);
-  //console.log(currentUser);
+  console.log(currentUser);
 
   const handleSignOut = async () => {
     try {
@@ -53,7 +53,7 @@ export default function OwnerProfile() {
       // console.log(data);
       if (data.error) {
         dispatch(updateUserFailure(data.error));
-        
+
         toast.error(data.error, {
           position: "top-center",
           autoClose: 3000,
@@ -107,17 +107,17 @@ export default function OwnerProfile() {
         setUserListings(data);
         setShowListings(true);
         console.log(userListings);
-        if(userListings.length == 0){
+        if (userListings.length == 0) {
           toast.error("No Listings Available", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
       } else {
         setShowListingsError(true);
@@ -158,7 +158,7 @@ export default function OwnerProfile() {
   const handleShowManagers = async () => {
     setShowListings(false);
   };
-//bg-[#F9FAFB]
+  //bg-[#F9FAFB]
   return (
     <div className="min-h-screen max-w-screen mx-auto bg-white">
       <div className="px-7 flex flex-col lg:flex-row gap-8 items-center lg:h-screen min-h-screen">
@@ -198,7 +198,8 @@ export default function OwnerProfile() {
             onSubmit={handleUpdate}
             className="flex flex-col gap-4 lg:gap-8 w-3/4"
           >
-            <input defaultValue={currentUser.name}
+            <input
+              defaultValue={currentUser.name}
               onChange={(e) =>
                 setformData({ ...formData, name: e.target.value })
               }
@@ -207,6 +208,18 @@ export default function OwnerProfile() {
               id="username"
               className="border p-3 rounded-lg"
             />
+
+            <input
+              defaultValue={currentUser.email}
+              onChange={(e) =>
+                setformData({ ...formData, email: e.target.value })
+              }
+              type="email"
+              placeholder="E-mail"
+              id="email"
+              className="border p-3 rounded-lg"
+            />
+
             <input
               onChange={(e) =>
                 setformData({ ...formData, password: e.target.value })
@@ -230,7 +243,11 @@ export default function OwnerProfile() {
               >
                 Create Listing
               </Link>
-              <button type="button" onClick={handleShowListings} className="bg-slate-700 text-white rounded-lg p-3  w-full  my-2 sm:ml-2 uppercase hover:opacity-95">
+              <button
+                type="button"
+                onClick={handleShowListings}
+                className="bg-slate-700 text-white rounded-lg p-3  w-full  my-2 sm:ml-2 uppercase hover:opacity-95"
+              >
                 Show Listings
               </button>
             </div>
@@ -238,37 +255,52 @@ export default function OwnerProfile() {
         </div>
       </div>
 
+      {/* <p className="text-red-700 mt-5">{error ? error : ""}</p>
+      <p className="text-green-700 mt-5">
+        {updateSuccess ? "User is updated successfully!" : ""}
+      </p> */}
+      {/* 
+      <p className="text-red-700 mt-5">
+        {showListingsError ? "Error showing listings" : ""}
+      </p> */}
+
       {showListings && userListings && userListings.length > 0 && (
         <div className="flex flex-col gap-4">
-          <h1 className="text-center text-2xl font-semibold">
+          <h1 className="text-center mt-7 text-2xl font-semibold">
             Your Listings
           </h1>
-          
-      <div className=" m-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
-          {userListings.map((listing) => (
-            <div
-              key={listing._id}
-              className=" border border-slate-400 bg-white rounded-lg p-3 flex justify-between items-center gap-4"
-            >
-              <div className="flex flex-col">
-                <p className="font-medium">{listing.name}</p>
-                <p className="text-slate-500">{listing.location}</p>
-                {listing.approved ? <p className="text-green-500">Approved</p> : <p className="text-red-500">Pending</p>}
-              </div>
 
-              <div className="flex flex-row item-center gap-2">
-                <Link to={`/update-listing/${listing._id}`}>
-                  <button className="bg-whte text-red-600 border-red-600 border-2 p-1 px-2 w-full  mx-2 rounded-lg uppercase text-center hover:opacity-95">Edit</button>
-                </Link>
-                <button
-                  onClick={() => handleListingDelete(listing._id)}
-                  className="bg-red-600 text-white p-1 px-2 w-full  mx-2 rounded-lg uppercase text-center hover:opacity-95"
-                >
-                  Delete
-                </button>
+          <div className=" m-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
+            {userListings.map((listing) => (
+              <div
+                key={listing._id}
+                className=" border border-slate-400 bg-white rounded-lg p-3 flex justify-between items-center gap-4"
+              >
+                <div className="flex flex-col">
+                  <p className="font-medium">{listing.name}</p>
+                  <p className="text-slate-500">{listing.location}</p>
+                  {listing.approved ? (
+                    <p className="text-green-500">Approved</p>
+                  ) : (
+                    <p className="text-red-500">Pending</p>
+                  )}
+                </div>
+
+                <div className="flex flex-row item-center gap-2">
+                  <Link to={`/update-listing/${listing._id}`}>
+                    <button className="bg-whte text-red-600 border-red-600 border-2 p-1 px-2 w-full  mx-2 rounded-lg uppercase text-center hover:opacity-95">
+                      Edit
+                    </button>
+                  </Link>
+                  <button
+                    onClick={() => handleListingDelete(listing._id)}
+                    className="bg-red-600 text-white p-1 px-2 w-full  mx-2 rounded-lg uppercase text-center hover:opacity-95"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
           </div>
         </div>
       )}
