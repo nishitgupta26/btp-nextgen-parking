@@ -50,16 +50,46 @@ export default function OwnerProfile() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       if (data.error) {
         dispatch(updateUserFailure(data.error));
+
+        toast.error(data.error, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         return;
       }
-
       dispatch(updateUserSuccess(data));
+      toast.info(data.message, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+      toast.error(error.message, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
@@ -76,6 +106,19 @@ export default function OwnerProfile() {
         const data = await res.json();
         setUserListings(data);
         setShowListings(true);
+        console.log(userListings);
+        if (userListings.length == 0) {
+          toast.error("No Listings Available", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
       } else {
         setShowListingsError(true);
       }
@@ -96,6 +139,16 @@ export default function OwnerProfile() {
         const data = await res.json();
         // console.log(data);
         setUserListings(userListings.filter((listing) => listing._id !== id));
+        toast.info(data, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     } catch (error) {
       console.log(error);
@@ -105,11 +158,11 @@ export default function OwnerProfile() {
   const handleShowManagers = async () => {
     setShowListings(false);
   };
-
+  //bg-[#F9FAFB]
   return (
-    <div className="min-h-screen max-w-screen mx-auto bg-[#F9FAFB]">
+    <div className="min-h-screen max-w-screen mx-auto bg-white">
       <div className="px-7 flex flex-col lg:flex-row gap-8 items-center lg:h-screen min-h-screen">
-        <div className="flex flex-col items-center lg:w-2/6 flex-grow w-full h-5/6 shadow-lg rounded-lg bg-white mt-7 lg:mt-0">
+        <div className="flex flex-col items-center lg:w-2/6 flex-grow w-full h-5/6  border border-slate-400 rounded-lg bg-white mt-7 lg:mt-0">
           <div className="items-center m-4 rounded-full overflow-hidden w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64">
             <img
               className="object-cover w-full h-full rounded-full"
@@ -137,7 +190,7 @@ export default function OwnerProfile() {
             Sign Out
           </button>
         </div>
-        <div className="flex flex-col items-center justify-center lg:w-4/6 flex-grow w-full h-5/6 shadow-lg rounded-lg bg-white p-4 mb-7 lg:mb-0">
+        <div className="flex flex-col items-center justify-center lg:w-4/6 flex-grow w-full h-5/6 border border-slate-400 rounded-lg bg-white p-4 mb-7 lg:mb-0">
           <h1 className="text-2xl font-semibold text-center my-7">
             Update Profile
           </h1>
@@ -179,6 +232,7 @@ export default function OwnerProfile() {
             <div className="flex flex-col justify-center sm:flex-row sm:justify-between">
               <button
                 disabled={loading}
+                type="submit"
                 className="bg-slate-700 text-white w-full my-2 sm:mr-2 rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
               >
                 {loading ? "Loading..." : "Update Profile"}
@@ -193,6 +247,7 @@ export default function OwnerProfile() {
                 onClick={handleShowListings}
                 className="bg-slate-700 text-white rounded-lg p-3  w-full  my-2 sm:ml-2 uppercase hover:opacity-95"
               >
+              <button type="button" onClick={handleShowListings} className="bg-slate-700 text-white rounded-lg p-3  w-full  my-2 sm:ml-2 uppercase hover:opacity-95">
                 Show Listings
               </button>
             </div>
@@ -214,17 +269,18 @@ export default function OwnerProfile() {
           <h1 className="text-center mt-7 text-2xl font-semibold">
             Your Listings
           </h1>
-
-          <div className=" m-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
-            {userListings.map((listing) => (
-              <div
-                key={listing._id}
-                className="border rounded-lg p-3 flex justify-between items-center gap-4"
-              >
-                <div className="flex flex-col">
-                  <p className="font-medium">{listing.name}</p>
-                  <p className="text-slate-500">{listing.location}</p>
-                </div>
+          
+      <div className=" m-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
+          {userListings.map((listing) => (
+            <div
+              key={listing._id}
+              className=" border border-slate-400 bg-white rounded-lg p-3 flex justify-between items-center gap-4"
+            >
+              <div className="flex flex-col">
+                <p className="font-medium">{listing.name}</p>
+                <p className="text-slate-500">{listing.location}</p>
+                {listing.approved ? <p className="text-green-500">Approved</p> : <p className="text-red-500">Pending</p>}
+              </div>
 
                 <div className="flex flex-row item-center gap-2">
                   <Link to={`/update-listing/${listing._id}`}>
