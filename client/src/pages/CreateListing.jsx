@@ -66,10 +66,10 @@ export default function CreateListing() {
   };
 
   return (
-    <div className="p-4 max-w-full min-h-screen mx-auto bg-[#F9FAFB]">
+    <div className="p-4 px-12 max-w-full min-h-screen mx-auto bg-white">
       <div className=" rounded-md p-1 my-7">
         <h1 className="text-3xl font-semibold text-center mb-4">
-          Create a New Listing{" "}
+          Create a New Listing
         </h1>
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
@@ -133,8 +133,8 @@ export default function CreateListing() {
             </div>
           </div>
           <div className="flex flex-wrap gap-6">
-            <div className="flex items-center gap-2">
-              <p>Four Wheeler Capacity:</p>
+            <div className="flex flex-col sm:flex-row items-center gap-2">
+              <p className="font-medium">Four Wheeler Capacity:</p>
               <input
                 onChange={(e) =>
                   setFormData({
@@ -183,6 +183,19 @@ export default function CreateListing() {
                 checked={formData.surveillanceCamera || false}
               />
             </div>
+            <div className="flex items-center font-medium gap-2">
+              <p>Parking Rate:</p>
+              <input
+                onChange={(e) =>
+                  setFormData({ ...formData, parkingRate: e.target.value })
+                }
+                type="number"
+                id="parkingRate"
+                defaultValue={30}
+                required
+                className="p-3 border border-gray-300 rounded-lg"
+              />
+            </div>
           </div>
         </div>
         <div className="flex flex-col flex-1 gap-4">
@@ -211,7 +224,7 @@ export default function CreateListing() {
           />
 
           <div className="flex gap-6 flex-wrap">
-            <div className="flex gap-2">Parking Status</div>
+            <div className="flex gap-2 font-medium">Parking Status</div>
             <div className="flex gap-2">
               <input
                 type="radio"
@@ -253,7 +266,7 @@ export default function CreateListing() {
             />
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center font-medium gap-2">
             <p>No. of EV Charging Ports:</p>
             <input
               onChange={(e) =>
@@ -270,12 +283,12 @@ export default function CreateListing() {
         </div>
       </form>
       <div className="flex items-center justify-center">
-      <button
-        onClick={handleSubmit}
-        className="p-3 w-full md:w-1/5 sm:w-1/3 my-7 border border-slate-400 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
-      >
-        Create Listing
-      </button>
+        <button
+          onClick={handleSubmit}
+          className="p-3 w-full md:w-1/5 sm:w-1/3 my-7 border border-slate-400 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
+        >
+          Create Listing
+        </button>
       </div>
     </div>
   );
