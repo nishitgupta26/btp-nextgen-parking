@@ -244,10 +244,10 @@ export default function OwnerProfile() {
                 Create Listing
               </Link>
               <button
+                type="button"
                 onClick={handleShowListings}
                 className="bg-slate-700 text-white rounded-lg p-3  w-full  my-2 sm:ml-2 uppercase hover:opacity-95"
               >
-              <button type="button" onClick={handleShowListings} className="bg-slate-700 text-white rounded-lg p-3  w-full  my-2 sm:ml-2 uppercase hover:opacity-95">
                 Show Listings
               </button>
             </div>
@@ -269,18 +269,22 @@ export default function OwnerProfile() {
           <h1 className="text-center mt-7 text-2xl font-semibold">
             Your Listings
           </h1>
-          
-      <div className=" m-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
-          {userListings.map((listing) => (
-            <div
-              key={listing._id}
-              className=" border border-slate-400 bg-white rounded-lg p-3 flex justify-between items-center gap-4"
-            >
-              <div className="flex flex-col">
-                <p className="font-medium">{listing.name}</p>
-                <p className="text-slate-500">{listing.location}</p>
-                {listing.approved ? <p className="text-green-500">Approved</p> : <p className="text-red-500">Pending</p>}
-              </div>
+
+          <div className=" m-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
+            {userListings.map((listing) => (
+              <div
+                key={listing._id}
+                className=" border border-slate-400 bg-white rounded-lg p-3 flex justify-between items-center gap-4"
+              >
+                <div className="flex flex-col">
+                  <p className="font-medium">{listing.name}</p>
+                  <p className="text-slate-500">{listing.location}</p>
+                  {listing.approved ? (
+                    <p className="text-green-500">Approved</p>
+                  ) : (
+                    <p className="text-red-500">Pending</p>
+                  )}
+                </div>
 
                 <div className="flex flex-row item-center gap-2">
                   <Link to={`/update-listing/${listing._id}`}>
