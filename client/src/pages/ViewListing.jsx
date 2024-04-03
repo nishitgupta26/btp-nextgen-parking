@@ -3,6 +3,8 @@ import Cookies from "universal-cookie";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ViewListing() {
   const [formData, setFormData] = useState({});
@@ -43,12 +45,43 @@ export default function ViewListing() {
         body: JSON.stringify({ lotid: listingId }),
       });
       const data = await res.json();
+      // console.log(data);
+      toast.success("Listing Approved Successfully", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       if (data.error) {
         console.log(data.error);
+        toast.error(data.error, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         return;
       }
     } catch (error) {
-      console.error("Error approving listing:", error);
+      console.error("Error approving listing", error);
+      toast.error("Error in approving listing", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
@@ -63,12 +96,42 @@ export default function ViewListing() {
         body: JSON.stringify({ lotid: listingId }),
       });
       const data = await res.json();
+      toast.info("Listing Dispproved", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       if (data.error) {
         console.log(data.error);
+        toast.error(data.error, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         return;
       }
     } catch (error) {
-      console.error("Error disapproving listing:", error);
+      console.error("Error disapproving listing", error);
+      toast.error("Error disapproving listing", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
