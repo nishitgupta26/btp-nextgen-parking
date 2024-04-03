@@ -25,7 +25,7 @@ export default function OwnerProfile() {
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
   const [showListings, setShowListings] = useState(true);
-  //console.log(currentUser);
+  console.log(currentUser);
 
   const handleSignOut = async () => {
     try {
@@ -145,7 +145,8 @@ export default function OwnerProfile() {
             onSubmit={handleUpdate}
             className="flex flex-col gap-4 lg:gap-8 w-3/4"
           >
-            <input defaultValue={currentUser.name}
+            <input
+              defaultValue={currentUser.name}
               onChange={(e) =>
                 setformData({ ...formData, name: e.target.value })
               }
@@ -155,7 +156,8 @@ export default function OwnerProfile() {
               className="border p-3 rounded-lg"
             />
 
-            <input defaultValue={currentUser.email}
+            <input
+              defaultValue={currentUser.email}
               onChange={(e) =>
                 setformData({ ...formData, email: e.target.value })
               }
@@ -187,7 +189,10 @@ export default function OwnerProfile() {
               >
                 Create Listing
               </Link>
-              <button onClick={handleShowListings} className="bg-slate-700 text-white rounded-lg p-3  w-full  my-2 sm:ml-2 uppercase hover:opacity-95">
+              <button
+                onClick={handleShowListings}
+                className="bg-slate-700 text-white rounded-lg p-3  w-full  my-2 sm:ml-2 uppercase hover:opacity-95"
+              >
                 Show Listings
               </button>
             </div>
@@ -199,7 +204,7 @@ export default function OwnerProfile() {
       <p className="text-green-700 mt-5">
         {updateSuccess ? "User is updated successfully!" : ""}
       </p> */}
-{/* 
+      {/* 
       <p className="text-red-700 mt-5">
         {showListingsError ? "Error showing listings" : ""}
       </p> */}
@@ -209,31 +214,33 @@ export default function OwnerProfile() {
           <h1 className="text-center mt-7 text-2xl font-semibold">
             Your Listings
           </h1>
-          
-      <div className=" m-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
-          {userListings.map((listing) => (
-            <div
-              key={listing._id}
-              className="border rounded-lg p-3 flex justify-between items-center gap-4"
-            >
-              <div className="flex flex-col">
-                <p className="font-medium">{listing.name}</p>
-                <p className="text-slate-500">{listing.location}</p>
-              </div>
 
-              <div className="flex flex-row item-center gap-2">
-                <Link to={`/update-listing/${listing._id}`}>
-                  <button className="bg-whte text-red-600 border-red-600 border-2 p-1 px-2 w-full  mx-2 rounded-lg uppercase text-center hover:opacity-95">Edit</button>
-                </Link>
-                <button
-                  onClick={() => handleListingDelete(listing._id)}
-                  className="bg-red-600 text-white p-1 px-2 w-full  mx-2 rounded-lg uppercase text-center hover:opacity-95"
-                >
-                  Delete
-                </button>
+          <div className=" m-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
+            {userListings.map((listing) => (
+              <div
+                key={listing._id}
+                className="border rounded-lg p-3 flex justify-between items-center gap-4"
+              >
+                <div className="flex flex-col">
+                  <p className="font-medium">{listing.name}</p>
+                  <p className="text-slate-500">{listing.location}</p>
+                </div>
+
+                <div className="flex flex-row item-center gap-2">
+                  <Link to={`/update-listing/${listing._id}`}>
+                    <button className="bg-whte text-red-600 border-red-600 border-2 p-1 px-2 w-full  mx-2 rounded-lg uppercase text-center hover:opacity-95">
+                      Edit
+                    </button>
+                  </Link>
+                  <button
+                    onClick={() => handleListingDelete(listing._id)}
+                    className="bg-red-600 text-white p-1 px-2 w-full  mx-2 rounded-lg uppercase text-center hover:opacity-95"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
           </div>
         </div>
       )}

@@ -137,12 +137,12 @@ export default function SignIn() {
   };
 
   return (
-    <div class="outer">
-      <div class="main">
+    <div className="outer">
+      <div className="main">
         <input type="checkbox" id="chk" aria-hidden="true" />
 
-        <div class="login">
-          <form class="form" onSubmit={handleSignIn}>
+        <div className="login">
+          <form className="form" onSubmit={handleSignIn}>
             <label for="chk" aria-hidden="true">
               Login
             </label>
@@ -150,7 +150,7 @@ export default function SignIn() {
               onChange={(e) =>
                 setLoginData({ ...loginData, email: e.target.value })
               }
-              class="input"
+              className="input"
               type="email"
               name="email"
               placeholder="Email"
@@ -160,13 +160,13 @@ export default function SignIn() {
               onChange={(e) =>
                 setLoginData({ ...loginData, password: e.target.value })
               }
-              class="input"
+              className="input"
               type="password"
               name="pswd"
               placeholder="Password"
               required=""
             />
-            <div class="container">
+            <div className="container">
               <form>
                 <label>
                   <input
@@ -209,8 +209,8 @@ export default function SignIn() {
             <button>{loading ? "Loading..." : "Log in"}</button>
           </form>
         </div>
-        <div class="register">
-          <form class="form" onSubmit={handleRegister}>
+        <div className="register">
+          <form className="form" onSubmit={handleRegister}>
             <label for="chk" aria-hidden="true">
               Register
             </label>
@@ -218,7 +218,7 @@ export default function SignIn() {
               onChange={(e) =>
                 setformData({ ...formData, name: e.target.value })
               }
-              class="input"
+              className="input"
               type="text"
               name="txt"
               placeholder="Username"
@@ -228,7 +228,7 @@ export default function SignIn() {
               onChange={(e) =>
                 setformData({ ...formData, email: e.target.value })
               }
-              class="input"
+              className="input"
               type="email"
               name="email"
               placeholder="Email"
@@ -238,13 +238,13 @@ export default function SignIn() {
               onChange={(e) =>
                 setformData({ ...formData, password: e.target.value })
               }
-              class="input"
+              className="input"
               type="password"
               name="pswd"
               placeholder="Password"
               required=""
             />
-            <div class="container">
+            <div className="container">
               <form>
                 <label>
                   <input
