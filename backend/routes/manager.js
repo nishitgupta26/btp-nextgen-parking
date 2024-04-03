@@ -71,7 +71,7 @@ router.post("/addmanager", fetchuser, async (req, res) => {
     }
     else
     {
-        return res.json("manager added successfullt");
+        return res.json("manager added successfully");
     }
     
 });
