@@ -86,9 +86,9 @@ export default function AdminProfile() {
   };
 
   return (
-    <div className="min-h-screen max-w-screen mx-auto bg-white">
-      <div className="px-7 flex flex-col lg:flex-row gap-8 items-center lg:h-screen min-h-screen">
-        <div className="flex flex-col items-center lg:w-2/6 flex-grow w-full h-5/6 border border-slate-400 rounded-lg bg-white lg:mt-0">
+    <div className="max-w-screen flex flex-col mx-auto bg-white">
+      <div className="px-7 flex flex-col lg:flex-row items-center gap-8 mt-8 ">
+        <div className="flex flex-col items-center lg:w-2/6 flex-grow w-full h-full border border-slate-400 rounded-lg bg-white lg:mt-0">
           <div className="items-center m-4 rounded-full overflow-hidden w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64">
             <img
               className="object-cover w-full h-full rounded-full"
@@ -116,7 +116,7 @@ export default function AdminProfile() {
             Sign Out
           </button>
         </div>
-        <div className="flex flex-col items-center justify-center lg:w-4/6 flex-grow w-full h-5/6 border border-slate-400 rounded-lg bg-white p-4 mb-7 lg:mb-0">
+        <div className="flex flex-col items-center lg:w-4/6 flex-grow w-full h-full border border-slate-400 rounded-lg bg-white p-4">
           <h1 className="text-2xl font-semibold text-center my-7">
             Update Profile
           </h1>
@@ -156,7 +156,7 @@ export default function AdminProfile() {
             <button type="submit" className="bg-slate-700 text-white border-2 border-slate-700 rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
             Update Profile
             </button>
-            <button type="button"onClick={showPendingListings} className="text-slate-700 bg-white border-2 border-slate-700 rounded-lg p-3 uppercase hover:opacity-95 hover:text-white hover:bg-slate-700">
+            <button type="button"onClick={showPendingListings} className="text-slate-700 bg-white border-2 border-slate-700 rounded-lg p-3 uppercase hover:opacity-95 hover:text-white hover:bg-slate-700 mb-8">
               Show Pending Listings
             </button>
           </form>

@@ -24,8 +24,8 @@ export default function Header() {
   };
 
   return (
-    <header className={`border-y-2 border-slate-300 ${HeaderCSS.head}`}>
-      <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
+    <header className={`top-0 sticky w-full z-50 bg-white border-y-2 border-slate-300 ${HeaderCSS.head}`}>
+      <div className='flex w-full justify-between items-center max-w-6xl mx-auto p-3'>
         <Link to='/'>
           <h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>
             <span className='text-black'>Welcome to&nbsp;</span>

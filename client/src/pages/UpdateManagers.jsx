@@ -191,22 +191,22 @@ export default function UpdateManagers() {
             <h2 className="text-center mt-7 text-2xl font-semibold">
               Your Managers
             </h2>
-            <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10">
+            <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10">
               {managers.map((manager) => (
                 <div
                   key={manager._id}
-                  className="border rounded-lg p-3 flex justify-between items-center gap-4"
+                  className="border rounded-lg py-3 px-1 flex justify-center items-center gap-4"
                 >
-                  <div className="flex flex-col">
-                    <p>{manager.name}</p>
-                    {/* Need to be added bcz email is only unique attribute */}
-                    {/* <p>{manager.email}</p> */}
+                  <div className="flex flex-col gap-2">
+                    <p className="font-medium"><em>Name :  </em>{manager.name}</p>
+                    {/* Need to be added bcz email is only unique attribute */} 
+                    <p className="text-slate-700"><em>Email :  </em>{manager.email}</p>
                   </div>
 
                   <div className="flex flex-col item-center">
                     <button
                       onClick={() => handleManagerDelete(manager._id)}
-                      className="bg-red-600 text-white p-1 px-2 w-full  mx-2 rounded-lg uppercase text-center hover:opacity-95"
+                      className="bg-red-600 text-white p-1 px-2 w-full mx-2 rounded-lg uppercase text-center hover:opacity-95"
                     >
                       Delete
                     </button>

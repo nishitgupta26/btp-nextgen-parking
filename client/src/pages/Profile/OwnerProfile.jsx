@@ -66,6 +66,7 @@ export default function OwnerProfile() {
         });
         return;
       }
+      console.log(data);
       dispatch(updateUserSuccess(data));
       toast.info(data.message, {
         position: "top-center",
@@ -104,10 +105,10 @@ export default function OwnerProfile() {
       });
       if (res.ok) {
         const data = await res.json();
+        console.log(data);
         setUserListings(data);
         setShowListings(true);
-        console.log(userListings);
-        if (userListings.length == 0) {
+        if (data.length == 0) {
           toast.error("No Listings Available", {
             position: "top-center",
             autoClose: 3000,
@@ -170,17 +171,15 @@ export default function OwnerProfile() {
               alt=""
             ></img>
           </div>
-          <h1 className="text-2xl font-semibold text-center my-7">UserName</h1>
+          <h1 className="text-2xl font-semibold text-center my-7">{currentUser.name}</h1>
           <div className="flex flex-row items-center justify-center gap-4">
             <div className="flex flex-col items-start justify-center">
-              <span className="my-2">Name :</span>
+              {/* <span className="my-2">Name :</span> */}
               <span className="my-2">Email :</span>
-              <span className="my-2">Phone No. :</span>
             </div>
             <div className="flex flex-col items-start justify-center">
-              <span className="text-gray-500 my-2">{currentUser.name}</span>
+              {/* <span className="text-gray-500 my-2">{currentUser.name}</span> */}
               <span className="text-gray-500 my-2"> {currentUser.email}</span>
-              <span className="text-gray-500 my-2">+91-1234567890</span>
             </div>
           </div>
           <button
@@ -211,9 +210,7 @@ export default function OwnerProfile() {
 
             <input
               defaultValue={currentUser.email}
-              onChange={(e) =>
-                setformData({ ...formData, email: e.target.value })
-              }
+              disabled
               type="email"
               placeholder="E-mail"
               id="email"

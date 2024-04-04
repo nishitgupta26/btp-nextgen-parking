@@ -1,6 +1,8 @@
 import { React, useState, useEffect } from "react";
 import Cookies from "universal-cookie";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function UpdateListing() {
   const [formData, setFormData] = useState({});
@@ -92,11 +94,9 @@ export default function UpdateListing() {
             value={formData.name || ""}
             required
           />
-          <p className="font-medium">Location:</p>
+          <p className="font-medium">Location: <em className="font-light">(Can't update Location)</em></p>
           <input
-            onChange={(e) =>
-              setFormData({ ...formData, location: e.target.value })
-            }
+            disabled
             type="text"
             placeholder="Location"
             className="border p-3 rounded-lg border-slate-400"

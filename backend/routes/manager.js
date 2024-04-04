@@ -150,7 +150,7 @@ router.get("/getmanagers/:id", fetchuser, async (req, res) => {
     let managerDetails = [];
     for(let i=0; i<Managers.length; i++)
     {
-        const manager = await User.findById(Managers[i]).select('name');
+        const manager = await User.findById(Managers[i]).select('name email');
         managerDetails.push(manager);
     }
     return res.json(managerDetails);

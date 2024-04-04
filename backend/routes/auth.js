@@ -195,7 +195,7 @@ router.put('/updateuser', fetchuser, async (req, res) => {
         // Save the updated user
         await user.save();
 
-        res.json({ message: "User updated successfully" });
+        res.json({name: user.name, role: user.role, email: user.email});
     }
     catch (err) {
         console.log(err);
