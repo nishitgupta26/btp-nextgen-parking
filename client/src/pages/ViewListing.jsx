@@ -144,8 +144,9 @@ export default function ViewListing() {
       </div>
       <form className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
-          <p className="font-medium">Parking Space Name</p>
+          <p className="font-medium">Parking Space Name:</p>
           <input
+            disabled
             type="text"
             placeholder="Parking Space Name"
             className="border border-slate-400 p-3 rounded-lg"
@@ -157,6 +158,7 @@ export default function ViewListing() {
           />
           <p className="font-medium">Location:</p>
           <input
+            disabled
             type="text"
             placeholder="Location"
             className="border p-3 rounded-lg border-slate-400"
@@ -169,6 +171,7 @@ export default function ViewListing() {
 
             <div className="flex gap-2">
               <input
+                disabled
                 type="radio"
                 id="closed"
                 className="w-5 border border-slate-400 "
@@ -178,6 +181,7 @@ export default function ViewListing() {
             </div>
             <div className="flex gap-2">
               <input
+                disabled
                 type="radio"
                 id="mixed"
                 className="w-5 border border-slate-400"
@@ -187,6 +191,7 @@ export default function ViewListing() {
             </div>
             <div className="flex gap-2">
               <input
+                disabled
                 type="radio"
                 id="open"
                 className="w-5 border border-slate-400"
@@ -199,6 +204,7 @@ export default function ViewListing() {
             <div className="flex flex-col sm:flex-row items-center gap-2">
               <p className="font-medium">Four Wheeler Capacity:</p>
               <input
+                disabled
                 type="number"
                 id="fourWheelerCapacity"
                 // min="0"
@@ -213,6 +219,7 @@ export default function ViewListing() {
             <div className="flex gap-2">
               <span className="font-medium">Security Guard ?</span>
               <input
+                disabled
                 type="checkbox"
                 id="security"
                 className="w-5 border border-slate-400 "
@@ -222,6 +229,7 @@ export default function ViewListing() {
             <div className="flex gap-2">
               <span className="font-medium">CCTV Surveillance ?</span>
               <input
+                disabled
                 type="checkbox"
                 id="surveillance"
                 className="w-5 border border-slate-400 "
@@ -231,6 +239,7 @@ export default function ViewListing() {
             <div className="flex items-center font-medium gap-2">
               <p>Parking Rate:</p>
               <input
+                disabled
                 type="number"
                 id="parkingRate"
                 value={formData.parkingRate || ""}
@@ -243,6 +252,7 @@ export default function ViewListing() {
         <div className="flex flex-col flex-1 gap-4">
           <p className="font-medium">Opening time (hh : mm):</p>
           <input
+            disabled
             type="text"
             placeholder="Opening time (hh : mm)"
             className="border border-slate-400  p-3 rounded-lg"
@@ -252,6 +262,7 @@ export default function ViewListing() {
           />
           <p className="font-medium">Closing time (hh : mm):</p>
           <input
+            disabled
             type="text"
             placeholder="Closing time (hh : mm)"
             className="border border-slate-400  p-3 rounded-lg"
@@ -263,6 +274,7 @@ export default function ViewListing() {
             <div className="flex gap-2">Parking Status</div>
             <div className="flex gap-2">
               <input
+                disabled
                 type="radio"
                 id="Open"
                 className="w-5 border border-slate-400 "
@@ -273,6 +285,7 @@ export default function ViewListing() {
 
             <div className="flex gap-2">
               <input
+                disabled
                 type="radio"
                 id="Closed"
                 className="w-5 border border-slate-400 "
@@ -284,6 +297,7 @@ export default function ViewListing() {
           <div className="flex items-center gap-2">
             <p className="font-medium">Two Wheeler Capacity:</p>
             <input
+              disabled
               type="number"
               id="twoWheelerCapacity"
               // min="0"
@@ -297,6 +311,7 @@ export default function ViewListing() {
           <div className="flex items-center font-medium gap-2">
             <p>No. of EV Charging Ports:</p>
             <input
+              disabled
               type="number"
               id="chargingPorts"
               // min="0"
@@ -309,22 +324,22 @@ export default function ViewListing() {
         </div>
       </form>
       <div className="flex items-center flex-col">
-          <Link
-            to="/admin-profile"
-            onClick={handleApproveListing}
-            className="p-3 bg-slate-700 border-2 text-center border-slate-700 text-white w-full md:w-1/3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 mt-2"
-          >
-            APPROVE LISTING
-          </Link>
+        <Link
+          to="/admin-profile"
+          onClick={handleApproveListing}
+          className="p-3 bg-slate-700 border-2 text-center border-slate-700 text-white w-full md:w-1/3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 mt-2"
+        >
+          APPROVE LISTING
+        </Link>
 
-          <Link
-            to="/admin-profile"
-            onClick={handleDisapproveListing}
-            className="p-3 bg-white-700 border-2 text-center border-slate-700 text-slate-700 w-full md:w-1/3 rounded-lg uppercase hover:bg-red-700 hover:text-white hover:opacity-95 disabled:opacity-80 mt-2"
-          >
-            DISAPPROVE LISTING
-          </Link>
-        </div>
+        <Link
+          to="/admin-profile"
+          onClick={handleDisapproveListing}
+          className="p-3 bg-white-700 border-2 text-center border-slate-700 text-slate-700 w-full md:w-1/3 rounded-lg uppercase hover:bg-red-700 hover:text-white hover:opacity-95 disabled:opacity-80 mt-2"
+        >
+          DISAPPROVE LISTING
+        </Link>
+      </div>
     </div>
   );
 }

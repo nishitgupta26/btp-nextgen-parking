@@ -45,7 +45,7 @@ export default function CreateListing() {
       });
       if (response.ok) {
         const data = await response.json();
-        toast.info("Parking listed successfully!", {
+        toast.success("Parking listed successfully!", {
           position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
@@ -74,7 +74,7 @@ export default function CreateListing() {
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
-          <p className="font-medium">Parking Space Name</p>
+          <p className="font-medium">Parking Space Name:<span className="text-red-600">*</span></p>
           <input
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             type="text"
@@ -86,7 +86,7 @@ export default function CreateListing() {
             required
           />
 
-          <p className="font-medium">Location:</p>
+          <p className="font-medium">Location:<span className="text-red-600">*</span></p>
           <input
             onChange={(e) =>
               setFormData({ ...formData, location: e.target.value })
@@ -99,7 +99,7 @@ export default function CreateListing() {
           />
 
           <div className="flex gap-6 flex-wrap">
-            <div className="flex gap-2 font-medium">Parking Type:</div>
+            <div className="flex gap-2 font-medium">Parking Type:<span className="text-red-600">*</span></div>
 
             <div className="flex gap-2">
               <input
@@ -134,7 +134,7 @@ export default function CreateListing() {
           </div>
           <div className="flex flex-wrap gap-6">
             <div className="flex flex-col sm:flex-row items-center gap-2">
-              <p className="font-medium">Four Wheeler Capacity:</p>
+              <p className="font-medium">Four Wheeler Capacity:<span className="text-red-600">*</span></p>
               <input
                 onChange={(e) =>
                   setFormData({
@@ -184,7 +184,7 @@ export default function CreateListing() {
               />
             </div>
             <div className="flex items-center font-medium gap-2">
-              <p>Parking Rate:</p>
+              <p>Parking Rate:<span className="text-red-600">*</span></p>
               <input
                 onChange={(e) =>
                   setFormData({ ...formData, parkingRate: e.target.value })
@@ -199,7 +199,7 @@ export default function CreateListing() {
           </div>
         </div>
         <div className="flex flex-col flex-1 gap-4">
-          <p className="font-medium">Opening time (hh : mm):</p>
+          <p className="font-medium">Opening time (hh : mm):<span className="text-red-600">*</span></p>
           <input
             onChange={(e) =>
               setFormData({ ...formData, openingHours: e.target.value })
@@ -211,7 +211,7 @@ export default function CreateListing() {
             required
           />
 
-          <p className="font-medium">Closing time (hh : mm):</p>
+          <p className="font-medium">Closing time (hh : mm):<span className="text-red-600">*</span></p>
           <input
             onChange={(e) =>
               setFormData({ ...formData, closingHours: e.target.value })
@@ -224,7 +224,7 @@ export default function CreateListing() {
           />
 
           <div className="flex gap-6 flex-wrap">
-            <div className="flex gap-2 font-medium">Parking Status</div>
+            <div className="flex gap-2 font-medium">Parking Status<span className="text-red-600">*</span></div>
             <div className="flex gap-2">
               <input
                 type="radio"
@@ -248,7 +248,7 @@ export default function CreateListing() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <p className="font-medium">Two Wheeler Capacity:</p>
+            <p className="font-medium">Two Wheeler Capacity:<span className="text-red-600">*</span></p>
             <input
               onChange={(e) =>
                 setFormData({
@@ -267,7 +267,7 @@ export default function CreateListing() {
           </div>
 
           <div className="flex items-center font-medium gap-2">
-            <p>No. of EV Charging Ports:</p>
+            <p>No. of EV Charging Ports:<span className="text-red-600">*</span></p>
             <input
               onChange={(e) =>
                 setFormData({ ...formData, chargingPorts: e.target.value })

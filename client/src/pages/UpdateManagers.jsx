@@ -191,16 +191,16 @@ export default function UpdateManagers() {
             <h2 className="text-center mt-7 text-2xl font-semibold">
               Your Managers
             </h2>
-            <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10">
+            <div className="grid 2xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
               {managers.map((manager) => (
                 <div
                   key={manager._id}
                   className="border rounded-lg py-3 px-1 flex justify-center items-center gap-4"
                 >
                   <div className="flex flex-col gap-2">
-                    <p className="font-medium"><em>Name :  </em>{manager.name}</p>
+                    <p className="font-medium"><span className="font-semibold">Name :  </span>{manager.name}</p>
                     {/* Need to be added bcz email is only unique attribute */} 
-                    <p className="text-slate-700"><em>Email :  </em>{manager.email}</p>
+                    <p className="text-slate-700"><span className="font-semibold">Email :  </span>{manager.email}</p>
                   </div>
 
                   <div className="flex flex-col item-center">
