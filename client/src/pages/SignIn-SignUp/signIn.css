@@ -23,7 +23,7 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 24px;
+  padding: 32px;
 }
 
 /*checkbox to switch from sign up to login*/
@@ -114,6 +114,7 @@ label {
 .container form {
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
   }
   
   .container label {
@@ -140,8 +141,8 @@ label {
   .container label span {
     display: flex;
     align-items: center;
-    padding: 0.375em 0.75em 0.375em 0.375em;
-    border-radius: 99em;
+    padding: 0.375em 0.75em;
+    border-radius: 4px;
     transition: 0.25s ease;
     color: #414181;
   }
@@ -150,18 +151,6 @@ label {
     background-color: #d6d6e5;
   }
   
-  .container label span:before {
-    display: flex;
-    flex-shrink: 0;
-    content: "";
-    background-color: #fff;
-    width: 0.5em;
-    height: 0.5em;
-    border-radius: 50%;
-    margin-right: 0.375em;
-    transition: 0.25s ease;
-    /* box-shadow: inset 0 0 0 0.125em #00005c; */
-  }
   .login form container label span{
     color:#d6d6e5;
   }

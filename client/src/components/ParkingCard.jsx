@@ -1,5 +1,6 @@
 import React from "react";
 import BgImg from "../img/parkingSlotCardBg.png";
+import plugIcon from "../img/plug-icon.png";
 export default function ParkingCard({lot}) {
   return (
     <>
@@ -23,9 +24,16 @@ export default function ParkingCard({lot}) {
                 {/* <span class="absolute top-0 left-0 inline-flex mt-3 ml-3 px-3 py-2 rounded-lg z-10 bg-red-500 text-sm font-medium text-white select-none">
                   Featured
                 </span> */}
-                {lot.chargingPorts!==0 && <span class="absolute top-0 left-0 inline-flex mt-3 ml-3 px-2 py-1 rounded-lg z-10 bg-white text-sm font-semibold border-2 border-green-600 text-green-600 select-none">
-                  EV
-                </span>}
+                {lot.chargingPorts!==0 && 
+                <div className="absolute top-0 left-0 inline-flex mt-3 ml-3 px-2 py-1 rounded-lg z-10 bg-white text-sm font-semibold border-2 border-green-600 text-green-600 select-none">
+                <div className="flex flex-row items-center justify-center gap-1">
+                <span className="">
+                  EV 
+                </span>
+                <img className="items-center w-4 h-4" src={plugIcon} />
+                </div>
+                </div>
+                }
               </div>
               <div className="m-3">
               <div class="mt-4 flex flex-row justify-between items-center">
