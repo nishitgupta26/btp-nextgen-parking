@@ -77,7 +77,7 @@ export default function UserProfile() {
     <div className="min-h-screen max-w-screen mx-auto bg-[#F9FAFB]">
       {/* <Header /> */}
       <div className="px-7 flex flex-col lg:flex-row gap-8 items-center lg:h-screen min-h-screen">
-        <div className="flex flex-col items-center lg:w-2/6 flex-grow w-full h-5/6 shadow-lg rounded-lg bg-white  mt-7 lg:mt-0">
+        <div className="flex flex-col items-center lg:w-2/6 flex-grow w-full h-5/6 border border-slate-400  rounded-lg bg-white  mt-7 lg:mt-0">
           <div className="items-center m-4 rounded-full overflow-hidden w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64">
             <img
               className="object-cover w-full h-full rounded-full"
@@ -85,17 +85,13 @@ export default function UserProfile() {
               alt=""
             ></img>
           </div>
-          <h1 className="text-2xl font-semibold text-center my-7">UserName</h1>
+          <h1 className="text-2xl font-semibold text-center my-7">{currentUser.name}</h1>
           <div className="flex flex-row items-center justify-center gap-4">
             <div className="flex flex-col items-start justify-center">
-              <span className="my-2">Name :</span>
               <span className="my-2">Email :</span>
-              <span className="my-2">Phone No. :</span>
             </div>
             <div className="flex flex-col items-start justify-center">
-              <span className="text-gray-500 my-2">John Doe</span>
               <span className="text-gray-500 my-2"> {currentUser.email}</span>
-              <span className="text-gray-500 my-2">+91-1234567890</span>
             </div>
           </div>
           <button
@@ -105,7 +101,7 @@ export default function UserProfile() {
             Sign Out
           </button>
         </div>
-        <div className="flex flex-col items-center justify-center lg:w-4/6 flex-grow w-full h-5/6 shadow-lg rounded-lg bg-white p-4 mb-7 lg:mb-0">
+        <div className="flex flex-col items-center justify-center lg:w-4/6 flex-grow w-full h-5/6 border border-slate-400  rounded-lg bg-white p-4 mb-7 lg:mb-0">
           <h1 className="text-2xl font-semibold text-center my-7">
             Update Profile
           </h1>
