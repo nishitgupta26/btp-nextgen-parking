@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import LocationAccess from "../../components/LocationAccess";
-import Header from "../../components/Header";
 import Cookies from "universal-cookie";
 import ParkingCard from "../../components/ParkingCard";
-import { useLayoutEffect } from "react";
 
 export default function Home({ isOverlay, setOverlay }) {
   const cookies = new Cookies();
-
+  const host = "http://localhost:3001";
+  const authtoken = cookies.get("access_token");
   const [latitude, setLatitude] = useState(cookies.get("latitude") || null);
   const [longitude, setLongitude] = useState(cookies.get("longitude") || null);
 
@@ -57,106 +56,30 @@ export default function Home({ isOverlay, setOverlay }) {
     };
   }, [latitude, longitude]);
   // code to fetch parkingslots data from backend
-  //   const [parkingSlots, setparkingSlots] = useState([]);
+    const [parkingSlots, setparkingSlots] = useState([]);
 
   // // useEffect to fetch all parking lots
-  // useEffect(() =>{
-  //   fetch(`${import.meta.env.MONGO_URI}/api/lots/getlots`)
-  //   .then(res => res.json())
-  //   .then(data => setparkingSlots(data))
-  // }, []);
+  useEffect(() => {
+    const fetchParkingSlots = async () => {
+      const res = await fetch(`${host}/api/lots/getlots`, {
+        method: "GET",
+        headers: {
+          "auth-token": authtoken,
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setparkingSlots(data);
+        console.log(data);
+      } else {
+        console.log("Error");
+      }
+    };
+  
+    fetchParkingSlots();
+  }, []);
+  
 
-  // Dummy data for parking slots
-  const parkingSlots = [
-    {
-      id: 1,
-      parkingSpaceName: "space 1",
-      location: "Location 1",
-      type: "Covered",
-      chargingPorts: 8,
-      openingHours: "8:00",
-      closingHours: "20:00",
-      surveillanceCamera: "Yes",
-      parkingRate: 30,
-    },
-    {
-      id: 2,
-      parkingSpaceName: "space 2",
-      location: "Location 2",
-      type: "Mixed",
-      chargingPorts: 0,
-      openingHours: "9:00",
-      closingHours: "2:00",
-      surveillanceCamera: "No",
-      parkingRate: 40,
-    },
-    {
-      id: 3,
-      parkingSpaceName: "space 3",
-      location: "Location 3",
-      type: "open",
-      chargingPorts: 8,
-      openingHours: "8:00",
-      closingHours: "20:00",
-      surveillanceCamera: "Yes",
-      parkingRate: 60,
-    },
-    {
-      id: 4,
-      parkingSpaceName: "space 4",
-      location: "Location 4",
-      type: "Mixed",
-      chargingPorts: 4,
-      openingHours: "9:00",
-      closingHours: "2:00",
-      surveillanceCamera: "No",
-      parkingRate: 35,
-    },
-    {
-      id: 5,
-      parkingSpaceName: "space 5",
-      location: "Location 5",
-      type: "Covered",
-      chargingPorts: 8,
-      openingHours: "8:00",
-      closingHours: "20:00",
-      surveillanceCamera: "Yes",
-      parkingRate: 15,
-    },
-    {
-      id: 6,
-      parkingSpaceName: "space 6",
-      location: "Location 6",
-      type: "open",
-      chargingPorts: 0,
-      openingHours: "9:00",
-      closingHours: "2:00",
-      surveillanceCamera: "No",
-      parkingRate: 25,
-    },
-    {
-      id: 7,
-      parkingSpaceName: "space 7",
-      location: "Location 7",
-      type: "open",
-      chargingPorts: 8,
-      openingHours: "8:00",
-      closingHours: "20:00",
-      surveillanceCamera: "Yes",
-      parkingRate: 45,
-    },
-    {
-      id: 8,
-      parkingSpaceName: "space 8",
-      location: "Location 8",
-      type: "Mixed",
-      chargingPorts: 0,
-      openingHours: "9:00",
-      closingHours: "2:00",
-      surveillanceCamera: "No",
-      parkingRate: 20,
-    },
-  ];
 
   return (
     <div className="relative min-h-screen">

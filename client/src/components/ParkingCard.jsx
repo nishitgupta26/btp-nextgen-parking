@@ -2,6 +2,7 @@ import React from "react";
 import BgImg from "../img/parkingSlotCardBg.png";
 import plugIcon from "../img/plug-icon.png";
 export default function ParkingCard({lot}) {
+  console.log(lot);
   return (
     <>
       {/* <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full "> */}
@@ -38,7 +39,7 @@ export default function ParkingCard({lot}) {
               <div className="m-3">
               <div class="mt-4 flex flex-row justify-between items-center">
                 <h2 class="font-medium text-base md:text-lg text-gray-800 line-clamp-1">
-                  {lot.parkingSpaceName}
+                  {lot.name}
                 </h2>
                 <p class="text-sm text-gray-800">
                   {lot.location}
@@ -75,6 +76,9 @@ export default function ParkingCard({lot}) {
               <div class="grid grid-cols-2 mt-8 items-center">
                 <div class="flex items-center ">
                   <button
+                  onClick={() =>
+                      navigate(`/book-parking/${lot.id}`)
+                    }
                     type="button"
                     class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
