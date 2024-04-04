@@ -4,7 +4,6 @@ import Header from "./components/Header.jsx";
 import Home from "./pages/Home/Home.jsx";
 import About from "./pages/About/About.jsx";
 import SignIn from "./pages/SignIn-SignUp/SignIn.jsx";
-import ParkingCard from "./components/ParkingCard.jsx";
 import ManagerProfile from "./pages/Profile/ManagerProfile.jsx";
 import OwnerProfile from "./pages/Profile/OwnerProfile.jsx";
 import UserProfile from "./pages/Profile/UserProfile.jsx";
@@ -14,8 +13,8 @@ import CreateListing from "./pages/CreateListing.jsx";
 import UpdateListing from "./pages/UpdateListing.jsx";
 import UpdateManagers from "./pages/UpdateManagers.jsx";
 import { useState } from "react";
-import { useEffect } from "react";
 import ViewListing from "./pages/ViewListing.jsx";
+import BookParking from "./pages/BookParking.jsx";
 
 export default function App() {
   const [isOverlay, setOverlay] = useState(true);
@@ -50,6 +49,7 @@ export default function App() {
 
           <Route path="/view-listing/:listingId" element={<ViewListing />} />
         </Route>
+        <Route path="/book-parking/:listingId" element={<BookParking />} />
       </Routes>
     </BrowserRouter>
   );
