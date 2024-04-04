@@ -36,7 +36,7 @@ export default function SignIn() {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
       });
     }
     try {
@@ -62,7 +62,7 @@ export default function SignIn() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "dark",
+          theme: "light",
         });
       } else {
         cookies.set("access_token", data.authtoken);
@@ -92,7 +92,7 @@ export default function SignIn() {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
       });
     }
     try {
@@ -117,7 +117,21 @@ export default function SignIn() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "dark",
+          theme: "light",
+        });
+      } else if (data.role !== loginType) {
+        const error = "Login with your role only";
+        dispatch(signInFailure(error));
+        // Render toast only when there's an error during login attempt
+        toast.error(error, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
         });
       } else {
         cookies.set("access_token", data.authtoken);
