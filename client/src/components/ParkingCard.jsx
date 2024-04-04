@@ -1,15 +1,19 @@
 import React from "react";
 import BgImg from "../img/parkingSlotCardBg.png";
 import plugIcon from "../img/plug-icon.png";
+import { useNavigate } from "react-router-dom";
+import { Link } from "@mui/material";
 export default function ParkingCard({lot}) {
+  const clienthost = "http://localhost:5173";
+  const navigate = useNavigate();
   console.log(lot);
   return (
     <>
       {/* <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full "> */}
         <div class="relative mx-auto w-full ">
           <a
-            href="#"
-            class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full"
+            href={`${clienthost}/book-parking/${lot._id}`}
+            className="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full"
           >
             <div class="border border-slate-400 rounded-lg bg-white overflow-hidden">
               <div class="flex justify-center relative rounded-none overflow-hidden h-52">
@@ -77,7 +81,7 @@ export default function ParkingCard({lot}) {
                 <div class="flex items-center ">
                   <button
                   onClick={() =>
-                      navigate(`/book-parking/${lot.id}`)
+                      navigate(`/book-parking/${lot._id}`)
                     }
                     type="button"
                     class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
