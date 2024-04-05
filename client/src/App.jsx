@@ -63,7 +63,7 @@ function RoutesComponent() {
 
   return (
     <>
-      {(isOverlay && location.pathname !== "/") && <Header />}
+      {isOverlay && location.pathname !== "/" && <Header />}
       <Routes>
         <Route
           path="/"
@@ -88,8 +88,8 @@ function RoutesComponent() {
           />
 
           <Route path="/view-listing/:listingId" element={<ViewListing />} />
+          <Route path="/book-parking/:listingId" element={<BookParking />} />
         </Route>
-        <Route path="/book-parking/:listingId" element={<BookParking />} />
       </Routes>
     </>
   );
