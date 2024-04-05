@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import LocationAccess from "../../components/LocationAccess";
 import Cookies from "universal-cookie";
 import ParkingCard from "../../components/ParkingCard";
+import Header from "../../components/Header";
 
 export default function Home({ isOverlay, setOverlay }) {
   const cookies = new Cookies();
@@ -83,19 +84,21 @@ export default function Home({ isOverlay, setOverlay }) {
 
   return (
     <div className="relative min-h-screen">
-      {/* <Header /> */}
+      <Header />
       <div
         className={`absolute inset-0 bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg ${
-          !latitude && !longitude ? "z-10" : "hidden"
+          !latitude && !longitude ? "z-40" : "hidden"
         }`}
-      ></div>
-      {!latitude && !longitude && (
-        <div className="relative left-64  h-2/5 w-3/5 z-20">
+      ><div className="absolute left-64  h-2/5 w-3/5 z-50">
+        <LocationAccess a={func} />
+    </div></div>
+      {/* {!latitude && !longitude && (
+        <div className="absolute left-64  h-2/5 w-3/5 z-20">
           <div className="">
             <LocationAccess a={func} />
           </div>
         </div>
-      )}
+      )} */}
       <div className="mt-14 ml-4 mr-4 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10">
         {/* <h1 className="text-4xl text-center mt-8">Welcome to SmartPark</h1> */}
         {parkingSlots.map((lot) => (

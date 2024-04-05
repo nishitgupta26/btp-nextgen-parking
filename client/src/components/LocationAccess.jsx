@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Button from "@mui/material-next/Button";
+import "./LocationAccess.css";
 
 export default function LocationAccess(props) {
   const [locationDetails, setLocationDetails] = useState(null);
@@ -31,7 +32,7 @@ export default function LocationAccess(props) {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="flex justify-center items-center h-2/5 w-3/5 rounded-lg bg-slate-200">
+      <div className="flex justify-center items-center h-2/5 w-3/5 p-4 rounded-lg bg-slate-200">
         <div className="flex flex-wrap items-centre justify-center">
           <Button
             className="geo-btn text-black text-2xl"

@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header.jsx";
 import Home from "./pages/Home/Home.jsx";
 import About from "./pages/About/About.jsx";
@@ -16,14 +16,54 @@ import { useState } from "react";
 import ViewListing from "./pages/ViewListing.jsx";
 import BookParking from "./pages/BookParking.jsx";
 
-export default function App() {
+// export default function App() {
+//   const [isOverlay, setOverlay] = useState(true);
+//   const location = useLocation();
+//   const currentPath = location.pathname;
+//   // useEffect(() => {
+//   //   console.log(isOverlay);
+//   // },[isOverlay]);
+//   return (
+//     <BrowserRouter>
+//       {isOverlay && currentPath !== "/" && <Header />}
+//       <Routes>
+//         <Route
+//           path="/"
+//           element={<Home isOverlay={isOverlay} setOverlay={setOverlay} />}
+//         />
+//         <Route path="/sign-in" element={<SignIn />} />
+//         <Route path="/about" element={<About />} />
+
+//         <Route element={<PrivateRoute />}>
+//           <Route path="/owner-profile" element={<OwnerProfile />} />
+//           <Route path="/manager-profile" element={<ManagerProfile />} />
+//           <Route path="/user-profile" element={<UserProfile />} />
+//           <Route path="/admin-profile" element={<AdminProfile />} />
+//           <Route path="/create-listing" element={<CreateListing />} />
+//           <Route
+//             path="/update-listing/:listingId"
+//             element={<UpdateListing />}
+//           />
+//           <Route
+//             path="/update-managers/:listingId"
+//             element={<UpdateManagers />}
+//           />
+
+//           <Route path="/view-listing/:listingId" element={<ViewListing />} />
+//         </Route>
+//         <Route path="/book-parking/:listingId" element={<BookParking />} />
+//       </Routes>
+//     </BrowserRouter>
+//   );
+// }
+
+function RoutesComponent() {
   const [isOverlay, setOverlay] = useState(true);
-  // useEffect(() => {
-  //   console.log(isOverlay);
-  // },[isOverlay]);
+  const location = useLocation();
+
   return (
-    <BrowserRouter>
-      {isOverlay && <Header />}
+    <>
+      {(isOverlay && location.pathname !== "/") && <Header />}
       <Routes>
         <Route
           path="/"
@@ -51,6 +91,14 @@ export default function App() {
         </Route>
         <Route path="/book-parking/:listingId" element={<BookParking />} />
       </Routes>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <RoutesComponent />
     </BrowserRouter>
   );
 }
