@@ -6,6 +6,7 @@ import Cookies from "universal-cookie";
 import BgImg from "../img/parkingSlotCardBg.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ParkingBox from "../components/ParkingBox";
 
 export default function BookParking() {
   // const { listingId } = useParams();
@@ -13,6 +14,7 @@ export default function BookParking() {
   const [difference, setDifference] = useState("");
   const [startTime, setStartTime] = useState("");
   const [EndTime, setEndTime] = useState("");
+  const [vehicleType, setVehicleType] = useState("fourWheeler");
   const host = "http://localhost:3001";
   const cookies = new Cookies();
   const navigate = useNavigate();
@@ -75,12 +77,18 @@ export default function BookParking() {
       setDifference(-1);
       return;
     }
-
     const differenceInMs = endTimeInMs - startTimeInMs;
     const differenceInHours = Math.ceil(differenceInMs / (1000 * 60 * 60));
-
+    
     setDifference(differenceInHours);
   };
+  useEffect(() => {
+    console.log(vehicleType);
+  }, [vehicleType]);
+  const [x,setX] = useState(900);
+  const parkingBoxes = Array.from({ length: x }, (_, index) => (
+    <ParkingBox index={index} />
+  ));
   return (
     <div className="p-4 px-12 max-w-full min-h-screen mx-auto bg-white">
       <div className=" rounded-md overflow-hidden my-7 h-96">
@@ -201,12 +209,40 @@ export default function BookParking() {
               className="w-40 border border-slate-400 rounded-md "
             />
           </div>
+          <div className="flex flex-row items-center gap-6">
+          <p className="font-medium ">Vehicle Type:</p>
+          <input
+          onChange={(e) => setVehicleType(e.target.value)}
+              type="radio"
+              id="fourWheeler"
+              value="fourWheeler"
+              className="w-5 border border-slate-400 rounded-md"
+              checked={vehicleType === "fourWheeler"}
+              />
+              <span>Four Wheeler</span>
+            <input
+          onChange={(e) => setVehicleType(e.target.value)}
+              type="radio"
+              id="twoWheeler"
+              value="twoWheeler"
+              className="w-5 border border-slate-400 rounded-md "
+              checked={vehicleType === "twoWheeler"}
+              />
+              <span>Two Wheeler</span>
+          </div>
         </div>
       </form>
+      <div className="flex flex-col justify-center items-center mt-8">
+        <p className="font-medium text-xl">Parking Lot Chart</p>
+      <div className="flex mt-6 h-80 overflow-auto gap-2 flex-wrap">
+      {parkingBoxes}
+      </div>
+      </div>
       <div className="flex items-center flex-col">
         <div className="flex items-center font-medium gap-2 mt-8">
           <p>Total Charge:</p>
-          {difference>0 ? <span>Rs. {difference * formData.parkingRate}/-</span> : <span>Rs. 0/-</span>}
+          {difference>=0 && vehicleType === "fourWheeler" ?<span>Rs. {difference * formData.parkingRate}/-</span> : <span></span>}
+          {difference>0 && vehicleType === "twoWheeler" ?<span>Rs. {difference * formData.parkingRate /2}/-</span> : <span></span>}
         </div>
         <button  className="p-3 bg-slate-700 border-2 text-center border-slate-700 text-white w-full md:w-1/3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 mt-2">
           Book Now
