@@ -112,37 +112,7 @@ export default function BookParking() {
           />
           <div className="flex gap-6 flex-wrap">
             <div className="flex gap-2 font-medium">Parking Type:</div>
-
-            <div className="flex gap-2">
-              <input
-                disabled
-                type="radio"
-                id="closed"
-                className="w-5 border border-slate-400 "
-                checked={formData.type === "closed"}
-              />
-              <span>Closed</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                disabled
-                type="radio"
-                id="mixed"
-                className="w-5 border border-slate-400"
-                checked={formData.type === "mixed"}
-              />
-              <span>Mixed</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                disabled
-                type="radio"
-                id="open"
-                className="w-5 border border-slate-400"
-                checked={formData.type === "open"}
-              />
-              <span>Open</span>
-            </div>
+            <span className="capitalize">{formData.type}</span>
           </div>
           <div className="flex flex-wrap gap-6">
             <div className="flex flex-col sm:flex-row items-center gap-2">
@@ -154,26 +124,14 @@ export default function BookParking() {
               )}
             </div>
           </div>
-          <div className="flex gap-6 flex-wrap">
+          <div className="flex gap-4 flex-wrap flex-col">
             <div className="flex gap-2">
-              <span className="font-medium">Security Guard ?</span>
-              <input
-                disabled
-                type="checkbox"
-                id="security"
-                className="w-5 border border-slate-400 "
-                checked={formData.securityGuard || false}
-              />
+            <span className="font-medium">Security Guard : </span>
+              {formData.securityGuard ? <span className="">Available </span> : <span className="">Not Available</span>}
             </div>
             <div className="flex gap-2">
-              <span className="font-medium">CCTV Surveillance ?</span>
-              <input
-                disabled
-                type="checkbox"
-                id="surveillance"
-                className="w-5 border border-slate-400 "
-                checked={formData.surveillanceCamera || false}
-              />
+              <span className="font-medium">CCTV Surveillance :</span>
+              {formData.surveillanceCamera ? <span className="">Available </span> : <span className="">Not Available</span>}
             </div>
           </div>
           <div className="flex items-center font-medium gap-2">
@@ -205,28 +163,8 @@ export default function BookParking() {
             required
           />
           <div className="flex gap-6 flex-wrap">
-            <div className="flex gap-2">Parking Status</div>
-            <div className="flex gap-2">
-              <input
-                disabled
-                type="radio"
-                id="Open"
-                className="w-5 border border-slate-400 "
-                checked={formData.isOpen === true}
-              />
-              <span>Open</span>
-            </div>
-
-            <div className="flex gap-2">
-              <input
-                disabled
-                type="radio"
-                id="Closed"
-                className="w-5 border border-slate-400 "
-                checked={formData.isOpen === false}
-              />
-              <span>Closed</span>
-            </div>
+            <div className="flex gap-2 font-medium">Parking Status:</div>
+            {formData.isOpen ? <span className="capitalize">Open</span> : <span className="capitalize">Closed</span>}
           </div>
           <div className="flex items-center gap-2">
             <p className="font-medium">Two Wheeler Capacity:</p>
@@ -236,8 +174,8 @@ export default function BookParking() {
               <span>Not Available</span>
             )}
           </div>
-          <div className="flex items-center font-medium gap-2">
-            <p>EV Charging:</p>
+          <div className="flex items-center gap-2">
+            <p className="font-medium">EV Charging:</p>
             {formData.chargingPorts > 0 ? (
               <span>Available</span>
             ) : (
