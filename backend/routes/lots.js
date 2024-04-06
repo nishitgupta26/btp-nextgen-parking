@@ -20,7 +20,54 @@ router.get("/getlots", async (req, res) => {
 
 // ROUTE-2 :: get nearby parking lots - GET - "/api/lots/getnearbylots" - DOES NOT REQUIRES LOGIN
 // TODO :: implement this route
+router.get("/getnearby", async (req, res) => {
+    const lots = await Lots.find({approved: true});
 
+    // get the user's location
+    const userLocation = req.body.location;
+    let cords = userLocation.split("_");
+    let userlong = parseFloat(cords[0]);
+    let userlat = parseFloat(cords[1]);
+
+    function toRadians(degrees) {
+        return degrees * (Math.PI / 180);
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const earthRadius = 6371; // Earth radius in km
+    
+        const radiansLat1 = toRadians(lat1);
+        const radiansLat2 = toRadians(lat2);
+        const radiansDeltaLon = toRadians(lon2 - lon1);
+    
+        const distance = Math.acos(Math.sin(radiansLat1) * Math.sin(radiansLat2) + Math.cos(radiansLat1) * Math.cos(radiansLat2) * Math.cos(radiansDeltaLon)) * earthRadius;
+        
+        return distance;
+    }
+
+
+    function  distcmp(a , b){
+        const cordsa = a.geoCoordinates.split("_");
+        const cordsb = b.geoCoordinates.split("_");
+        const longa = parseFloat(cordsa[0]);
+        const lata = parseFloat(cordsa[1]);
+        const longb = parseFloat(cordsb[0]);
+        const latb = parseFloat(cordsb[1]);
+        const dista = calculateDistance(lata, longa, userlat, userlong);
+        const distb = calculateDistance(latb, longb, userlat, userlong);
+
+        if (dista < distb) {
+            return -1;
+        }
+        if (dista > distb) {
+            return 1;
+        }
+    }
+
+    lots.sort(distcmp);
+
+    return res.json(lots);
+});
 
 
 
