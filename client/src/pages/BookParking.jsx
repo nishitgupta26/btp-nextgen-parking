@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
-import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Cookies from "universal-cookie";
 import BgImg from "../img/parkingSlotCardBg.png";
@@ -9,12 +8,14 @@ import "react-toastify/dist/ReactToastify.css";
 import ParkingBox from "../components/ParkingBox";
 
 export default function BookParking() {
-  // const { listingId } = useParams();
   const [formData, setFormData] = useState({});
   const [difference, setDifference] = useState("");
   const [startTime, setStartTime] = useState("");
   const [EndTime, setEndTime] = useState("");
   const [vehicleType, setVehicleType] = useState("fourWheeler");
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [pin, setPin] = useState("");
+  const [vehicleNumber, setVehicleNumber] = useState("");
   const host = "http://localhost:3001";
   const cookies = new Cookies();
   const navigate = useNavigate();
@@ -63,7 +64,8 @@ export default function BookParking() {
     if (endTimeInMs < startTimeInMs) {
       // If second time is earlier than first time, set error message
       // setDifference("Error: Second time cannot be earlier than first time.");
-      const errorMessage = "Error: Second time cannot be earlier than first time.";
+      const errorMessage =
+        "Error: Second time cannot be earlier than first time.";
       toast.error(errorMessage, {
         position: "top-center",
         autoClose: 3000,
@@ -79,16 +81,30 @@ export default function BookParking() {
     }
     const differenceInMs = endTimeInMs - startTimeInMs;
     const differenceInHours = Math.ceil(differenceInMs / (1000 * 60 * 60));
-    
+
     setDifference(differenceInHours);
   };
   useEffect(() => {
     console.log(vehicleType);
   }, [vehicleType]);
-  const [x,setX] = useState(900);
+
+  const [x, setX] = useState(900);
   const parkingBoxes = Array.from({ length: x }, (_, index) => (
     <ParkingBox index={index} />
   ));
+
+  const toggleModal = () => {
+    if (pin !== "12345") {
+      console.log("incorrect pin");
+    } else setIsModalOpen(!isModalOpen);
+  };
+
+  const closeModal = (e) => {
+    if (e.target.className === "modal-overlay") {
+      setIsModalOpen(false);
+    }
+  };
+
   return (
     <div className="p-4 px-12 max-w-full min-h-screen mx-auto bg-white">
       <div className=" rounded-md overflow-hidden my-7 h-96">
@@ -134,12 +150,20 @@ export default function BookParking() {
           </div>
           <div className="flex gap-4 flex-wrap flex-col">
             <div className="flex gap-2">
-            <span className="font-medium">Security Guard : </span>
-              {formData.securityGuard ? <span className="">Available </span> : <span className="">Not Available</span>}
+              <span className="font-medium">Security Guard : </span>
+              {formData.securityGuard ? (
+                <span className="">Available </span>
+              ) : (
+                <span className="">Not Available</span>
+              )}
             </div>
             <div className="flex gap-2">
               <span className="font-medium">CCTV Surveillance :</span>
-              {formData.surveillanceCamera ? <span className="">Available </span> : <span className="">Not Available</span>}
+              {formData.surveillanceCamera ? (
+                <span className="">Available </span>
+              ) : (
+                <span className="">Not Available</span>
+              )}
             </div>
           </div>
           <div className="flex items-center font-medium gap-2">
@@ -172,7 +196,11 @@ export default function BookParking() {
           />
           <div className="flex gap-6 flex-wrap">
             <div className="flex gap-2 font-medium">Parking Status:</div>
-            {formData.isOpen ? <span className="capitalize">Open</span> : <span className="capitalize">Closed</span>}
+            {formData.isOpen ? (
+              <span className="capitalize">Open</span>
+            ) : (
+              <span className="capitalize">Closed</span>
+            )}
           </div>
           <div className="flex items-center gap-2">
             <p className="font-medium">Two Wheeler Capacity:</p>
@@ -210,44 +238,97 @@ export default function BookParking() {
             />
           </div>
           <div className="flex flex-row items-center gap-6">
-          <p className="font-medium ">Vehicle Type:</p>
-          <input
-          onChange={(e) => setVehicleType(e.target.value)}
+            <p className="font-medium ">Vehicle Type:</p>
+            <input
+              onChange={(e) => setVehicleType(e.target.value)}
               type="radio"
               id="fourWheeler"
               value="fourWheeler"
               className="w-5 border border-slate-400 rounded-md"
               checked={vehicleType === "fourWheeler"}
-              />
-              <span>Four Wheeler</span>
+            />
+            <span>Four Wheeler</span>
             <input
-          onChange={(e) => setVehicleType(e.target.value)}
+              onChange={(e) => setVehicleType(e.target.value)}
               type="radio"
               id="twoWheeler"
               value="twoWheeler"
               className="w-5 border border-slate-400 rounded-md "
               checked={vehicleType === "twoWheeler"}
-              />
-              <span>Two Wheeler</span>
+            />
+            <span>Two Wheeler</span>
           </div>
         </div>
       </form>
       <div className="flex flex-col justify-center items-center mt-8">
         <p className="font-medium text-xl">Parking Lot Chart</p>
-      <div className="flex mt-6 h-80 overflow-auto gap-2 flex-wrap">
-      {parkingBoxes}
-      </div>
+        <div className="flex mt-6 h-80 overflow-auto gap-2 flex-wrap">
+          {parkingBoxes}
+        </div>
       </div>
       <div className="flex items-center flex-col">
         <div className="flex items-center font-medium gap-2 mt-8">
           <p>Total Charge:</p>
-          {difference>=0 && vehicleType === "fourWheeler" ?<span>Rs. {difference * formData.parkingRate}/-</span> : <span></span>}
-          {difference>0 && vehicleType === "twoWheeler" ?<span>Rs. {difference * formData.parkingRate /2}/-</span> : <span></span>}
+          {difference >= 0 && vehicleType === "fourWheeler" ? (
+            <span>Rs. {difference * formData.parkingRate}/-</span>
+          ) : (
+            <span></span>
+          )}
+          {difference > 0 && vehicleType === "twoWheeler" ? (
+            <span>Rs. {(difference * formData.parkingRate) / 2}/-</span>
+          ) : (
+            <span></span>
+          )}
         </div>
-        <button  className="p-3 bg-slate-700 border-2 text-center border-slate-700 text-white w-full md:w-1/3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 mt-2">
+        <button
+          onClick={toggleModal}
+          className="p-3 bg-slate-700 border-2 text-center border-slate-700 text-white w-full md:w-1/3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 mt-2"
+        >
           Book Now
         </button>
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div
+            className="absolute inset-0 bg-gray-500 opacity-75 modal-overlay"
+            onClick={closeModal}
+          ></div>
+          <div className="relative bg-white rounded-lg p-8 modal">
+            <p
+              className="absolute top-0 right-0 cursor-pointer text-gray-500 hover:text-gray-700 text-xl font-bold mr-2 mt-1"
+              onClick={toggleModal}
+            >
+              X
+            </p>
+            <p className="text-xl font-semibold mb-4">Enter Vehicle Number</p>
+            <input
+              onChange={(e) => {
+                setVehicleNumber(e.target.value);
+              }}
+              type="text"
+              placeholder="Ex: RJ14AA0000"
+              className="border border-gray-300 p-2 rounded-md mb-4 w-full"
+            />
+
+            <p className="text-xl font-semibold mb-4">Enter Pin for payment</p>
+            <input
+              onChange={(e) => {
+                setPin(e.target.value);
+              }}
+              type="text"
+              placeholder="Pin"
+              className="border border-gray-300 p-2 rounded-md mb-4 w-full"
+            />
+            <button
+              onClick={toggleModal}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            >
+              Pay & Book
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
