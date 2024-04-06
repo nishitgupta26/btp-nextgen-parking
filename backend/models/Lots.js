@@ -6,6 +6,8 @@ const lotSchema = new mongoose.Schema({
   type: { type: String, enum: ["closed", "mixed", "open"], required: true },
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 
+  geoCoordinates: { type: String, required: false },
+
   twoWheelerCapacity: { type: Number, required: true },
   fourWheelerCapacity: { type: Number, required: true },
   chargingPorts: { type: Number, required: true },
