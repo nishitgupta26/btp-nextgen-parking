@@ -86,10 +86,10 @@ export default function Home({ isOverlay, setOverlay }) {
     <div className="relative min-h-screen">
       <Header />
       <div
-        className={`absolute inset-0 bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg ${
+        className={`absolute h-screen flex justify-center items-center inset-0 bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg ${
           !latitude && !longitude ? "z-40" : "hidden"
         }`}
-      ><div className="absolute left-64  h-2/5 w-3/5 z-50">
+      ><div className="z-50">
         <LocationAccess a={func} />
     </div></div>
       {/* {!latitude && !longitude && (
