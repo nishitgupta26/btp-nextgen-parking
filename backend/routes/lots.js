@@ -21,7 +21,7 @@ router.get("/getlots", async (req, res) => {
 // ROUTE-2 :: get nearby parking lots - GET - "/api/lots/getnearbylots" - DOES NOT REQUIRES LOGIN
 // TODO :: implement this route
 router.get("/getnearby", async (req, res) => {
-    const lots = await Lots.find({approved: true});
+    const lots = await Lots.find({approved: true, isOpen: true});
 
     // get the user's location
     const userLocation = req.body.location;
