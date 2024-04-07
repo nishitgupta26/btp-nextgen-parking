@@ -18,16 +18,16 @@ router.get("/getlots", async (req, res) => {
   return res.json(lots);
 });
 
-// ROUTE-2 :: get nearby parking lots - GET - "/api/lots/getnearbylots" - DOES NOT REQUIRES LOGIN
+// ROUTE-2 :: get nearby parking lots - GET - "/api/lots/getnearby/:location" - DOES NOT REQUIRES LOGIN
 // TODO :: implement this route
 router.get("/getnearby/:location", async (req, res) => {
-    const lots = await Lots.find({approved: true, isOpen: true});
+  const lots = await Lots.find({ approved: true, isOpen: true });
 
-    // get the user's location
-    const userLocation = req.params.location;
-    let cords = userLocation.split("_");
-    let userlong = parseFloat(cords[0]);
-    let userlat = parseFloat(cords[1]);
+  // get the user's location
+  const userLocation = req.params.location;
+  let cords = userLocation.split("_");
+  let userlong = parseFloat(cords[0]);
+  let userlat = parseFloat(cords[1]);
 
   function toRadians(degrees) {
     return degrees * (Math.PI / 180);

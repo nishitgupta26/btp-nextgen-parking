@@ -65,11 +65,10 @@ export default function Home({ isOverlay, setOverlay }) {
       const latitude = cookies.get("latitude");
 
       const combined = longitude + "_" + latitude;
-      const res = await fetch(`${host}/api/lots/getnearbylots`, {
+      const res = await fetch(`${host}/api/lots/getnearby/${combined}`, {
         method: "GET",
         headers: {
           "auth-token": authtoken,
-          location: combined,
         },
       });
       if (res.ok) {
