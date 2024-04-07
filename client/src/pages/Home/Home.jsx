@@ -45,8 +45,7 @@ export default function Home({ isOverlay, setOverlay }) {
     if (!latitude && !longitude) {
       setOverlay(false);
       document.body.style.overflow = "hidden";
-    } 
-    else {
+    } else {
       setOverlay(true);
       document.body.style.overflow = "auto";
     }
@@ -57,15 +56,20 @@ export default function Home({ isOverlay, setOverlay }) {
     };
   }, [latitude, longitude]);
   // code to fetch parkingslots data from backend
-    const [parkingSlots, setparkingSlots] = useState([]);
+  const [parkingSlots, setparkingSlots] = useState([]);
 
   // // useEffect to fetch all parking lots
   useEffect(() => {
     const fetchParkingSlots = async () => {
-      const res = await fetch(`${host}/api/lots/getlots`, {
+      const longitude = cookies.get("longitude");
+      const latitude = cookies.get("latitude");
+
+      const combined = longitude + "_" + latitude;
+      const res = await fetch(`${host}/api/lots/getnearbylots`, {
         method: "GET",
         headers: {
           "auth-token": authtoken,
+          location: combined,
         },
       });
       if (res.ok) {
@@ -76,11 +80,9 @@ export default function Home({ isOverlay, setOverlay }) {
         console.log("Error");
       }
     };
-  
+
     fetchParkingSlots();
   }, []);
-  
-
 
   return (
     <div className="relative min-h-screen">
@@ -89,9 +91,11 @@ export default function Home({ isOverlay, setOverlay }) {
         className={`absolute h-screen flex justify-center items-center inset-0 bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg ${
           !latitude && !longitude ? "z-40" : "hidden"
         }`}
-      ><div className="z-50">
-        <LocationAccess a={func} />
-    </div></div>
+      >
+        <div className="z-50">
+          <LocationAccess a={func} />
+        </div>
+      </div>
       {/* {!latitude && !longitude && (
         <div className="absolute left-64  h-2/5 w-3/5 z-20">
           <div className="">
