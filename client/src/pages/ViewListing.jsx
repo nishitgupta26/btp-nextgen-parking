@@ -36,13 +36,17 @@ export default function ViewListing() {
 
   const handleApproveListing = async () => {
     try {
+      const latitude = cookies.get("latitude");
+      const longitude = cookies.get("longitude");
+
+      const combined = longitude + "_" + latitude;
       const res = await fetch(`${host}/api/admin/approvelots`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "auth-token": cookies.get("access_token"),
         },
-        body: JSON.stringify({ lotid: listingId }),
+        body: JSON.stringify({ lotid: listingId, location: combined }),
       });
       const data = await res.json();
       // console.log(data);
