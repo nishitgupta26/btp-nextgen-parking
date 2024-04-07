@@ -18,17 +18,22 @@ router.post("/approvelots", fetchuser, async (req, res) => {
     {
         return res.status(401).send("Not Allowed");
     }
-    // update lot having id targetlot to approved status
-    Lots.findByIdAndUpdate(targetlot, {approved: true}, function(err, docs){
-        if(err){
+    
+    const geocord = req.body.location;
+
+    // update lot having id targetlot to approved status also add geocordinates
+    Lots.findByIdAndUpdate(targetlot, {approved: true, geoCoordinates: geocord}, function(err, docs)
+    {
+        if(err)
+        {
             console.log(err);
             return res.status(500).send(err);
         }
-        else{
+        else
+        {
             return res.json(docs);
         }
-    }
-    );
+    });
 });
 
 // ROUTE-2 :: delete a lot - DELETE - "/api/admin/deletelot" - REQUIRES LOGIN
