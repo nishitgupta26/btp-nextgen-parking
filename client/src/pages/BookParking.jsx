@@ -105,7 +105,16 @@ export default function BookParking() {
 
   const handleCloseModal = async () => {
     if (pin !== "12345") {
-      console.log("Invalid Pin");
+      toast.error("Invalid Pin", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       return;
     }
     setIsModalOpen(false);
