@@ -13,7 +13,7 @@ export default function BookParking() {
   const [startTime, setStartTime] = useState("");
   const [EndTime, setEndTime] = useState("");
   const [vehicleType, setVehicleType] = useState("fourWheeler");
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [pin, setPin] = useState("");
   const [vehicleNumber, setVehicleNumber] = useState("");
   const host = "http://localhost:3001";
@@ -94,15 +94,21 @@ export default function BookParking() {
   ));
 
   const toggleModal = () => {
-    if (pin !== "12345") {
-      console.log("incorrect pin");
-    } else setIsModalOpen(!isModalOpen);
+    setIsModalOpen(!isModalOpen);
   };
 
   const closeModal = (e) => {
     if (e.target.className === "modal-overlay") {
       setIsModalOpen(false);
     }
+  };
+
+  const handleCloseModal = async () => {
+    if (pin !== "12345") {
+      console.log("Invalid Pin");
+      return;
+    }
+    setIsModalOpen(false);
   };
 
   return (
@@ -321,7 +327,7 @@ export default function BookParking() {
               className="border border-gray-300 p-2 rounded-md mb-4 w-full"
             />
             <button
-              onClick={toggleModal}
+              onClick={handleCloseModal}
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
             >
               Pay & Book
