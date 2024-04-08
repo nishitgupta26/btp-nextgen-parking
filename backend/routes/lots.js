@@ -113,6 +113,7 @@ router.post("/addlot", fetchuser, async (req, res) => {
       amenities: req.body.amenities,
 
       availableSpots: req.body.availableSpots,
+      availableSpotsTwoWheeler: req.body.availableSpotsTwoWheeler,
       isOpen: req.body.isOpen,
     });
 
@@ -154,6 +155,7 @@ router.put("/updatelot/:id", fetchuser, async (req, res) => {
     email,
     amenities,
     availableSpots,
+    availableSpotsTwoWheeler,
     isOpen,
   } = req.body;
   const newLot = {
@@ -172,6 +174,7 @@ router.put("/updatelot/:id", fetchuser, async (req, res) => {
     email,
     amenities,
     availableSpots,
+    availableSpotsTwoWheeler,
     isOpen,
   };
   try {

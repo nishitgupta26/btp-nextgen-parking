@@ -26,6 +26,8 @@ const lotSchema = new mongoose.Schema({
   amenities: [{ type: String, required: false }],
 
   availableSpots: { type: Number, required: false }, // number of empty slots right now
+  availableSpotsTwoWheeler: { type: Number, required: false }, // number of empty two wheeler slots right now
+  
   isOpen: { type: Boolean, default: true, required: true }, // is the parking lot open right now?
 
   approved: { type: Boolean, default: false, required: false },
