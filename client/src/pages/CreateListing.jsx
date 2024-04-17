@@ -140,6 +140,7 @@ export default function CreateListing() {
                   setFormData({
                     ...formData,
                     fourWheelerCapacity: e.target.value,
+                    availableSpots: e.target.value,
                   })
                 }
                 type="number"
@@ -254,6 +255,7 @@ export default function CreateListing() {
                 setFormData({
                   ...formData,
                   twoWheelerCapacity: e.target.value,
+                  availableSpotsTwoWheeler: e.target.value,
                 })
               }
               type="number"
