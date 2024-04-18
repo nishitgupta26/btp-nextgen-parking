@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { updateCoordinates } from "../redux/User/userSlice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function ViewListing() {
   const [formData, setFormData] = useState({});
@@ -14,6 +17,8 @@ export default function ViewListing() {
   const navigate = useNavigate();
   const params = useParams();
   const listingId = params.listingId;
+  const dispatch = useDispatch();
+  const { latitude, longitude } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -36,10 +41,20 @@ export default function ViewListing() {
 
   const handleApproveListing = async () => {
     try {
-      const latitude = cookies.get("latitude");
-      const longitude = cookies.get("longitude");
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          //console.log(latitude, longitude);
+          dispatch(updateCoordinates({ latitude, longitude }));
+        },
+        (error) => {
+          console.error(error.message);
+        }
+      );
 
       const combined = longitude + "_" + latitude;
+      console.log(combined);
+      console.log(cookies.get("access_token"));
       const res = await fetch(`${host}/api/admin/approvelots`, {
         method: "POST",
         headers: {

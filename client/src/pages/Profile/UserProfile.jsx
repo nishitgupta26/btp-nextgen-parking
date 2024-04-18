@@ -54,7 +54,7 @@ export default function UserProfile() {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            "auth-token": authtoken, // Use the correct header name and format for the token
+            "auth-token": authtoken,
           },
           body: JSON.stringify(formData),
         });
@@ -85,7 +85,9 @@ export default function UserProfile() {
               alt=""
             ></img>
           </div>
-          <h1 className="text-2xl font-semibold text-center my-7">{currentUser.name}</h1>
+          <h1 className="text-2xl font-semibold text-center my-7">
+            {currentUser.name}
+          </h1>
           <div className="flex flex-row items-center justify-center gap-4">
             <div className="flex flex-col items-start justify-center">
               <span className="my-2">Email :</span>

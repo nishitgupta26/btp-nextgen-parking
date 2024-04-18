@@ -3,13 +3,19 @@ import LocationAccess from "../../components/LocationAccess";
 import Cookies from "universal-cookie";
 import ParkingCard from "../../components/ParkingCard";
 import Header from "../../components/Header";
+import { useDispatch, useSelector } from "react-redux";
+import { updateCoordinates } from "../../redux/User/userSlice";
 
 export default function Home({ isOverlay, setOverlay }) {
+  const dispatch = useDispatch();
+
   const cookies = new Cookies();
   const host = "http://localhost:3001";
   const authtoken = cookies.get("access_token");
-  const [latitude, setLatitude] = useState(cookies.get("latitude") || null);
-  const [longitude, setLongitude] = useState(cookies.get("longitude") || null);
+
+  const { latitude, longitude } = useSelector((state) => state.user);
+
+  const [parkingSlots, setParkingSlots] = useState([]);
 
   const checkLocationPermission = async () => {
     const permissionStatus = await navigator.permissions.query({
@@ -20,28 +26,34 @@ export default function Home({ isOverlay, setOverlay }) {
   };
 
   const func = (c, b) => {
-    setLatitude(c);
-    setLongitude(b);
-    cookies.set("latitude", c);
-    cookies.set("longitude", b);
+    dispatch(updateCoordinates({ latitude: c, longitude: b })); // Use the dispatch function to dispatch the action
   };
 
   useEffect(() => {
     const checkAndClearCookies = async () => {
       const permissionState = await checkLocationPermission();
       if (permissionState === "denied") {
-        // Clear cookies
-        cookies.remove("latitude");
-        cookies.remove("longitude");
-        setLatitude(null);
-        setLongitude(null);
+        dispatch(updateCoordinates({ latitude: null, longitude: null }));
       }
     };
     checkAndClearCookies();
+
+    const intervalId = setInterval(() => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          dispatch(updateCoordinates({ latitude, longitude }));
+        },
+        (error) => {
+          console.error(error.message);
+        }
+      );
+    }, 1000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
-    // Disable scrolling when overlay is rendered
     if (!latitude && !longitude) {
       setOverlay(false);
       document.body.style.overflow = "hidden";
@@ -51,37 +63,33 @@ export default function Home({ isOverlay, setOverlay }) {
     }
 
     return () => {
-      // Re-enable scrolling when component unmounts
       document.body.style.overflow = "auto";
     };
   }, [latitude, longitude]);
-  // code to fetch parkingslots data from backend
-  const [parkingSlots, setparkingSlots] = useState([]);
 
-  // // useEffect to fetch all parking lots
   useEffect(() => {
-    const fetchParkingSlots = async () => {
-      const longitude = cookies.get("longitude");
-      const latitude = cookies.get("latitude");
-
-      const combined = longitude + "_" + latitude;
-      const res = await fetch(`${host}/api/lots/getnearby/${combined}`, {
-        method: "GET",
-        headers: {
-          "auth-token": authtoken,
-        },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setparkingSlots(data);
-        console.log(data);
-      } else {
-        console.log("Error");
-      }
-    };
-
     fetchParkingSlots();
+    const intervalId = setInterval(fetchParkingSlots, 1000);
+
+    return () => clearInterval(intervalId);
   }, []);
+
+  const fetchParkingSlots = async () => {
+    const combined = longitude + "_" + latitude;
+    console.log(combined);
+    const res = await fetch(`${host}/api/lots/getnearby/${combined}`, {
+      method: "GET",
+      headers: {
+        "auth-token": authtoken,
+      },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setParkingSlots(data);
+    } else {
+      console.log("Error");
+    }
+  };
 
   return (
     <div className="relative min-h-screen">
@@ -95,15 +103,7 @@ export default function Home({ isOverlay, setOverlay }) {
           <LocationAccess a={func} />
         </div>
       </div>
-      {/* {!latitude && !longitude && (
-        <div className="absolute left-64  h-2/5 w-3/5 z-20">
-          <div className="">
-            <LocationAccess a={func} />
-          </div>
-        </div>
-      )} */}
       <div className="mt-14 ml-4 mr-4 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10">
-        {/* <h1 className="text-4xl text-center mt-8">Welcome to SmartPark</h1> */}
         {parkingSlots.map((lot) => (
           <ParkingCard key={lot.id} lot={lot} />
         ))}

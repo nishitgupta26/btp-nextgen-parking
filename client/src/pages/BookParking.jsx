@@ -6,6 +6,8 @@ import BgImg from "../img/parkingSlotCardBg.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ParkingBox from "../components/ParkingBox";
+import { useDispatch, useSelector } from "react-redux";
+import { updateCoordinates } from "../redux/User/userSlice";
 
 export default function BookParking() {
   const [formData, setFormData] = useState({});
@@ -21,6 +23,9 @@ export default function BookParking() {
   const navigate = useNavigate();
   const params = useParams();
   const listingId = params.listingId;
+  const dispatch = useDispatch();
+
+  const { latitude, longitude } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -32,7 +37,6 @@ export default function BookParking() {
           return;
         }
         setFormData(data);
-        console.log("I am useEffect");
       } catch (error) {
         console.error("Error fetching listing:", error);
       }
@@ -41,9 +45,34 @@ export default function BookParking() {
     fetchListing();
   }, [listingId]);
 
+  useEffect(() => {
+    const checkAndClearCookies = async () => {
+      const permissionState = await checkLocationPermission();
+      if (permissionState === "denied") {
+        dispatch(updateCoordinates({ latitude: null, longitude: null }));
+      }
+    };
+    checkAndClearCookies();
+
+    const intervalId = setInterval(() => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          //console.log(latitude, longitude);
+          dispatch(updateCoordinates({ latitude, longitude }));
+        },
+        (error) => {
+          console.error(error.message);
+        }
+      );
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   const handleStartTimeChange = (e) => {
     setStartTime(e.target.value);
-    calculateDifference(e.target.value, endTime);
+    calculateDifference(e.target.value, EndTime);
   };
 
   const handleEndTimeChange = (e) => {
