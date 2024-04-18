@@ -45,32 +45,38 @@ export default function BookParking() {
     fetchListing();
   }, [listingId]);
 
-  useEffect(() => {
-    const checkAndClearCookies = async () => {
-      const permissionState = await checkLocationPermission();
-      if (permissionState === "denied") {
-        dispatch(updateCoordinates({ latitude: null, longitude: null }));
-      }
-    };
-    checkAndClearCookies();
-
-    const intervalId = setInterval(() => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          //console.log(latitude, longitude);
-          dispatch(updateCoordinates({ latitude, longitude }));
-        },
-        (error) => {
-          console.error(error.message);
-        }
-      );
-    }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, []);
+  const d = new Date();
+  const hr = d.getHours();
+  const min = d.getMinutes();
 
   const handleStartTimeChange = (e) => {
+    const selectedTime = e.target.value;
+    const currentTime = new Date();
+    const selectedHour = parseInt(selectedTime.split(":")[0]);
+    const selectedMinute = parseInt(selectedTime.split(":")[1]);
+
+    const currentHour = currentTime.getHours();
+    const currentMinute = currentTime.getMinutes();
+
+    const timeDifference =
+      (selectedHour - currentHour) * 60 + (selectedMinute - currentMinute);
+
+    if (timeDifference > 30) {
+      const errorMessage =
+        "Cannot book parking more than 30 minutes in advance.";
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+
     setStartTime(e.target.value);
     calculateDifference(e.target.value, EndTime);
   };
@@ -117,11 +123,21 @@ export default function BookParking() {
     console.log(vehicleType);
   }, [vehicleType]);
 
-  const [x, setX] = useState(900);
-  const parkingBoxes = Array.from({ length: x }, (_, index) => (
-    <ParkingBox index={index} />
-  ));
+  // console.log(formData.availableSpots);
+  // console.log(formData.availableSpotsTwoWheeler);
+  // const [availableFourWheelerParking, setAvailableFourWheelerParking] = useState(300);
+  const parkingBoxesFourWheeler = Array.from(
+    { length: formData.availableSpots },
+    (_, index) => <ParkingBox index={index} booked={formData.availableSpots} />
+  );
 
+  // const [availableTwoWheelerParking, setAvailableTwoWheelerParking] = useState(100);
+  const parkingBoxesTwoWheeler = Array.from(
+    { length: formData.availableSpotsTwoWheeler },
+    (_, index) => (
+      <ParkingBox index={index} booked={formData.availableSpotsTwoWheeler} />
+    )
+  );
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -306,8 +322,10 @@ export default function BookParking() {
       </form>
       <div className="flex flex-col justify-center items-center mt-8">
         <p className="font-medium text-xl">Parking Lot Chart</p>
-        <div className="flex mt-6 h-80 overflow-auto gap-2 flex-wrap">
-          {parkingBoxes}
+        <div className="flex mt-6 h-80 overflow-auto gap-2 flex-wrap border-2 border-slate-500 p-3 rounded-lg">
+          {vehicleType === "fourWheeler"
+            ? parkingBoxesFourWheeler
+            : parkingBoxesTwoWheeler}
         </div>
       </div>
       <div className="flex items-center flex-col">
@@ -318,7 +336,7 @@ export default function BookParking() {
           ) : (
             <span></span>
           )}
-          {difference > 0 && vehicleType === "twoWheeler" ? (
+          {difference >= 0 && vehicleType === "twoWheeler" ? (
             <span>Rs. {(difference * formData.parkingRate) / 2}/-</span>
           ) : (
             <span></span>

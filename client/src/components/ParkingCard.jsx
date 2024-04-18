@@ -2,7 +2,7 @@ import React from "react";
 import BgImg from "../img/parkingSlotCardBg.png";
 import plugIcon from "../img/plug-icon.png";
 import { useNavigate } from "react-router-dom";
-import { Link } from "@mui/material";
+import locIcon from "../img/location-icon.png";
 export default function ParkingCard({ lot }) {
   const clienthost = "http://localhost:5173";
   const navigate = useNavigate();
@@ -38,11 +38,27 @@ export default function ParkingCard({ lot }) {
               )}
             </div>
             <div className="m-3">
-              <div class="mt-4 flex flex-row justify-between items-center">
-                <h2 class="font-medium text-base md:text-lg text-gray-800 line-clamp-1">
+              <div class="mt-4 flex flex-col justify-between items-left">
+                {/* <h2 class="font-medium text-base md:text-lg text-gray-800 mr-16"> */}
+                {/* {lot.name} */}
+                {/* Raja Ram Parkings Ayodhya
+                </h2>
+                <p class="text-sm text-gray-800">
+                  {lot.location}
+                </p> */}
+
+                <h2 class="font-medium text-base md:text-lg text-gray-800 ">
                   {lot.name}
                 </h2>
-                <p class="text-sm text-gray-800">{lot.location}</p>
+                <div className="flex flex-row items-center mt-3">
+                  <img
+                    src={locIcon}
+                    alt="Location Icon"
+                    className="w-6 h-6 mr-4"
+                  />
+
+                  <p class="text-sm text-gray-800">{lot.location}</p>
+                </div>
               </div>
 
               <div class="grid grid-cols-2 grid-rows-2 gap-4 mt-4">
