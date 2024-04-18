@@ -148,7 +148,21 @@ export default function BookParking() {
     }
   };
 
-  const handleCloseModal = async () => {
+  function convertToISO(timeString) {
+    // Parse the time string into hours and minutes
+    const [hours, minutes] = timeString.split(":").map(Number);
+
+    // Create a Date object with today's date and the provided hours and minutes
+    const date = new Date();
+    date.setHours(hours);
+    date.setMinutes(minutes);
+
+    // Format the Date object to ISO 8601 format
+    return date.toISOString();
+  }
+
+  const handleBookng = async (e) => {
+    e.preventDefault();
     if (pin !== "12345") {
       toast.error("Invalid Pin", {
         position: "top-center",
@@ -162,6 +176,47 @@ export default function BookParking() {
       });
       return;
     }
+
+    try {
+      const authToken = cookies.get("access_token");
+      const startISO = convertToISO(startTime);
+      const endISO = convertToISO(EndTime);
+
+      console.log(startISO, endISO);
+      const response = await fetch(`${host}/api/booking/bookslot`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": authToken,
+        },
+        body: JSON.stringify({
+          lotId: listingId,
+          checkIn: startISO,
+          checkOut: endISO,
+          vehicleNumber,
+          vehicleType,
+        }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        toast.success("Parking booked successfully", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        const errorMessage = await response.text();
+        console.error(errorMessage);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
     setIsModalOpen(false);
   };
 
@@ -383,7 +438,7 @@ export default function BookParking() {
               className="border border-gray-300 p-2 rounded-md mb-4 w-full"
             />
             <button
-              onClick={handleCloseModal}
+              onClick={handleBookng}
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
             >
               Pay & Book
