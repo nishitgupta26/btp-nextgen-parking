@@ -121,7 +121,7 @@ export default function BookParking() {
   // console.log(formData.availableSpots);
   // console.log(formData.availableSpotsTwoWheeler);
   // const [availableFourWheelerParking, setAvailableFourWheelerParking] = useState(300);
-  const parkingBoxesFourWheeler = Array.from({ length: formData.fourWheelerCapacity }, (_, index) => (
+  const parkingBoxesFourWheeler = Array.from({ length: formData.availableSpots }, (_, index) => (
     <ParkingBox index={index} booked={formData.availableSpots}/>
   ));
 
@@ -325,7 +325,7 @@ export default function BookParking() {
           ) : (
             <span></span>
           )}
-          {difference > 0 && vehicleType === "twoWheeler" ? (
+          {difference >= 0 && vehicleType === "twoWheeler" ? (
             <span>Rs. {(difference * formData.parkingRate) / 2}/-</span>
           ) : (
             <span></span>
