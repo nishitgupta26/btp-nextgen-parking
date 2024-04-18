@@ -15,7 +15,7 @@ router.post("/bookslot", fetchuser, async (req, res) => {
     try {
         // const { lotId, checkIn, checkOut, vehicleNumber, vehicleType } = req.body;
 
-        const lot = await Lots.findById(lotId);
+        const lot = await Lots.findById(req.body.lotId);
         if (!lot) {
             return res.status(404).send("Lot not found");
         }
@@ -24,7 +24,7 @@ router.post("/bookslot", fetchuser, async (req, res) => {
             const checkInDate = new Date(x);
             const checkOutDate = new Date(y);
 
-            const differenceInMilliseconds = abs(checkOutDate.getTime() - checkInDate.getTime());
+            const differenceInMilliseconds = Math.abs(checkOutDate.getTime() - checkInDate.getTime());
 
             // Convert the difference from milliseconds to hours
             const differenceInHours = differenceInMilliseconds / 1000 / 60 / 60;
@@ -38,7 +38,7 @@ router.post("/bookslot", fetchuser, async (req, res) => {
             const checkInDate = new Date(x);
             const checkOutDate = new Date(y);
 
-            const differenceInMilliseconds = abs(checkOutDate.getTime() - checkInDate.getTime());
+            const differenceInMilliseconds = Math.abs(checkOutDate.getTime() - checkInDate.getTime());
             const diffInMinutes = differenceInMilliseconds / 1000 / 60;
 
             const valid = diffInMinutes <= 30 ? true : false;
@@ -87,6 +87,24 @@ router.post("/bookslot", fetchuser, async (req, res) => {
 // ROUTE-2 :: Checking a user into the parking by car number by manager :: PUT - "/api/booking/checkin/:id" - REQUIRES LOGIN
 
 
+
+
+
+// Route-3 :: Checking a user out of the parking by car number by manager :: PUT - "/api/booking/checkout/:id" - REQUIRES LOGIN
+
+
+
+// Route-4 :: Getting all bookings of a user :: GET - "/api/booking/getallbookings" - REQUIRES LOGIN
+router.get("/getallbookings", fetchuser, async (req, res) => {
+    try {
+        const bookings = await Booking.find({ driver: req.user.id });
+        res.json(bookings);
+    } 
+    catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 
 module.exports = router;
