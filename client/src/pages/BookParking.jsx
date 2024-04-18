@@ -123,21 +123,34 @@ export default function BookParking() {
     console.log(vehicleType);
   }, [vehicleType]);
 
-  // console.log(formData.availableSpots);
-  // console.log(formData.availableSpotsTwoWheeler);
-  // const [availableFourWheelerParking, setAvailableFourWheelerParking] = useState(300);
   const parkingBoxesFourWheeler = Array.from(
-    { length: formData.availableSpots },
-    (_, index) => <ParkingBox index={index} booked={formData.availableSpots} />
+    { length: formData.fourWheelerCapacity },
+    (_, index) => <ParkingBox key={index}  index={index} booked={formData.availableSpots} />
   );
-
-  // const [availableTwoWheelerParking, setAvailableTwoWheelerParking] = useState(100);
   const parkingBoxesTwoWheeler = Array.from(
-    { length: formData.availableSpotsTwoWheeler },
+    { length: formData.twoWheelerCapacity},
     (_, index) => (
-      <ParkingBox index={index} booked={formData.availableSpotsTwoWheeler} />
+      <ParkingBox key={index}  index={index} booked={formData.availableSpotsTwoWheeler} />
     )
   );
+
+  useEffect(() => {
+    const parkingBoxesFourWheeler = Array.from(
+    { length: formData.fourWheelerCapacity },
+    (_, index) => <ParkingBox key={index} index={index} booked={formData.availableSpots} />
+  );
+  }, [formData.availableSpots]);
+
+  useEffect(() => {
+    const parkingBoxesTwoWheeler = Array.from(
+      { length: formData.twoWheelerCapacity},
+      (_, index) => (
+        <ParkingBox key={index}  index={index} booked={formData.availableSpotsTwoWheeler} />
+      )
+    );
+  }, [formData.availableSpotsTwoWheeler]);
+
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -377,7 +390,7 @@ export default function BookParking() {
       </form>
       <div className="flex flex-col justify-center items-center mt-8">
         <p className="font-medium text-xl">Parking Lot Chart</p>
-        <div className="flex mt-6 h-80 overflow-auto gap-2 flex-wrap border-2 border-slate-500 p-3 rounded-lg">
+        <div className="flex flex-wrap gap-3 p-3 mt-6 max-h-80 overflow-auto flex-row border-2 border-gray-500 rounded-lg">
           {vehicleType === "fourWheeler"
             ? parkingBoxesFourWheeler
             : parkingBoxesTwoWheeler}
