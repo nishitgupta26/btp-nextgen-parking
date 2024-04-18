@@ -125,31 +125,46 @@ export default function BookParking() {
 
   const parkingBoxesFourWheeler = Array.from(
     { length: formData.fourWheelerCapacity },
-    (_, index) => <ParkingBox key={index}  index={index} booked={formData.availableSpots} />
+    (_, index) => (
+      <ParkingBox key={index} index={index} booked={formData.availableSpots} />
+    )
   );
   const parkingBoxesTwoWheeler = Array.from(
-    { length: formData.twoWheelerCapacity},
+    { length: formData.twoWheelerCapacity },
     (_, index) => (
-      <ParkingBox key={index}  index={index} booked={formData.availableSpotsTwoWheeler} />
+      <ParkingBox
+        key={index}
+        index={index}
+        booked={formData.availableSpotsTwoWheeler}
+      />
     )
   );
 
   useEffect(() => {
     const parkingBoxesFourWheeler = Array.from(
-    { length: formData.fourWheelerCapacity },
-    (_, index) => <ParkingBox key={index} index={index} booked={formData.availableSpots} />
-  );
+      { length: formData.fourWheelerCapacity },
+      (_, index) => (
+        <ParkingBox
+          key={index}
+          index={index}
+          booked={formData.availableSpots}
+        />
+      )
+    );
   }, [formData.availableSpots]);
 
   useEffect(() => {
     const parkingBoxesTwoWheeler = Array.from(
-      { length: formData.twoWheelerCapacity},
+      { length: formData.twoWheelerCapacity },
       (_, index) => (
-        <ParkingBox key={index}  index={index} booked={formData.availableSpotsTwoWheeler} />
+        <ParkingBox
+          key={index}
+          index={index}
+          booked={formData.availableSpotsTwoWheeler}
+        />
       )
     );
   }, [formData.availableSpotsTwoWheeler]);
-
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -208,10 +223,12 @@ export default function BookParking() {
           checkOut: endISO,
           vehicleNumber,
           vehicleType,
+          parkingRate: formData.parkingRate,
         }),
       });
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         toast.success("Parking booked successfully", {
           position: "top-center",
           autoClose: 2000,
