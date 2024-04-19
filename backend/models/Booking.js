@@ -13,6 +13,8 @@ const bookingSchema = new mongoose.Schema({
     hasPayed: { type: Boolean, default: false, required: true },
     parkingRate: { type: Number, required: true },
     moneyPaid: { type: Number, required: false },
+
+    isCurrent: { type: Boolean, default: true, required: false }, // is this booking currently active
 });
 
 module.exports = mongoose.model("Booking", bookingSchema);

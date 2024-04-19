@@ -128,4 +128,20 @@ router.get("/getallbookings", fetchuser, async (req, res) => {
   }
 });
 
+// Route-5 :: Getting current booking of a user :: GET - "/api/currentbooking/" - REQUIRES LOGIN
+router.get("/currentbooking", fetchuser, async (req, res) => {
+  try {
+    const booking = await Booking.find({ driver: req.user.id, isCurrent: true });
+    
+
+    if(!booking)
+        return res.status(404).send("No current booking found");
+
+    res.json(booking);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 module.exports = router;
