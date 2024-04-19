@@ -18,6 +18,21 @@ router.post("/bookslot", fetchuser, async (req, res) => {
       return res.status(404).send("Lot not found");
     }
 
+        if(req.body.vehicleType.toLowerCase() == "twowheeler" && lot.availableSpotsTwoWheeler <= 0) {
+            return res.status(400).send("No two wheeler spots available");
+        }
+
+        if(req.body.vehicleType.toLowerCase() == "fourwheeler" && lot.availableSpots <= 0) {
+            return res.status(400).send("No four wheeler spots available");
+        }
+        if(req.body.vehicleType.toLowerCase() != "twowheeler" && req.body.vehicleType.toLowerCase() != "fourwheeler") {
+            return res.status(400).send("Invalid vehicle type");
+        }
+
+
+
+
+
     function calculateTimeDifference(x, y) {
       const checkInDate = new Date(x);
       const checkOutDate = new Date(y);
@@ -78,6 +93,16 @@ router.post("/bookslot", fetchuser, async (req, res) => {
       parkingRate: req.body.parkingRate,
       moneyPaid: amountPaid,
     };
+
+        if(req.body.vehicleType.toLowerCase() == "twowheeler") {
+            // update availableSpotsTwoWheeler in database
+
+            const updatedLot = await Lots.findByIdAndUpdate(req.body.lotId, { availableSpotsTwoWheeler: lot.availableSpotsTwoWheeler - 1 });
+        }
+        else{
+            // update availableSpots in database
+            const updatedLot = await Lots.findByIdAndUpdate(req.body.lotId, { availableSpots: lot.availableSpots - 1 });
+        }
 
     const newBooking = new Booking(booking);
     await newBooking.save();
