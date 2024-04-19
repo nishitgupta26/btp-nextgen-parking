@@ -5,9 +5,31 @@ const bcrypt = require("bcrypt");
 const { body, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const fetchuser = require("../middleware/fetchuser");
+const otpGenerator = require('otp-generator');
+const nodemailer = require('nodemailer');
 
+// Import the node-cache package
+const NodeCache = require('node-cache');
+
+// Initialize a new instance of NodeCache
+const cache = new NodeCache();
+const MAIL_ID = process.env.MAIL_ID;
+const MAIL_PASS = process.env.MAIL_PASS;
+// Create a Nodemailer transporter
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    auth: {
+        user: MAIL_ID,
+        pass: MAIL_PASS
+    }
+});
+  
 
 const JWT_SECRET =  process.env.JWT_SECRET;
+
+
+  
 
 // ROUTE-1 //create a user - POST - "/api/auth/createuser " - DOES NOT REQUIRE LOGIN
 router.post("/createuser", 
@@ -202,5 +224,66 @@ router.put('/updateuser', fetchuser, async (req, res) => {
         return res.status(500).json({ error: "Internal server error" });
     }
 });
+
+//TEMP ROUTE TO CHECK EMAIL SENDING FUNCTIONALITY
+// Backend endpoint to send a "hi" message to an email address
+router.post("/sendHi", async (req, res) => {
+    try {
+        const { email } = req.body;
+        // Send "hi" message via email
+        const mailOptions = {
+            from: 'guptanishit.2626@gmail.com',
+            to: email,
+            subject: 'Hi from Temporary API',
+            text: 'Hi, this is a test message from the Temporary API.'
+        };
+        await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully'); // Add logging
+        res.json({ success: true, message: 'Hi message sent successfully.' });
+    } catch (error) {
+        console.error('Error sending email:', error); // Log detailed error
+        res.status(500).json({ error });
+    }
+});
+
+// ROUTE-6 //generate and send OTP - POST - "/api/auth/generateOTP "
+router.post("/generateOTP", async (req, res) => {
+    const { email } = req.body;
+    const OTP = otpGenerator.generate(4, { digits: true,lowerCaseAlphabets:false ,upperCaseAlphabets:false, alphabets: false, specialChars: false  });
+    // Store OTP in cache or database
+    cache.set(email, OTP);
+    // Send OTP via email
+    const mailOptions = {
+      from: MAIL_ID,
+      to: email,
+      subject: 'OTP for registration on SmartPark',
+      text: `Your OTP for registration is: ${OTP}`,
+    };
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Failed to send OTP' });
+      } else {
+        console.log('Email sent: ' + info.response);
+        res.json({ success: true });
+      }
+    });
+  });
+  
+
+// ROUTE-7 //generate and send OTP - POST - "/api/auth/verifyOTP "
+router.post("/verifyOTP", async (req, res) => {
+    const { email, enteredOTP } = req.body;
+    const storedOTP = cache.get(email);
+    if (storedOTP === enteredOTP) {
+      // OTP matched, proceed with registration
+      // Clear OTP from cache
+      cache.del(email);
+      // Register user or perform necessary actions
+      res.json({ success: true });
+    } else {
+      res.status(400).json({ error: 'Invalid OTP' });
+    }
+  });
 
 module.exports = router;

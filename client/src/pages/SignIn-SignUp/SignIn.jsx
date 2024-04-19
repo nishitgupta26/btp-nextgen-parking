@@ -23,11 +23,66 @@ export default function SignIn() {
   const dispatch = useDispatch();
   const cookies = new Cookies();
 
+  // const handleRegister = async (e) => {
+  //   e.preventDefault();
+  //   // Password length validation
+  //   if (formData.password.length < 5) {
+  //     // Display an error message or toast indicating the password length requirement
+  //     return toast.error("Password must be at least 5 characters long", {
+  //       position: "top-center",
+  //       autoClose: 3000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "light",
+  //     });
+  //   }
+  //   try {
+  //     // Email existence validation -> Need to be done in the backend
+  //     dispatch(signInStart());
+  //     const response = await fetch(`${host}/api/auth/createuser`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ ...formData, role: type }), // Include role in formData
+  //     });
+  //     const data = await response.json();
+
+  //     if (data.error) {
+  //       dispatch(signInFailure(data.error));
+  //       console.log(data.error);
+  //       return toast.error(data.error, {
+  //         position: "top-center",
+  //         autoClose: 3000,
+  //         hideProgressBar: false,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //         theme: "light",
+  //       });
+  //     } else {
+  //       cookies.set("access_token", data.authtoken);
+  //       const { password, ...userData } = formData;
+  //       dispatch(signInSuccess({ ...userData, role: type }));
+
+  //       if (type === "Owner") navigate("/owner-profile");
+  //       else if (type === "Manager") navigate("/manager-profile");
+  //       else if (type === "User") navigate("/user-profile");
+  //       else navigate("/admin-profile");
+  //     }
+  //   } catch (error) {
+  //     dispatch(signInFailure(error.message));
+  //   }
+  // };
   const handleRegister = async (e) => {
     e.preventDefault();
+  
     // Password length validation
     if (formData.password.length < 5) {
-      // Display an error message or toast indicating the password length requirement
       return toast.error("Password must be at least 5 characters long", {
         position: "top-center",
         autoClose: 3000,
@@ -39,22 +94,74 @@ export default function SignIn() {
         theme: "light",
       });
     }
+  
     try {
-      // Email existence validation -> Need to be done in the backend
+      // Generate OTP before registering the user
       dispatch(signInStart());
-      const response = await fetch(`${host}/api/auth/createuser`, {
+      const otpResponse = await fetch(`${host}/api/auth/generateOTP`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...formData, role: type }), // Include role in formData
+        body: JSON.stringify({ email: formData.email }),
       });
-      const data = await response.json();
-
-      if (data.error) {
-        dispatch(signInFailure(data.error));
-        console.log(data.error);
-        return toast.error(data.error, {
+      const otpData = await otpResponse.json();
+  
+      if (otpData.error) {
+        return toast.error("Failed to generate OTP", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+  
+      // Prompt the user to enter OTP
+      const enteredOTP = prompt("Enter OTP");
+  
+      // Verify OTP
+      const verifyResponse = await fetch(`${host}/api/auth/verifyOTP`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          enteredOTP: enteredOTP,
+        }),
+      });
+      const verifyData = await verifyResponse.json();
+  
+      if (verifyData.error) {
+        return toast.error("Invalid OTP", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+  
+      // Proceed with user registration if OTP verification successful
+      const userResponse = await fetch(`${host}/api/auth/createuser`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...formData, role: type }),
+      });
+      const userData = await userResponse.json();
+  
+      if (userData.error) {
+        dispatch(signInFailure(userData.error));
+        return toast.error(userData.error, {
           position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
@@ -65,10 +172,10 @@ export default function SignIn() {
           theme: "light",
         });
       } else {
-        cookies.set("access_token", data.authtoken);
-        const { password, ...userData } = formData;
-        dispatch(signInSuccess({ ...userData, role: type }));
-
+        cookies.set("access_token", userData.authtoken);
+        const { password, ...userDataWithoutPassword } = formData;
+        dispatch(signInSuccess({ ...userDataWithoutPassword, role: type }));
+  
         if (type === "Owner") navigate("/owner-profile");
         else if (type === "Manager") navigate("/manager-profile");
         else if (type === "User") navigate("/user-profile");
@@ -78,7 +185,7 @@ export default function SignIn() {
       dispatch(signInFailure(error.message));
     }
   };
-
+  
   const handleSignIn = async (e) => {
     e.preventDefault();
     // Password length validation
@@ -149,6 +256,49 @@ export default function SignIn() {
       dispatch(signInFailure(error.message));
     }
   };
+
+  // Frontend function to handle OTP verification
+const handleVerifyOTP = async () => {
+  try {
+    const response = await fetch(`${host}/api/auth/verifyOTP`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: formData.email, enteredOTP: formData.otp }),
+    });
+    const data = await response.json();
+    if (data.success) {
+      // OTP verification successful, proceed with registration
+      // Call handleRegister function or perform registration actions
+      toast.success("OTP done", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } else {
+      // Invalid OTP, display error message
+      toast.error("Invalid OTP", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  } catch (error) {
+    console.error("Error verifying OTP:", error);
+    // Handle error
+  }
+};
 
   return (
     <div className="outer">
