@@ -18,20 +18,25 @@ router.post("/bookslot", fetchuser, async (req, res) => {
       return res.status(404).send("Lot not found");
     }
 
-        if(req.body.vehicleType.toLowerCase() == "twowheeler" && lot.availableSpotsTwoWheeler <= 0) {
-            return res.status(400).send("No two wheeler spots available");
-        }
+    if (
+      req.body.vehicleType.toLowerCase() == "twowheeler" &&
+      lot.availableSpotsTwoWheeler <= 0
+    ) {
+      return res.status(400).send("No two wheeler spots available");
+    }
 
-        if(req.body.vehicleType.toLowerCase() == "fourwheeler" && lot.availableSpots <= 0) {
-            return res.status(400).send("No four wheeler spots available");
-        }
-        if(req.body.vehicleType.toLowerCase() != "twowheeler" && req.body.vehicleType.toLowerCase() != "fourwheeler") {
-            return res.status(400).send("Invalid vehicle type");
-        }
-
-
-
-
+    if (
+      req.body.vehicleType.toLowerCase() == "fourwheeler" &&
+      lot.availableSpots <= 0
+    ) {
+      return res.status(400).send("No four wheeler spots available");
+    }
+    if (
+      req.body.vehicleType.toLowerCase() != "twowheeler" &&
+      req.body.vehicleType.toLowerCase() != "fourwheeler"
+    ) {
+      return res.status(400).send("Invalid vehicle type");
+    }
 
     function calculateTimeDifference(x, y) {
       const checkInDate = new Date(x);
@@ -94,15 +99,18 @@ router.post("/bookslot", fetchuser, async (req, res) => {
       moneyPaid: amountPaid,
     };
 
-        if(req.body.vehicleType.toLowerCase() == "twowheeler") {
-            // update availableSpotsTwoWheeler in database
+    if (req.body.vehicleType.toLowerCase() == "twowheeler") {
+      // update availableSpotsTwoWheeler in database
 
-            const updatedLot = await Lots.findByIdAndUpdate(req.body.lotId, { availableSpotsTwoWheeler: lot.availableSpotsTwoWheeler - 1 });
-        }
-        else{
-            // update availableSpots in database
-            const updatedLot = await Lots.findByIdAndUpdate(req.body.lotId, { availableSpots: lot.availableSpots - 1 });
-        }
+      const updatedLot = await Lots.findByIdAndUpdate(req.body.lotId, {
+        availableSpotsTwoWheeler: lot.availableSpotsTwoWheeler - 1,
+      });
+    } else {
+      // update availableSpots in database
+      const updatedLot = await Lots.findByIdAndUpdate(req.body.lotId, {
+        availableSpots: lot.availableSpots - 1,
+      });
+    }
 
     const newBooking = new Booking(booking);
     await newBooking.save();
@@ -128,14 +136,15 @@ router.get("/getallbookings", fetchuser, async (req, res) => {
   }
 });
 
-// Route-5 :: Getting current booking of a user :: GET - "/api/currentbooking/" - REQUIRES LOGIN
+// Route-5 :: Getting current booking of a user :: GET - "/api/booking/currentbooking" - REQUIRES LOGIN
 router.get("/currentbooking", fetchuser, async (req, res) => {
   try {
-    const booking = await Booking.find({ driver: req.user.id, isCurrent: true });
-    
+    const booking = await Booking.find({
+      driver: req.user.id,
+      isCurrent: true,
+    });
 
-    if(!booking)
-        return res.status(404).send("No current booking found");
+    if (!booking) return res.status(404).send("No current booking found");
 
     res.json(booking);
   } catch (error) {

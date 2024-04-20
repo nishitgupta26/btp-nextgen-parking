@@ -80,7 +80,7 @@ export default function SignIn() {
   // };
   const handleRegister = async (e) => {
     e.preventDefault();
-  
+
     // Password length validation
     if (formData.password.length < 5) {
       return toast.error("Password must be at least 5 characters long", {
@@ -94,7 +94,7 @@ export default function SignIn() {
         theme: "light",
       });
     }
-  
+
     try {
       // Generate OTP before registering the user
       dispatch(signInStart());
@@ -106,8 +106,9 @@ export default function SignIn() {
         body: JSON.stringify({ email: formData.email }),
       });
       const otpData = await otpResponse.json();
-  
+
       if (otpData.error) {
+        dispatch(signInFailure(otpData.error));
         return toast.error("Failed to generate OTP", {
           position: "top-center",
           autoClose: 3000,
@@ -119,10 +120,10 @@ export default function SignIn() {
           theme: "light",
         });
       }
-  
+
       // Prompt the user to enter OTP
       const enteredOTP = prompt("Enter OTP");
-  
+
       // Verify OTP
       const verifyResponse = await fetch(`${host}/api/auth/verifyOTP`, {
         method: "POST",
@@ -135,8 +136,9 @@ export default function SignIn() {
         }),
       });
       const verifyData = await verifyResponse.json();
-  
+
       if (verifyData.error) {
+        dispatch(signInFailure(verifyData.error));
         return toast.error("Invalid OTP", {
           position: "top-center",
           autoClose: 3000,
@@ -148,7 +150,7 @@ export default function SignIn() {
           theme: "light",
         });
       }
-  
+
       // Proceed with user registration if OTP verification successful
       const userResponse = await fetch(`${host}/api/auth/createuser`, {
         method: "POST",
@@ -158,7 +160,7 @@ export default function SignIn() {
         body: JSON.stringify({ ...formData, role: type }),
       });
       const userData = await userResponse.json();
-  
+
       if (userData.error) {
         dispatch(signInFailure(userData.error));
         return toast.error(userData.error, {
@@ -175,7 +177,7 @@ export default function SignIn() {
         cookies.set("access_token", userData.authtoken);
         const { password, ...userDataWithoutPassword } = formData;
         dispatch(signInSuccess({ ...userDataWithoutPassword, role: type }));
-  
+
         if (type === "Owner") navigate("/owner-profile");
         else if (type === "Manager") navigate("/manager-profile");
         else if (type === "User") navigate("/user-profile");
@@ -185,7 +187,7 @@ export default function SignIn() {
       dispatch(signInFailure(error.message));
     }
   };
-  
+
   const handleSignIn = async (e) => {
     e.preventDefault();
     // Password length validation
@@ -258,47 +260,50 @@ export default function SignIn() {
   };
 
   // Frontend function to handle OTP verification
-const handleVerifyOTP = async () => {
-  try {
-    const response = await fetch(`${host}/api/auth/verifyOTP`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: formData.email, enteredOTP: formData.otp }),
-    });
-    const data = await response.json();
-    if (data.success) {
-      // OTP verification successful, proceed with registration
-      // Call handleRegister function or perform registration actions
-      toast.success("OTP done", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
+  const handleVerifyOTP = async () => {
+    try {
+      const response = await fetch(`${host}/api/auth/verifyOTP`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          enteredOTP: formData.otp,
+        }),
       });
-    } else {
-      // Invalid OTP, display error message
-      toast.error("Invalid OTP", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      const data = await response.json();
+      if (data.success) {
+        // OTP verification successful, proceed with registration
+        // Call handleRegister function or perform registration actions
+        toast.success("OTP done", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        // Invalid OTP, display error message
+        toast.error("Invalid OTP", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      // Handle error
     }
-  } catch (error) {
-    console.error("Error verifying OTP:", error);
-    // Handle error
-  }
-};
+  };
 
   return (
     <div className="outer">

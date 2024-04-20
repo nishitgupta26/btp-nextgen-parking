@@ -24,6 +24,7 @@ export default function BookParking() {
   const params = useParams();
   const listingId = params.listingId;
   const dispatch = useDispatch();
+  const [booked, setBooked] = useState(false);
 
   const { latitude, longitude } = useSelector((state) => state.user);
 
@@ -210,7 +211,6 @@ export default function BookParking() {
       const startISO = convertToISO(startTime);
       const endISO = convertToISO(EndTime);
 
-      console.log(startISO, endISO);
       const response = await fetch(`${host}/api/booking/bookslot`, {
         method: "POST",
         headers: {
@@ -229,6 +229,7 @@ export default function BookParking() {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
+        setBooked(true);
         toast.success("Parking booked successfully", {
           position: "top-center",
           autoClose: 2000,
@@ -431,7 +432,7 @@ export default function BookParking() {
           onClick={toggleModal}
           className="p-3 bg-slate-700 border-2 text-center border-slate-700 text-white w-full md:w-1/3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 mt-2"
         >
-          Book Now
+          {booked ? `Your booking is confirmed` : `Book Now`}
         </button>
       </div>
 
