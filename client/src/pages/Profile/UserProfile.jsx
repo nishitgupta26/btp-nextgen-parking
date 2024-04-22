@@ -19,6 +19,10 @@ export default function UserProfile() {
   const cookies = new Cookies();
   const dispatch = useDispatch();
   const [formData, setformData] = useState({});
+  const [bookings, setBookings] = useState([]);
+  const [parkingLotName, setParkingLotName] = useState("");
+  const [parkingLotLocation, setParkingLotLocation] = useState("");
+
   const authtoken = cookies.get("access_token");
   console.log(currentUser);
 
@@ -70,6 +74,45 @@ export default function UserProfile() {
       }
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+    }
+  };
+
+  const showUserBookings = async () => {
+    try {
+      const res = await fetch(`${host}/api/booking/currentbooking`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": authtoken,
+        },
+      });
+      const data = await res.json();
+      console.log(data);
+      setBookings(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const formatTime = (isoTime) => {
+    const date = new Date(isoTime);
+    return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  };
+
+  const getParkinglotDetails = async (parkinglotId) => {
+    try {
+      const res = await fetch(`${host}/api/lots/getlot/${parkinglotId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": authtoken,
+        },
+      });
+      const data = await res.json();
+      setParkingLotName(data.name);
+      setParkingLotLocation(data.location);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -146,9 +189,43 @@ export default function UserProfile() {
             <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
               update
             </button>
+
+            <button
+              type="button"
+              onClick={showUserBookings}
+              className="text-slate-700 bg-white border-2 border-slate-700 rounded-lg p-3 uppercase hover:opacity-95 hover:text-white hover:bg-slate-700"
+            >
+              Show My Bookings
+            </button>
           </form>
         </div>
       </div>
+
+      {bookings.length > 0 ? (
+        <div className="flex flex-col gap-4">
+          <h1 className="text-center mt-7 text-2xl font-semibold">
+            My Current bookings
+          </h1>
+          <div className="m-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
+            {bookings.map((booking) => {
+              getParkinglotDetails(booking.parkedAt);
+
+              return (
+                <div
+                  key={booking._id}
+                  className="border border-slate-400 bg-white rounded-lg p-3 flex justify-between items-center gap-4"
+                >
+                  <span>Vehicle Number: {booking.vehicleNumber}</span>
+                  <span>Check In: {formatTime(booking.checkIn)}</span>
+                  <span>Check Out: {formatTime(booking.checkOut)}</span>
+                  <span>Parking Lot: {parkingLotName}</span>
+                  <span>Location: {parkingLotLocation}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
