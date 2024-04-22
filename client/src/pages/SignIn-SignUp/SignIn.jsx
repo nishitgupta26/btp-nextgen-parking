@@ -18,66 +18,82 @@ export default function SignIn() {
   const { loading, error } = useSelector((state) => state.user);
   const [type, setType] = useState("User");
   const [loginType, setLoginType] = useState("User");
+  const [model, setModel] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cookies = new Cookies();
+  const [otp, setOtp] = useState("");
 
-  // const handleRegister = async (e) => {
-  //   e.preventDefault();
-  //   // Password length validation
-  //   if (formData.password.length < 5) {
-  //     // Display an error message or toast indicating the password length requirement
-  //     return toast.error("Password must be at least 5 characters long", {
-  //       position: "top-center",
-  //       autoClose: 3000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: "light",
-  //     });
-  //   }
-  //   try {
-  //     // Email existence validation -> Need to be done in the backend
-  //     dispatch(signInStart());
-  //     const response = await fetch(`${host}/api/auth/createuser`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ ...formData, role: type }), // Include role in formData
-  //     });
-  //     const data = await response.json();
+  const handleModel = async () => {
+    // Verify OTP
+    try {
+      const verifyResponse = await fetch(`${host}/api/auth/verifyOTP`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          enteredOTP: otp,
+        }),
+      });
 
-  //     if (data.error) {
-  //       dispatch(signInFailure(data.error));
-  //       console.log(data.error);
-  //       return toast.error(data.error, {
-  //         position: "top-center",
-  //         autoClose: 3000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //         theme: "light",
-  //       });
-  //     } else {
-  //       cookies.set("access_token", data.authtoken);
-  //       const { password, ...userData } = formData;
-  //       dispatch(signInSuccess({ ...userData, role: type }));
+      const verifyData = await verifyResponse.json();
 
-  //       if (type === "Owner") navigate("/owner-profile");
-  //       else if (type === "Manager") navigate("/manager-profile");
-  //       else if (type === "User") navigate("/user-profile");
-  //       else navigate("/admin-profile");
-  //     }
-  //   } catch (error) {
-  //     dispatch(signInFailure(error.message));
-  //   }
-  // };
+      if (verifyData.error) {
+        dispatch(signInFailure(verifyData.error));
+        return toast.error("Invalid OTP", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+
+      setModel(false);
+
+      // Proceed with user registration if OTP verification successful
+      const userResponse = await fetch(`${host}/api/auth/createuser`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...formData, role: type }),
+      });
+      const userData = await userResponse.json();
+
+      if (userData.error) {
+        dispatch(signInFailure(userData.error));
+        return toast.error(userData.error, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        cookies.set("access_token", userData.authtoken);
+        const { password, ...userDataWithoutPassword } = formData;
+        dispatch(signInSuccess({ ...userDataWithoutPassword, role: type }));
+
+        if (type === "Owner") navigate("/owner-profile");
+        else if (type === "Manager") navigate("/manager-profile");
+        else if (type === "User") navigate("/user-profile");
+        else navigate("/admin-profile");
+      }
+    } catch (error) {
+      dispatch(signInFailure(error.message));
+    }
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -121,68 +137,7 @@ export default function SignIn() {
         });
       }
 
-      // Prompt the user to enter OTP
-      const enteredOTP = prompt("Enter OTP");
-
-      // Verify OTP
-      const verifyResponse = await fetch(`${host}/api/auth/verifyOTP`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          enteredOTP: enteredOTP,
-        }),
-      });
-      const verifyData = await verifyResponse.json();
-
-      if (verifyData.error) {
-        dispatch(signInFailure(verifyData.error));
-        return toast.error("Invalid OTP", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
-
-      // Proceed with user registration if OTP verification successful
-      const userResponse = await fetch(`${host}/api/auth/createuser`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...formData, role: type }),
-      });
-      const userData = await userResponse.json();
-
-      if (userData.error) {
-        dispatch(signInFailure(userData.error));
-        return toast.error(userData.error, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      } else {
-        cookies.set("access_token", userData.authtoken);
-        const { password, ...userDataWithoutPassword } = formData;
-        dispatch(signInSuccess({ ...userDataWithoutPassword, role: type }));
-
-        if (type === "Owner") navigate("/owner-profile");
-        else if (type === "Manager") navigate("/manager-profile");
-        else if (type === "User") navigate("/user-profile");
-        else navigate("/admin-profile");
-      }
+      setModel(true);
     } catch (error) {
       dispatch(signInFailure(error.message));
     }
@@ -437,10 +392,34 @@ export default function SignIn() {
             </div>
             <button>{loading ? "Loading..." : "Register"}</button>
           </form>
-
           {/* {error && <p className='text-red-500 mt-5'>{error}</p>} */}
         </div>
       </div>
+
+      {model && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-gray-500 opacity-75 modal-overlay"></div>
+          <div className="relative bg-white rounded-lg p-8 modal">
+            <p className="text-xl font-semibold mb-4">Enter OTP</p>
+            <input
+              onChange={(e) => {
+                setOtp(e.target.value);
+              }}
+              type="text"
+              inputMode="numeric"
+              maxLength="4"
+              placeholder="Enter OTP"
+              className="border border-gray-300 p-2 rounded-md mb-4 w-full"
+            />
+            <button
+              onClick={handleModel}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            >
+              Verify OTP
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

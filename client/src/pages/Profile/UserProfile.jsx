@@ -218,8 +218,8 @@ export default function UserProfile() {
                   <span>Vehicle Number: {booking.vehicleNumber}</span>
                   <span>Check In: {formatTime(booking.checkIn)}</span>
                   <span>Check Out: {formatTime(booking.checkOut)}</span>
-                  <span>Parking Lot: {parkingLotName}</span>
-                  <span>Location: {parkingLotLocation}</span>
+                  <span>Parking Lot Name: {parkingLotName}</span>
+                  <span>Parking Lot Location: {parkingLotLocation}</span>
                 </div>
               );
             })}
