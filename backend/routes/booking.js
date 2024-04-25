@@ -139,13 +139,13 @@ router.get("/getallbookings", fetchuser, async (req, res) => {
 // Route-5 :: Getting current booking of a user :: GET - "/api/booking/currentbooking" - REQUIRES LOGIN
 router.get("/currentbooking", fetchuser, async (req, res) => {
   try {
+    console.log(req.user);
     const booking = await Booking.find({
       driver: req.user.id,
       isCurrent: true,
     });
 
     if (!booking) return res.status(404).send("No current booking found");
-
     res.json(booking);
   } catch (error) {
     console.error(error.message);
