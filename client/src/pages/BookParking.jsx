@@ -120,9 +120,6 @@ export default function BookParking() {
 
     setDifference(differenceInHours);
   };
-  useEffect(() => {
-    console.log(vehicleType);
-  }, [vehicleType]);
 
   const parkingBoxesFourWheeler = Array.from(
     { length: formData.fourWheelerCapacity },
@@ -368,6 +365,7 @@ export default function BookParking() {
           <div className="flex flex-row items-center gap-10">
             <p className="font-medium ">Booking Time:</p>
             <input
+              required
               onChange={handleStartTimeChange}
               type="time"
               id="startTime"
@@ -376,6 +374,7 @@ export default function BookParking() {
             />
             <span>to</span>
             <input
+              required
               onChange={handleEndTimeChange}
               type="time"
               id="endTime"
@@ -429,6 +428,7 @@ export default function BookParking() {
           )}
         </div>
         <button
+          disabled={booked}
           onClick={toggleModal}
           className="p-3 bg-slate-700 border-2 text-center border-slate-700 text-white w-full md:w-1/3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 mt-2"
         >

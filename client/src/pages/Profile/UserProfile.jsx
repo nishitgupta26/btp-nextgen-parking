@@ -170,6 +170,7 @@ export default function UserProfile() {
               onChange={(e) =>
                 setformData({ ...formData, email: e.target.value })
               }
+              disabled
               type="email"
               placeholder="E-mail"
               id="email"
