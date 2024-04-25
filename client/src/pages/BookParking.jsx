@@ -26,6 +26,7 @@ export default function BookParking() {
   const dispatch = useDispatch();
   const [booked, setBooked] = useState(false);
   const { latitude, longitude } = useSelector((state) => state.user);
+
   const [parkingBoxesFourWheeler, setParkingBoxesFourWheeler] = useState(() =>
     Array.from({ length: formData.fourWheelerCapacity }, (_, index) => (
       <ParkingBox
@@ -35,6 +36,7 @@ export default function BookParking() {
       />
     ))
   );
+
   const [parkingBoxesTwoWheeler, setParkingBoxesTwoWheeler] = useState(() =>
     Array.from({ length: formData.twoWheelerCapacity }, (_, index) => (
       <ParkingBox
@@ -48,6 +50,7 @@ export default function BookParking() {
   useEffect(() => {
     const fetchListing = async () => {
       try {
+        console.log(isModalOpen);
         const res = await fetch(`${host}/api/lots/getlot/${listingId}`);
         const data = await res.json();
         if (data.success === false) {
@@ -61,7 +64,7 @@ export default function BookParking() {
     };
 
     fetchListing();
-  }, [listingId]);
+  }, []);
 
   const d = new Date();
   const hr = d.getHours();
@@ -139,7 +142,7 @@ export default function BookParking() {
   };
 
   useEffect(() => {
-    console.log("i am use effect 1 ");
+    console.log(isModalOpen);
     const boxes = Array.from(
       { length: formData.fourWheelerCapacity },
       (_, index) => (
@@ -154,6 +157,7 @@ export default function BookParking() {
   }, [formData.availableSpots]);
 
   useEffect(() => {
+    console.log(isModalOpen);
     const boxes = Array.from(
       { length: formData.twoWheelerCapacity },
       (_, index) => (

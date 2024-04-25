@@ -204,10 +204,10 @@ export default function SignIn() {
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
 
-        cookies.set("access_token", userData.authtoken, { expires: tomorrow });
-        const { password, ...userData } = loginData;
+        cookies.set("access_token", data.authtoken, { expires: tomorrow });
+        const { password, ...Userdata } = loginData;
         dispatch(
-          signInSuccess({ ...userData, role: data.role, name: data.name })
+          signInSuccess({ ...Userdata, role: data.role, name: data.name })
         );
 
         if (data.role === "Owner") navigate("/owner-profile");
@@ -217,52 +217,6 @@ export default function SignIn() {
       }
     } catch (error) {
       dispatch(signInFailure(error.message));
-    }
-  };
-
-  // Frontend function to handle OTP verification
-  const handleVerifyOTP = async () => {
-    try {
-      const response = await fetch(`${host}/api/auth/verifyOTP`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          enteredOTP: formData.otp,
-        }),
-      });
-      const data = await response.json();
-      if (data.success) {
-        // OTP verification successful, proceed with registration
-        // Call handleRegister function or perform registration actions
-        toast.success("OTP done", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      } else {
-        // Invalid OTP, display error message
-        toast.error("Invalid OTP", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
-    } catch (error) {
-      console.error("Error verifying OTP:", error);
-      // Handle error
     }
   };
 
