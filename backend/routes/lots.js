@@ -52,6 +52,11 @@ router.get("/getnearby/:location", async (req, res) => {
   }
 
   function distcmp(a, b) {
+    if (!a.geoCoordinates || !b.geoCoordinates) {
+      // Handle cases where geoCoordinates is not defined
+      // For example, you might want to consider these objects equal in distance
+      return 0;
+    }
     const cordsa = a.geoCoordinates.split("_");
     const cordsb = b.geoCoordinates.split("_");
     const longa = parseFloat(cordsa[0]);

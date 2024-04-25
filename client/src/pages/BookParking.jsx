@@ -25,8 +25,25 @@ export default function BookParking() {
   const listingId = params.listingId;
   const dispatch = useDispatch();
   const [booked, setBooked] = useState(false);
-
   const { latitude, longitude } = useSelector((state) => state.user);
+  const [parkingBoxesFourWheeler, setParkingBoxesFourWheeler] = useState(() =>
+    Array.from({ length: formData.fourWheelerCapacity }, (_, index) => (
+      <ParkingBox
+        key={index}
+        index={index}
+        booked={formData.fourWheelerCapacity - formData.availableSpots}
+      />
+    ))
+  );
+  const [parkingBoxesTwoWheeler, setParkingBoxesTwoWheeler] = useState(() =>
+    Array.from({ length: formData.twoWheelerCapacity }, (_, index) => (
+      <ParkingBox
+        key={index}
+        index={index}
+        booked={formData.twoWheelerCapacity - formData.availableSpotsTwoWheeler}
+      />
+    ))
+  );
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -121,47 +138,35 @@ export default function BookParking() {
     setDifference(differenceInHours);
   };
 
-  const parkingBoxesFourWheeler = Array.from(
-    { length: formData.fourWheelerCapacity },
-    (_, index) => (
-      <ParkingBox key={index} index={index} booked={formData.availableSpots} />
-    )
-  );
-  const parkingBoxesTwoWheeler = Array.from(
-    { length: formData.twoWheelerCapacity },
-    (_, index) => (
-      <ParkingBox
-        key={index}
-        index={index}
-        booked={formData.availableSpotsTwoWheeler}
-      />
-    )
-  );
-
   useEffect(() => {
-    const parkingBoxesFourWheeler = Array.from(
+    console.log("i am use effect 1 ");
+    const boxes = Array.from(
       { length: formData.fourWheelerCapacity },
       (_, index) => (
         <ParkingBox
           key={index}
           index={index}
-          booked={formData.availableSpots}
+          booked={formData.fourWheelerCapacity - formData.availableSpots}
         />
       )
     );
+    setParkingBoxesFourWheeler(boxes);
   }, [formData.availableSpots]);
 
   useEffect(() => {
-    const parkingBoxesTwoWheeler = Array.from(
+    const boxes = Array.from(
       { length: formData.twoWheelerCapacity },
       (_, index) => (
         <ParkingBox
           key={index}
           index={index}
-          booked={formData.availableSpotsTwoWheeler}
+          booked={
+            formData.twoWheelerCapacity - formData.availableSpotsTwoWheeler
+          }
         />
       )
     );
+    setParkingBoxesTwoWheeler(boxes);
   }, [formData.availableSpotsTwoWheeler]);
 
   const toggleModal = () => {
