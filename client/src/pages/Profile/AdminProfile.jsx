@@ -15,7 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function AdminProfile() {
   const host = "http://localhost:3001";
-  const {currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
   const cookies = new Cookies();
   const dispatch = useDispatch();
   const [formData, setformData] = useState({});
@@ -25,6 +25,12 @@ export default function AdminProfile() {
   const [showListingsError, setShowListingsError] = useState(false);
   const navigate = useNavigate();
   const [showListings, setShowListings] = useState(false);
+
+  useEffect(() => {
+    if (!cookies.get("access_token")) {
+      navigate("/sign-in");
+    }
+  }, []);
 
   const handleSignOut = async () => {
     try {
@@ -96,7 +102,9 @@ export default function AdminProfile() {
               alt=""
             ></img>
           </div>
-          <h1 className="text-2xl font-semibold text-center my-7">{currentUser.name}</h1>
+          <h1 className="text-2xl font-semibold text-center my-7">
+            {currentUser.name}
+          </h1>
           <div className="flex flex-row items-center justify-center gap-4">
             <div className="flex flex-col items-start justify-center">
               <span className="my-2">Email :</span>
@@ -116,7 +124,10 @@ export default function AdminProfile() {
           <h1 className="text-2xl font-semibold text-center my-7">
             Update Profile
           </h1>
-          <form onSubmit={handleUpdate} className="flex flex-col gap-4 lg:gap-8 w-3/4">
+          <form
+            onSubmit={handleUpdate}
+            className="flex flex-col gap-4 lg:gap-8 w-3/4"
+          >
             <input
               defaultValue={currentUser.name}
               onChange={(e) =>
@@ -147,10 +158,17 @@ export default function AdminProfile() {
               className="border p-3 rounded-lg"
             />
 
-            <button type="submit" className="bg-slate-700 text-white border-2 border-slate-700 rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
-            Update Profile
+            <button
+              type="submit"
+              className="bg-slate-700 text-white border-2 border-slate-700 rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
+            >
+              Update Profile
             </button>
-            <button type="button"onClick={showPendingListings} className="text-slate-700 bg-white border-2 border-slate-700 rounded-lg p-3 uppercase hover:opacity-95 hover:text-white hover:bg-slate-700">
+            <button
+              type="button"
+              onClick={showPendingListings}
+              className="text-slate-700 bg-white border-2 border-slate-700 rounded-lg p-3 uppercase hover:opacity-95 hover:text-white hover:bg-slate-700"
+            >
               Show Pending Listings
             </button>
           </form>

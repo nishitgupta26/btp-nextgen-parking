@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./signIn.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -80,7 +80,10 @@ export default function SignIn() {
           theme: "light",
         });
       } else {
-        cookies.set("access_token", userData.authtoken);
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        cookies.set("access_token", userData.authtoken, { expires: tomorrow });
         const { password, ...userDataWithoutPassword } = formData;
         dispatch(signInSuccess({ ...userDataWithoutPassword, role: type }));
 
@@ -198,7 +201,10 @@ export default function SignIn() {
           theme: "light",
         });
       } else {
-        cookies.set("access_token", data.authtoken);
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        cookies.set("access_token", userData.authtoken, { expires: tomorrow });
         const { password, ...userData } = loginData;
         dispatch(
           signInSuccess({ ...userData, role: data.role, name: data.name })

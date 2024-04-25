@@ -24,7 +24,12 @@ export default function UserProfile() {
   const [parkingLotLocation, setParkingLotLocation] = useState("");
 
   const authtoken = cookies.get("access_token");
-  console.log(currentUser);
+
+  useEffect(() => {
+    if (!cookies.get("access_token")) {
+      navigate("/sign-in");
+    }
+  }, []);
 
   const handleSignOut = async () => {
     try {
