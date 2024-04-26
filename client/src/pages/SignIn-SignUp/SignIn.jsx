@@ -24,6 +24,16 @@ export default function SignIn() {
   const dispatch = useDispatch();
   const cookies = new Cookies();
   const [otp, setOtp] = useState("");
+  const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (currentUser) {
+      if (currentUser.role === "Owner") navigate("/owner-profile");
+      else if (currentUser.role === "Manager") navigate("/manager-profile");
+      else if (currentUser.role === "User") navigate("/user-profile");
+      else navigate("/admin-profile");
+    }
+  }, []);
 
   const handleModel = async () => {
     // Verify OTP

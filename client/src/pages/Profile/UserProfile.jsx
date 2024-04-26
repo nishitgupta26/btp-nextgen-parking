@@ -20,8 +20,6 @@ export default function UserProfile() {
   const dispatch = useDispatch();
   const [formData, setformData] = useState({});
   const [bookings, setBookings] = useState([]);
-  const [parkingLotName, setParkingLotName] = useState("");
-  const [parkingLotLocation, setParkingLotLocation] = useState("");
   const [parkingLotDetails, setParkingLotDetails] = useState({});
 
   const authtoken = cookies.get("access_token");
