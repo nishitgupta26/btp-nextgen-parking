@@ -20,8 +20,7 @@ export default function UserProfile() {
   const dispatch = useDispatch();
   const [formData, setformData] = useState({});
   const [bookings, setBookings] = useState([]);
-  const [parkingLotName, setParkingLotName] = useState("");
-  const [parkingLotLocation, setParkingLotLocation] = useState("");
+  const [parkingLotDetails, setParkingLotDetails] = useState({});
 
   const authtoken = cookies.get("access_token");
   const navigate = useNavigate();
@@ -107,22 +106,33 @@ export default function UserProfile() {
     return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
   };
 
-  const getParkinglotDetails = async (parkinglotId) => {
-    try {
-      const res = await fetch(`${host}/api/lots/getlot/${parkinglotId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": authtoken,
-        },
-      });
-      const data = await res.json();
-      setParkingLotName(data.name);
-      setParkingLotLocation(data.location);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  useEffect(() => {
+    const fetchParkingLotDetails = async (parkingLotId) => {
+      try {
+        const res = await fetch(`${host}/api/lots/getlot/${parkingLotId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": authtoken,
+          },
+        });
+        const data = await res.json();
+        setParkingLotDetails((prevDetails) => ({
+          ...prevDetails,
+          [parkingLotId]: {
+            name: data.name,
+            location: data.location,
+          },
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    bookings.forEach((booking) => {
+      fetchParkingLotDetails(booking.parkedAt);
+    });
+  }, [bookings, authtoken]);
 
   return (
     <div className="min-h-screen max-w-screen mx-auto bg-[#F9FAFB]">
@@ -217,7 +227,7 @@ export default function UserProfile() {
           </h1>
           <div className="m-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
             {bookings.map((booking) => {
-              getParkinglotDetails(booking.parkedAt);
+              const lotDetails = parkingLotDetails[booking.parkedAt] || {};
 
               return (
                 <div
@@ -227,8 +237,8 @@ export default function UserProfile() {
                   <span>Vehicle Number: {booking.vehicleNumber}</span>
                   <span>Check In: {formatTime(booking.checkIn)}</span>
                   <span>Check Out: {formatTime(booking.checkOut)}</span>
-                  <span>Parking Lot Name: {parkingLotName}</span>
-                  <span>Parking Lot Location: {parkingLotLocation}</span>
+                  <span>Parking Lot Name: {lotDetails.name}</span>
+                  <span>Parking Lot Location: {lotDetails.location}</span>
                 </div>
               );
             })}

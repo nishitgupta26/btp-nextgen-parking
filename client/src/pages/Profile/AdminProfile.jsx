@@ -80,6 +80,21 @@ export default function AdminProfile() {
         },
       });
       const data = await res.json();
+      conso;
+      if (data.length === 0) {
+        toast.error(data.error, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        return;
+      }
+
       console.log(data);
       if (data.error) {
         setShowListingsError(data.error);
