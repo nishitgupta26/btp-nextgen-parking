@@ -57,13 +57,12 @@ router.delete("/deletelot", fetchuser, async (req, res) => {
 // ROUTE-3 :: show all listings that are not approved - GET - "/api/admin/showpending" - REQUIRES LOGIN
 router.get("/showpending", fetchuser, async (req, res) => {
   const userdata = await User.findById(req.user.id).select("-password");
-
-  console.log(userdata.role);
   if (userdata.role.toLowerCase() !== "admin") {
     return res.status(401).send("Not Allowed");
   }
   // find all lots that are not approved
   const lots = await Lots.find({ approved: false });
+  console.log(lots);
   return res.json(lots);
 });
 
