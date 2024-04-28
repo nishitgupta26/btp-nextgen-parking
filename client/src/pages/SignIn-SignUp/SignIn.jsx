@@ -27,13 +27,14 @@ export default function SignIn() {
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
+    console.log(currentUser);
     if (currentUser) {
       if (currentUser.role === "Owner") navigate("/owner-profile");
       else if (currentUser.role === "Manager") navigate("/manager-profile");
       else if (currentUser.role === "User") navigate("/user-profile");
       else navigate("/admin-profile");
     }
-  }, []);
+  }, [currentUser]);
 
   const handleModel = async () => {
     // Verify OTP

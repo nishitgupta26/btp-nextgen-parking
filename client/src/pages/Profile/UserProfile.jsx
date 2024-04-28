@@ -25,8 +25,18 @@ export default function UserProfile() {
   const authtoken = cookies.get("access_token");
 
   useEffect(() => {
-    if (!cookies.get("access_token")) {
+    const accessToken = cookies.get("access_token");
+    if (!accessToken) {
+      dispatch(signOutUserSuccess());
       navigate("/sign-in");
+    } else {
+      const tokenExpirationDate = new Date(accessToken.expires);
+      if (tokenExpirationDate < new Date()) {
+        // Removed user details from redux STORE
+        dispatch(signOutUserSuccess());
+        cookies.remove("access_token");
+        navigate("/sign-in");
+      }
     }
   }, []);
 

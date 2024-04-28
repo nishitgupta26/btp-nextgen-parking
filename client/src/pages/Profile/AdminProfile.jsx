@@ -27,8 +27,21 @@ export default function AdminProfile() {
   const [showListings, setShowListings] = useState(false);
 
   useEffect(() => {
-    if (!cookies.get("access_token")) {
+    const accessToken = cookies.get("access_token");
+    if (!accessToken) {
+      console.log("sign");
+      dispatch(signOutUserSuccess());
+      console.log("out");
       navigate("/sign-in");
+    } else {
+      const tokenExpirationDate = new Date(accessToken.expires);
+      if (tokenExpirationDate < new Date()) {
+        console.log("Token expired");
+        // Removed user details from redux STORE
+        dispatch(signOutUserSuccess());
+        cookies.remove("access_token");
+        navigate("/sign-in");
+      }
     }
   }, []);
 
