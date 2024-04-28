@@ -241,13 +241,40 @@ export default function UserProfile() {
               return (
                 <div
                   key={booking._id}
-                  className="border border-slate-400 bg-white rounded-lg p-3 flex justify-between items-center gap-4"
+                  className="border border-slate-400 bg-white rounded-lg p-3 flex flex-col justify-between items-center gap-4"
                 >
-                  <span>Vehicle Number: {booking.vehicleNumber}</span>
-                  <span>Check In: {formatTime(booking.checkIn)}</span>
-                  <span>Check Out: {formatTime(booking.checkOut)}</span>
-                  <span>Parking Lot Name: {lotDetails.name}</span>
-                  <span>Parking Lot Location: {lotDetails.location}</span>
+                  <div className="w-full">
+                    <div className="flex justify-center items-center">
+                      <span className="font-medium">Vehicle No. : &nbsp;</span>
+                      <span className="text-slate-600 font-medium uppercase">
+                        {booking.vehicleNumber}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-row justify-between w-full">
+                    <div className="flex flex-col justify-between">
+                      <div className="flex flex-col justify-between sm:flex-row">
+                        <span className="font-medium">Check In: </span>
+                        <span>{formatTime(booking.checkIn)}</span>
+                      </div>
+                      {/* </div>
+                    <div className="flex-row "> */}
+                      <div className="flex flex-col mt-1">
+                        <span className="font-medium">Parking Lot Name: </span>
+                        <span className="">{lotDetails.name}</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-between">
+                    <div className="flex flex-col justify-between sm:flex-row">
+                        <span className="font-medium">Check Out: </span>
+                        <span>{formatTime(booking.checkOut)}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-medium">Parking Lot Location: </span>
+                        <span className="">{lotDetails.location}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               );
             })}
