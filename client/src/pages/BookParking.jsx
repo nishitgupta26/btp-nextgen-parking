@@ -121,7 +121,7 @@ export default function BookParking() {
       // If second time is earlier than first time, set error message
       // setDifference("Error: Second time cannot be earlier than first time.");
       const errorMessage =
-        "Error: Second time cannot be earlier than first time.";
+        "End time cannot be earlier than start time.";
       toast.error(errorMessage, {
         position: "top-center",
         autoClose: 3000,
@@ -174,6 +174,19 @@ export default function BookParking() {
   }, [formData.availableSpotsTwoWheeler]);
 
   const toggleModal = () => {
+    if(startTime === "" || EndTime === "") {
+      toast.error("Booking Time is not valid!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
     setIsModalOpen(!isModalOpen);
   };
 

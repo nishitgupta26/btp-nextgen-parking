@@ -12,7 +12,7 @@ import Cookies from "universal-cookie";
 import Header from "../../components/Header.jsx";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { useNavigate } from "react-router-dom";
 export default function UserProfile() {
   const host = "http://localhost:3001";
   const { currentUser } = useSelector((state) => state.user);
@@ -23,6 +23,7 @@ export default function UserProfile() {
   const [parkingLotDetails, setParkingLotDetails] = useState({});
 
   const authtoken = cookies.get("access_token");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const accessToken = cookies.get("access_token");
@@ -39,6 +40,7 @@ export default function UserProfile() {
       }
     }
   }, []);
+  // console.log(currentUser);
 
   const handleSignOut = async () => {
     try {
@@ -195,11 +197,11 @@ export default function UserProfile() {
               onChange={(e) =>
                 setformData({ ...formData, email: e.target.value })
               }
-              disabled
               type="email"
               placeholder="E-mail"
               id="email"
               className="border p-3 rounded-lg"
+              disabled
             />
 
             <input
