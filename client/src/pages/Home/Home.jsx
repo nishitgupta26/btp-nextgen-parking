@@ -105,7 +105,7 @@ export default function Home({ isOverlay, setOverlay }) {
       </div>
       <div className="mt-14 ml-4 mr-4 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10">
         {parkingSlots.map((lot) => (
-          <ParkingCard key={lot.id} lot={lot} />
+          <ParkingCard key={lot.id ? lot.id : JSON.stringify(lot)} lot={lot} />
         ))}
       </div>
     </div>
