@@ -13,10 +13,16 @@ const app = express();
 mongoose.set("strictQuery", false);
 
 app.use(express.json());
-app.use(cors())
+app.use(cors(
+    {
+        origin: ['deployed-vercel-frontend-app', 'localhost:3000'], // Add your frontend app URL here
+        methods: ['POST', 'GET'],
+        credentials: true,
+      }
+));
 
 
-const port =  3001;
+const port =  process.env.PORT || 3001;
 
 
 //  using mongoose@6.10.0 temporarily to fix error - https://stackoverflow.com/a/75638135
