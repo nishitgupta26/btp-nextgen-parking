@@ -39,6 +39,10 @@ export default function UserProfile() {
         navigate("/sign-in");
       }
     }
+
+    if (currentUser.role === "admin") navigate("/admin-profile");
+    else if (currentUser.role === "manager") navigate("/manager-profile");
+    else if (currentUser.role === "owner") navigate("/owner-profile");
   }, []);
   // console.log(currentUser);
 
@@ -265,12 +269,14 @@ export default function UserProfile() {
                       </div>
                     </div>
                     <div className="flex flex-col justify-between">
-                    <div className="flex flex-col justify-between sm:flex-row">
+                      <div className="flex flex-col justify-between sm:flex-row">
                         <span className="font-medium">Check Out: </span>
                         <span>{formatTime(booking.checkOut)}</span>
                       </div>
                       <div className="flex flex-col">
-                        <span className="font-medium">Parking Lot Location: </span>
+                        <span className="font-medium">
+                          Parking Lot Location:{" "}
+                        </span>
                         <span className="">{lotDetails.location}</span>
                       </div>
                     </div>

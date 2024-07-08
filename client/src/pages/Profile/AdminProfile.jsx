@@ -43,6 +43,10 @@ export default function AdminProfile() {
         navigate("/sign-in");
       }
     }
+
+    if (currentUser.role === "owner") navigate("/owner-profile");
+    else if (currentUser.role === "manager") navigate("/manager-profile");
+    else if (currentUser.role === "user") navigate("/user-profile");
   }, []);
 
   const handleSignOut = async () => {
