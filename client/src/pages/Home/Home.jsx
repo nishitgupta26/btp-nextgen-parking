@@ -25,20 +25,16 @@ export default function Home({ isOverlay, setOverlay }) {
     return permissionStatus.state;
   };
 
-  const func = (c, b) => {
-    dispatch(updateCoordinates({ latitude: c, longitude: b })); // Use the dispatch function to dispatch the action
-  };
-
   useEffect(() => {
-    const checkAndClearCookies = async () => {
-      const permissionState = await checkLocationPermission();
-      if (permissionState === "denied") {
-        dispatch(updateCoordinates({ latitude: null, longitude: null }));
-      }
-    };
-    checkAndClearCookies();
-
     const intervalId = setInterval(() => {
+      const checkAndClearCookies = async () => {
+        const permissionState = await checkLocationPermission();
+        if (permissionState === "denied") {
+          dispatch(updateCoordinates({ latitude: null, longitude: null }));
+        }
+      };
+      checkAndClearCookies();
+
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
@@ -100,12 +96,12 @@ export default function Home({ isOverlay, setOverlay }) {
         }`}
       >
         <div className="z-50">
-          <LocationAccess a={func} />
+          <LocationAccess />
         </div>
       </div>
       <div className="mt-14 ml-4 mr-4 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10">
         {parkingSlots.map((lot) => (
-          <ParkingCard key={lot.id ? lot.id : JSON.stringify(lot)} lot={lot} />
+          <ParkingCard key={lot.id} lot={lot} />
         ))}
       </div>
     </div>

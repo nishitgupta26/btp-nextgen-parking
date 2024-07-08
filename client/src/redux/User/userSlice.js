@@ -40,7 +40,6 @@ const userSlice = createSlice({
       state.loading = true;
     },
     signOutUserSuccess: (state) => {
-      console.log("signOutUserSuccess");
       state.currentUser = null;
       state.loading = false;
       state.error = null;
