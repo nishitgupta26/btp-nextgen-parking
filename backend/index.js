@@ -11,6 +11,7 @@ const app = express();
 mongoose.set("strictQuery", false);
 
 app.use(express.json());
+app.use(cors());
 app.use(
   cors({
     origin: ["deployed-vercel-frontend-app", "http://localhost:5173"], // Add your frontend app URL here

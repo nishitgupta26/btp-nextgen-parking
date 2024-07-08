@@ -34,12 +34,15 @@ export default function OwnerProfile() {
     } else {
       const tokenExpirationDate = new Date(accessToken.expires);
       if (tokenExpirationDate < new Date()) {
-        // Removed user details from redux STORE
         dispatch(signOutUserSuccess());
         cookies.remove("access_token");
         navigate("/sign-in");
       }
     }
+
+    if (currentUser.role === "admin") navigate("/admin-profile");
+    else if (currentUser.role === "manager") navigate("/manager-profile");
+    else if (currentUser.role === "user") navigate("/user-profile");
   }, []);
 
   const handleSignOut = async () => {
@@ -60,7 +63,7 @@ export default function OwnerProfile() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "auth-token": authtoken, // Use the correct header name and format for the token
+          "auth-token": authtoken,
         },
         body: JSON.stringify(formData),
       });
@@ -83,7 +86,8 @@ export default function OwnerProfile() {
       }
       console.log(data);
       dispatch(updateUserSuccess(data));
-      toast.info(data.message, {
+
+      toast.info("User Updated successfully", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: false,
@@ -171,10 +175,6 @@ export default function OwnerProfile() {
     }
   };
 
-  const handleShowManagers = async () => {
-    setShowListings(false);
-  };
-  //bg-[#F9FAFB]
   return (
     <div className="min-h-screen max-w-screen mx-auto bg-white">
       <div className="px-7 flex flex-col lg:flex-row gap-8 items-center lg:h-screen min-h-screen">
