@@ -15,7 +15,8 @@ import UpdateManagers from "./pages/UpdateManagers.jsx";
 import { useState } from "react";
 import ViewListing from "./pages/ViewListing.jsx";
 import BookParking from "./pages/BookParking.jsx";
-import ParkingBox from "./components/ParkingBox.jsx";
+import CheckEntry from "./pages/CheckEntry.jsx";
+import CheckExit from "./pages/CheckExit.jsx";
 
 // export default function App() {
 //   const [isOverlay, setOverlay] = useState(true);
@@ -90,6 +91,8 @@ function RoutesComponent() {
 
           <Route path="/view-listing/:listingId" element={<ViewListing />} />
           <Route path="/book-parking/:listingId" element={<BookParking />} />
+          <Route path="/check-entry" element={<CheckEntry />} />
+          <Route path="/check-exit" element={<CheckExit />} />
         </Route>
         {/* <Route path="/box" element={<ParkingBox />} /> */}
       </Routes>

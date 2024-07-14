@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ParkingBox from "../components/ParkingBox";
 import { useDispatch, useSelector } from "react-redux";
-import { updateCoordinates } from "../redux/User/userSlice";
 
 export default function BookParking() {
   const [formData, setFormData] = useState({});
@@ -25,7 +24,6 @@ export default function BookParking() {
   const listingId = params.listingId;
   const dispatch = useDispatch();
   const [booked, setBooked] = useState(false);
-  const { latitude, longitude } = useSelector((state) => state.user);
 
   const [parkingBoxesFourWheeler, setParkingBoxesFourWheeler] = useState(() =>
     Array.from({ length: formData.fourWheelerCapacity }, (_, index) => (
@@ -120,8 +118,7 @@ export default function BookParking() {
     if (endTimeInMs < startTimeInMs) {
       // If second time is earlier than first time, set error message
       // setDifference("Error: Second time cannot be earlier than first time.");
-      const errorMessage =
-        "End time cannot be earlier than start time.";
+      const errorMessage = "End time cannot be earlier than start time.";
       toast.error(errorMessage, {
         position: "top-center",
         autoClose: 3000,
@@ -174,7 +171,7 @@ export default function BookParking() {
   }, [formData.availableSpotsTwoWheeler]);
 
   const toggleModal = () => {
-    if(startTime === "" || EndTime === "") {
+    if (startTime === "" || EndTime === "") {
       toast.error("Booking Time is not valid!", {
         position: "top-center",
         autoClose: 3000,

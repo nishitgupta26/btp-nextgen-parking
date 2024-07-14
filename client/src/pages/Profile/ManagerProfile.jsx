@@ -9,6 +9,7 @@ import {
   signOutUserFailure,
 } from "../../redux/User/userSlice.js";
 import Cookies from "universal-cookie";
+import { Link } from "react-router-dom";
 
 export default function ManagerProfile() {
   const host = "http://localhost:3001";
@@ -151,6 +152,20 @@ export default function ManagerProfile() {
               update
             </button>
           </form>
+
+          <Link
+            to={`/check-entry`}
+            className="bg-slate-700 text-white text-center rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80 m-3 w-3/4"
+          >
+            Check Vehicle entry
+          </Link>
+
+          <Link
+            to={`/check-exit`}
+            className="bg-slate-700 text-white text-center rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80 w-3/4"
+          >
+            Check Vehicle exit
+          </Link>
         </div>
       </div>
     </div>

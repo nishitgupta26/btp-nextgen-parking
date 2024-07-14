@@ -9,7 +9,6 @@ import {
   signOutUserFailure,
 } from "../../redux/User/userSlice.js";
 import Cookies from "universal-cookie";
-import Header from "../../components/Header.jsx";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
