@@ -153,4 +153,27 @@ router.get("/currentbooking", fetchuser, async (req, res) => {
   }
 });
 
+// ROUTE-6 :: MANAGER CHECKING VEHICLE ENTRY - GET - "/api/booking/checkentry/:vehicleNumber" - REQUIRES LOGIN
+router.get("/checkentry/:vehicleNumber", fetchuser, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    console.log(user);
+    if (!user || user.role !== "Manager") {
+      return res.status(403).json({ error: "Access denied" });
+    }
+
+    const vehicleNumber = req.params.vehicleNumber;
+    const booking = await Booking.findOne({ vehicleNumber });
+
+    if (!booking) {
+      return res.status(404).json({ error: "Booking not found" });
+    }
+
+    res.json(booking);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 module.exports = router;
