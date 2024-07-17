@@ -176,4 +176,50 @@ router.get("/checkentry/:vehicleNumber", fetchuser, async (req, res) => {
   }
 });
 
+// ROUTE-7 :: MANAGER CHECKING VEHICLE EXIT - DELETE - "/api/booking/exit/:id" - REQUIRES LOGIN
+router.delete("/exit/:id", fetchuser, async (req, res) => {
+  try {
+    // Fetch the user from the token
+    const user = await User.findById(req.user.id);
+
+    // Check if the user is a manager
+    if (!user || user.role !== "Manager") {
+      return res.status(403).json({ error: "Access denied" });
+    }
+
+    // Get booking ID, parking lot ID, and vehicle type from the request body
+    const bookingId = req.params.id;
+    const { parkingLotId, vehicleType } = req.body;
+
+    // Find and delete the booking
+    const booking = await Booking.findByIdAndDelete(bookingId);
+    if (!booking) {
+      return res.status(404).json({ error: "Booking not found" });
+    }
+
+    // Find the parking lot
+    const lot = await Lots.findById(parkingLotId);
+    if (!lot) {
+      return res.status(404).json({ error: "Parking lot not found" });
+    }
+
+    // Update the available spots count based on the vehicle type
+    if (vehicleType.toLowerCase() === "twowheeler") {
+      lot.availableSpotsTwoWheeler += 1;
+    } else if (vehicleType.toLowerCase() === "fourwheeler") {
+      lot.availableSpots += 1;
+    } else {
+      return res.status(400).json({ error: "Invalid vehicle type" });
+    }
+
+    // Save the updated lot
+    await lot.save();
+
+    res.json({ message: "Allow user exit" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 module.exports = router;
