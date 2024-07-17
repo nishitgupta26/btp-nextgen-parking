@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Cookies from "universal-cookie";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CheckEntry() {
   const [manualVehicleNumber, setManualVehicleNumber] = useState("");
   const [parkingDetails, setParkingDetails] = useState({});
   const [parkinglotId, setParkinglotId] = useState("");
   const [showDetails, setShowDetails] = useState(false);
+  const [checkEntry, setCheckEntry] = useState(false);
 
   const host = "http://localhost:3001";
   const cookies = new Cookies();
@@ -16,6 +19,7 @@ export default function CheckEntry() {
     console.log("useEffect called");
     const fetchListing = async () => {
       try {
+        if (!checkEntry) return;
         const res = await fetch(`${host}/api/lots/getlot/${parkinglotId}`);
         const data = await res.json();
         if (data.success === false) {
@@ -25,17 +29,30 @@ export default function CheckEntry() {
 
         setParkingDetails({ ...parkingDetails, parkingName: data.name });
         setShowDetails(true);
+
+        toast.success("Booking found successfully!", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+
+        setCheckEntry(false);
       } catch (error) {
         console.error("Error fetching listing:", error);
+        setCheckEntry(false);
       }
     };
 
     fetchListing();
-  }, [parkinglotId]);
+  }, [checkEntry]);
 
   const handleVehicleDetails = async () => {
     try {
-      setShowDetails(false);
       const response = await fetch(
         `${host}/api/booking/checkentry/${manualVehicleNumber}`,
         {
@@ -48,11 +65,25 @@ export default function CheckEntry() {
       );
 
       const data = await response.json();
-      console.log(data);
+      if (data.error) {
+        setShowDetails(false);
+        toast.error(data.error, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        return;
+      }
       const { vehicleNumber, vehicleType } = data;
 
       setParkingDetails({ vehicleNumber, vehicleType });
       setParkinglotId(data.parkedAt);
+      setCheckEntry(true);
     } catch (error) {
       console.error(error.message);
     }
