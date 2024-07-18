@@ -169,6 +169,23 @@ router.get("/checkentry/:vehicleNumber", fetchuser, async (req, res) => {
       return res.status(404).json({ error: "Booking not found" });
     }
 
+    const lot = await Lots.findById(booking.parkedAt);
+    if (!lot) {
+      return res.status(404).json({ error: "Parking lot not found" });
+    }
+
+    let verifyManager = false;
+
+    lot.managers.map((manager) => {
+      if (manager.toString() === req.user.id) {
+        verifyManager = true;
+      }
+    });
+
+    if (!verifyManager) {
+      return res.status(403).json({ error: "Access denied" });
+    }
+
     res.json(booking);
   } catch (error) {
     console.error(error.message);
