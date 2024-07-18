@@ -203,6 +203,18 @@ router.delete("/exit/:id", fetchuser, async (req, res) => {
       return res.status(404).json({ error: "Parking lot not found" });
     }
 
+    let verifyManager = false;
+
+    lot.managers.map((manager) => {
+      if (manager.toString() === req.user.id) {
+        verifyManager = true;
+      }
+    });
+
+    if (!verifyManager) {
+      return res.status(403).json({ error: "Access denied" });
+    }
+
     // Update the available spots count based on the vehicle type
     if (vehicleType.toLowerCase() === "twowheeler") {
       lot.availableSpotsTwoWheeler += 1;
