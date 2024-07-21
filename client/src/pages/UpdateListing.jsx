@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 export default function UpdateListing() {
   const [formData, setFormData] = useState({});
 
-  const host = "https://next-gen-parking-backend.vercel.app/";
+  const host = "http://localhost:3001";
   const cookies = new Cookies();
   const navigate = useNavigate();
   const params = useParams();

@@ -10,7 +10,7 @@ export default function Home({ isOverlay, setOverlay }) {
   const dispatch = useDispatch();
 
   const cookies = new Cookies();
-  const host = "https://next-gen-parking-backend.vercel.app/";
+  const host = "http://localhost:3001";
   const authtoken = cookies.get("access_token");
 
   const { latitude, longitude } = useSelector((state) => state.user);

@@ -12,7 +12,7 @@ import Cookies from "universal-cookie";
 import { Link } from "react-router-dom";
 
 export default function ManagerProfile() {
-  const host = "https://next-gen-parking-backend.vercel.app/";
+  const host = "http://localhost:3001";
   const { currentUser } = useSelector((state) => state.user);
   const cookies = new Cookies();
   const dispatch = useDispatch();

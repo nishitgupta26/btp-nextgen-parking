@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function OwnerProfile() {
-  const host = "https://next-gen-parking-backend.vercel.app/";
+  const host = "http://localhost:3001";
   const { currentUser } = useSelector((state) => state.user);
   const { loading, error } = useSelector((state) => state.user);
   const cookies = new Cookies();

@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 export default function ViewListing() {
   const [formData, setFormData] = useState({});
 
-  const host = "https://next-gen-parking-backend.vercel.app/";
+  const host = "http://localhost:3001";
   const cookies = new Cookies();
   const navigate = useNavigate();
   const params = useParams();

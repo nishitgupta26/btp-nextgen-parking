@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function UpdateManagers() {
-  const host = "https://next-gen-parking-backend.vercel.app/";
+  const host = "http://localhost:3001";
   const [managers, setManagers] = useState([]);
   const params = useParams();
   const cookies = new Cookies();

@@ -11,7 +11,7 @@ export default function CheckEntry() {
   const [showDetails, setShowDetails] = useState(false);
   const [checkEntry, setCheckEntry] = useState(false);
 
-  const host = "https://next-gen-parking-backend.vercel.app/";
+  const host = "http://localhost:3001";
   const cookies = new Cookies();
   const authToken = cookies.get("access_token");
 

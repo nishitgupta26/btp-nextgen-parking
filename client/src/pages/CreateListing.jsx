@@ -13,7 +13,7 @@ export default function CreateListing() {
     isOpen: false,
   });
 
-  const host = "https://next-gen-parking-backend.vercel.app/";
+  const host = "http://localhost:3001";
   const cookies = new Cookies();
   const navigate = useNavigate();
 
