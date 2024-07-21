@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function SignIn() {
-  const host = "http://localhost:3001";
+  const host = "https://next-gen-parking-backend.vercel.app/";
   const [formData, setformData] = useState({});
   const [loginData, setLoginData] = useState({});
   const { loading, error } = useSelector((state) => state.user);

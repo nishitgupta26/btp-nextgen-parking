@@ -11,7 +11,7 @@ export default function CheckExit() {
   const [checkExit, setCheckExit] = useState(false);
   const [showDues, setShowDues] = useState(false);
 
-  const host = "http://localhost:3001";
+  const host = "https://next-gen-parking-backend.vercel.app/";
   const cookies = new Cookies();
   const authToken = cookies.get("access_token");
 

@@ -17,7 +17,7 @@ export default function BookParking() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pin, setPin] = useState("");
   const [vehicleNumber, setVehicleNumber] = useState("");
-  const host = "http://localhost:3001";
+  const host = "https://next-gen-parking-backend.vercel.app/";
   const cookies = new Cookies();
   const navigate = useNavigate();
   const params = useParams();
