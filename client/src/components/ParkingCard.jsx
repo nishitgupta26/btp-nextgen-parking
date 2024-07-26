@@ -4,7 +4,7 @@ import plugIcon from "../img/plug-icon.png";
 import { useNavigate } from "react-router-dom";
 import locIcon from "../img/location-icon.png";
 export default function ParkingCard({ lot }) {
-  const clienthost = "http://localhost:5173";
+  const clienthost = "https://frontend-nextgen-parking.vercel.app";
   const navigate = useNavigate();
   return (
     <>
