@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 export default function ViewListing() {
   const [formData, setFormData] = useState({});
 
-  const host = "import.meta.env.VITE_BACKEND_URI";
+  const host = import.meta.env.VITE_BACKEND_URI;
   const cookies = new Cookies();
   const navigate = useNavigate();
   const params = useParams();

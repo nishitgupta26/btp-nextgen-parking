@@ -10,7 +10,7 @@ export default function Home({ isOverlay, setOverlay }) {
   const dispatch = useDispatch();
 
   const cookies = new Cookies();
-  const host = "import.meta.env.VITE_BACKEND_URI";
+  const host = import.meta.env.VITE_BACKEND_URI;
   const authtoken = cookies.get("access_token");
 
   const { latitude, longitude } = useSelector((state) => state.user);

@@ -11,7 +11,7 @@ export default function CheckExit() {
   const [checkExit, setCheckExit] = useState(false);
   const [showDues, setShowDues] = useState(false);
 
-  const host = "import.meta.env.VITE_BACKEND_URI";
+  const host = import.meta.env.VITE_BACKEND_URI;
   const cookies = new Cookies();
   const authToken = cookies.get("access_token");
 

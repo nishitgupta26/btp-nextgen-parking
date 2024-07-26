@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 export default function UserProfile() {
-  const host = "import.meta.env.VITE_BACKEND_URI";
+  const host = import.meta.env.VITE_BACKEND_URI;
   const { currentUser } = useSelector((state) => state.user);
   const cookies = new Cookies();
   const dispatch = useDispatch();

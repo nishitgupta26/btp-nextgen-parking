@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function AdminProfile() {
-  const host = "import.meta.env.VITE_BACKEND_URI";
+  const host = import.meta.env.VITE_BACKEND_URI;
   const { currentUser } = useSelector((state) => state.user);
   const cookies = new Cookies();
   const dispatch = useDispatch();
