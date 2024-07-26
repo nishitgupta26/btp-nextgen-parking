@@ -11,7 +11,7 @@ export default function CheckEntry() {
   const [showDetails, setShowDetails] = useState(false);
   const [checkEntry, setCheckEntry] = useState(false);
 
-  const host = "http://localhost:3001";
+  const host = "import.meta.env.VITE_BACKEND_URI";
   const cookies = new Cookies();
   const authToken = cookies.get("access_token");
 

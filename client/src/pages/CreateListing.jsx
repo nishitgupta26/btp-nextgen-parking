@@ -13,7 +13,7 @@ export default function CreateListing() {
     isOpen: false,
   });
 
-  const host = "http://localhost:3001";
+  const host = "import.meta.env.VITE_BACKEND_URI";
   const cookies = new Cookies();
   const navigate = useNavigate();
 

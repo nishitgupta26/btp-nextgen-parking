@@ -12,7 +12,7 @@ import Cookies from "universal-cookie";
 import { Link } from "react-router-dom";
 
 export default function ManagerProfile() {
-  const host = "http://localhost:3001";
+  const host = "import.meta.env.VITE_BACKEND_URI";
   const { currentUser } = useSelector((state) => state.user);
   const cookies = new Cookies();
   const dispatch = useDispatch();
