@@ -21,63 +21,103 @@ router.get("/getlots", async (req, res) => {
 // ROUTE-2 :: get nearby parking lots - GET - "/api/lots/getnearby/:location" - DOES NOT REQUIRES LOGIN
 // TODO :: implement this route
 router.get("/getnearby/:location", async (req, res) => {
-  const lots = await Lots.find({ approved: true, isOpen: true });
 
-  // get the user's location
+  // Helper function to check if today is a weekend
+  function isTodayWeekend() {
+    const today = new Date();
+    const day = today.getDay();
+    return day === 0 || day === 6; // 0 = Sunday, 6 = Saturday
+  }
+
+  // Helper function to check if today is a holiday
+  function isTodayHoliday() {
+    const today = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
+    const holidays = ["2024-12-25", "2025-01-01"]; // Add actual holiday dates here
+
+    return holidays.includes(today);
+  }
+
+  // Dynamic pricing function
+  function calculateDynamicPrice(lot) {
+    function calculateOccupancy(fourWheelerCapacity, availableSpots) {
+      if (fourWheelerCapacity === 0) return 0; // Avoid division by zero
+      return ((fourWheelerCapacity - availableSpots) * 100) / fourWheelerCapacity;
+    }
+
+    let price = lot.parkingRate;
+    const occupancyPercentage = calculateOccupancy(lot.fourWheelerCapacity, lot.availableSpots);
+
+    // Increase price if today is a weekend or holiday
+    if (isTodayWeekend()) price *= 1.2; // 20% increase for weekends
+    if (isTodayHoliday()) price *= 1.3; // 30% increase for holidays
+
+    // Adjust price based on crowd level
+    switch (lot.crowdLevel) {
+      case "high":
+        price *= 1.5;
+        break;
+      case "medium":
+        price *= 1.2;
+        break;
+      default:
+        break;
+    }
+
+    // Adjust price based on occupancy
+    if (occupancyPercentage >= 75) {
+      price *= 1.3;
+    } else if (occupancyPercentage >= 50) {
+      price *= 1.2;
+    }
+    // console.log(`Original Rate: ${lot.parkingRate}, New Rate: ${price}`);
+    return price;
+  }
+
+  let lots = await Lots.find({ approved: true, isOpen: true });
+
+  // Apply dynamic pricing and save to `currentRate`
+  lots = await Promise.all(
+    lots.map(async (lot) => {
+      const newRate = calculateDynamicPrice(lot);
+      lot.currentRate = newRate;
+      await lot.save(); // Save the updated rate to the database
+      return lot;
+    }) 
+  );
   const userLocation = req.params.location;
-  let cords = userLocation.split("_");
-  let userlong = parseFloat(cords[0]);
-  let userlat = parseFloat(cords[1]);
+  const [userlong, userlat] = userLocation.split("_").map(parseFloat);
 
   function toRadians(degrees) {
     return degrees * (Math.PI / 180);
   }
 
   function calculateDistance(lat1, lon1, lat2, lon2) {
-    const earthRadius = 6371; // Earth radius in km
-
+    const earthRadius = 6371;
     const radiansLat1 = toRadians(lat1);
     const radiansLat2 = toRadians(lat2);
     const radiansDeltaLon = toRadians(lon2 - lon1);
 
-    const distance =
-      Math.acos(
-        Math.sin(radiansLat1) * Math.sin(radiansLat2) +
-          Math.cos(radiansLat1) *
-            Math.cos(radiansLat2) *
-            Math.cos(radiansDeltaLon)
-      ) * earthRadius;
-
-    return distance;
+    return Math.acos(
+      Math.sin(radiansLat1) * Math.sin(radiansLat2) +
+      Math.cos(radiansLat1) * Math.cos(radiansLat2) * Math.cos(radiansDeltaLon)
+    ) * earthRadius;
   }
 
   function distcmp(a, b) {
-    if (!a.geoCoordinates || !b.geoCoordinates) {
-      // Handle cases where geoCoordinates is not defined
-      // For example, you might want to consider these objects equal in distance
-      return 0;
-    }
-    const cordsa = a.geoCoordinates.split("_");
-    const cordsb = b.geoCoordinates.split("_");
-    const longa = parseFloat(cordsa[0]);
-    const lata = parseFloat(cordsa[1]);
-    const longb = parseFloat(cordsb[0]);
-    const latb = parseFloat(cordsb[1]);
+    if (!a.geoCoordinates || !b.geoCoordinates) return 0;
+
+    const [longa, lata] = a.geoCoordinates.split("_").map(parseFloat);
+    const [longb, latb] = b.geoCoordinates.split("_").map(parseFloat);
     const dista = calculateDistance(lata, longa, userlat, userlong);
     const distb = calculateDistance(latb, longb, userlat, userlong);
 
-    if (dista < distb) {
-      return -1;
-    }
-    if (dista > distb) {
-      return 1;
-    }
+    return dista - distb;
   }
 
   lots.sort(distcmp);
-
   return res.json(lots);
 });
+
 
 // Add a new parking lot - POST - "/api/lots/addlot" - REQUIRES LOGIN
 router.post("/addlot", fetchuser, async (req, res) => {
@@ -108,6 +148,7 @@ router.post("/addlot", fetchuser, async (req, res) => {
       surveillanceCamera: req.body.surveillanceCamera,
 
       parkingRate: req.body.parkingRate,
+      currentRate: req.body.currentRate,
 
       openingHours: req.body.openingHours,
       closingHours: req.body.closingHours,
@@ -154,6 +195,7 @@ router.put("/updatelot/:id", fetchuser, async (req, res) => {
     securityGuard,
     surveillanceCamera,
     parkingRate,
+    currentRate,
     openingHours,
     closingHours,
     contactNumber,
@@ -173,6 +215,7 @@ router.put("/updatelot/:id", fetchuser, async (req, res) => {
     securityGuard,
     surveillanceCamera,
     parkingRate,
+    currentRate,
     openingHours,
     closingHours,
     contactNumber,

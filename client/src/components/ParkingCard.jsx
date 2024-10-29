@@ -127,7 +127,7 @@ export default function ParkingCard({ lot }) {
                 <div className="flex justify-end">
                   <p className="inline-block font-semibold text-primary whitespace-nowrap leading-tight rounded-xl">
                     <span className="text-lg uppercase text-semibold">₹ </span>
-                    <span className="text-lg">{lot.parkingRate}</span>
+                    <span className="text-lg">{lot.currentRate || lot.parkingRate}</span>
                   </p>
                 </div>
               </div>

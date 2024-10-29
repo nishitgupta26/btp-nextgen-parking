@@ -81,6 +81,7 @@ export default function Home({ isOverlay, setOverlay }) {
     });
     if (res.ok) {
       const data = await res.json();
+      // console.log(data);
       setParkingSlots(data);
     } else {
       console.log("Error");
