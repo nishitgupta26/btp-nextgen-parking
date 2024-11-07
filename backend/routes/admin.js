@@ -18,7 +18,19 @@ router.post("/approvelots", fetchuser, async (req, res) => {
     return res.status(401).send("Not Allowed");
   }
 
-  const geocord = req.body.location;
+  const location = req.body.location;
+  if (!location) {
+    return res.status(400).send("Longitude and latitude are required");
+  }
+
+  const [longitudeStr, latitudeStr] = location.split("_");
+  const longitude = parseFloat(longitudeStr);
+  const latitude = parseFloat(latitudeStr);
+
+  const geocord = {
+    type: "Point",
+    coordinates: [longitude, latitude],
+  };
 
   // update lot having id targetlot to approved status also add geocordinates
   Lots.findByIdAndUpdate(

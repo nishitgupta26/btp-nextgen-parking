@@ -73,49 +73,72 @@ router.get("/getnearby/:location", async (req, res) => {
     return price;
   }
 
-  let lots = await Lots.find({ approved: true, isOpen: true });
-
   // Apply dynamic pricing and save to `currentRate`
-  lots = await Promise.all(
-    lots.map(async (lot) => {
-      const newRate = calculateDynamicPrice(lot);
-      lot.currentRate = newRate;
-      await lot.save(); // Save the updated rate to the database
-      return lot;
-    }) 
-  );
+  
   const userLocation = req.params.location;
   const [userlong, userlat] = userLocation.split("_").map(parseFloat);
+  const radiusInMeters = 10000;
 
-  function toRadians(degrees) {
-    return degrees * (Math.PI / 180);
+  // function toRadians(degrees) {
+  //   return degrees * (Math.PI / 180);
+  // }
+
+  // function calculateDistance(lat1, lon1, lat2, lon2) {
+  //   const earthRadius = 6371;
+  //   const radiansLat1 = toRadians(lat1);
+  //   const radiansLat2 = toRadians(lat2);
+  //   const radiansDeltaLon = toRadians(lon2 - lon1);
+
+  //   return Math.acos(
+  //     Math.sin(radiansLat1) * Math.sin(radiansLat2) +
+  //     Math.cos(radiansLat1) * Math.cos(radiansLat2) * Math.cos(radiansDeltaLon)
+  //   ) * earthRadius;
+  // }
+
+  // function distcmp(a, b) {
+  //   if (!a.geoCoordinates || !b.geoCoordinates) return 0;
+
+  //   const [longa, lata] = a.geoCoordinates.split("_").map(parseFloat);
+  //   const [longb, latb] = b.geoCoordinates.split("_").map(parseFloat);
+  //   const dista = calculateDistance(lata, longa, userlat, userlong);
+  //   const distb = calculateDistance(latb, longb, userlat, userlong);
+
+  //   return dista - distb;
+  // }
+
+  // lots.sort(distcmp);
+  // return res.json(lots);
+
+  try{
+    let lots = await Lots.find({ approved: true,
+      isOpen: true,
+      geoCoordinates: {
+        $nearSphere: {
+          $geometry: {
+            type: "Point",
+            coordinates: [userlong, userlat],
+          },
+          $maxDistance: radiusInMeters,
+        },
+      },
+     }).limit(10);
+
+    // Apply dynamic pricing and save to `currentRate`
+    lots = await Promise.all(
+      lots.map(async (lot) => {
+        const newRate = calculateDynamicPrice(lot);
+        lot.currentRate = newRate;
+        await lot.save();
+        return lot;
+      })
+    );
+
+    return res.json(lots);
   }
-
-  function calculateDistance(lat1, lon1, lat2, lon2) {
-    const earthRadius = 6371;
-    const radiansLat1 = toRadians(lat1);
-    const radiansLat2 = toRadians(lat2);
-    const radiansDeltaLon = toRadians(lon2 - lon1);
-
-    return Math.acos(
-      Math.sin(radiansLat1) * Math.sin(radiansLat2) +
-      Math.cos(radiansLat1) * Math.cos(radiansLat2) * Math.cos(radiansDeltaLon)
-    ) * earthRadius;
+  catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
   }
-
-  function distcmp(a, b) {
-    if (!a.geoCoordinates || !b.geoCoordinates) return 0;
-
-    const [longa, lata] = a.geoCoordinates.split("_").map(parseFloat);
-    const [longb, latb] = b.geoCoordinates.split("_").map(parseFloat);
-    const dista = calculateDistance(lata, longa, userlat, userlong);
-    const distb = calculateDistance(latb, longb, userlat, userlong);
-
-    return dista - distb;
-  }
-
-  lots.sort(distcmp);
-  return res.json(lots);
 });
 
 

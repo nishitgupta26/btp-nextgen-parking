@@ -6,8 +6,21 @@ const lotSchema = new mongoose.Schema({
   type: { type: String, enum: ["closed", "mixed", "open"], required: true },
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 
-  geoCoordinates: { type: String, required: false },
 
+  // changing for geospatial indexing
+  geoCoordinates: {
+    type: {
+      type: String,
+      enum: ['Point'],  // Must be 'Point' to use geospatial indexing
+      required: false,
+    },
+    coordinates: {
+      type: [Number],  // Array with [longitude, latitude]
+      required: false,
+    },
+  },
+
+  
   twoWheelerCapacity: { type: Number, required: true },
   fourWheelerCapacity: { type: Number, required: true },
   chargingPorts: { type: Number, required: true },
@@ -46,5 +59,6 @@ const lotSchema = new mongoose.Schema({
 });
 
 
+lotSchema.index({ geoCoordinates: '2dsphere' });
 
 module.exports = mongoose.model("Lot", lotSchema);
