@@ -21,7 +21,7 @@ router.get("/getlots", async (req, res) => {
 // ROUTE-2 :: get nearby parking lots - GET - "/api/lots/getnearby/:location" - DOES NOT REQUIRES LOGIN
 // TODO :: implement this route
 router.get("/getnearby/:location", async (req, res) => {
-
+ 
   // Helper function to check if today is a weekend
   function isTodayWeekend() {
     const today = new Date();
@@ -52,16 +52,16 @@ router.get("/getnearby/:location", async (req, res) => {
     if (isTodayHoliday()) price *= 1.3; // 30% increase for holidays
 
     // Adjust price based on crowd level
-    switch (lot.crowdLevel) {
-      case "high":
-        price *= 1.5;
-        break;
-      case "medium":
-        price *= 1.2;
-        break;
-      default:
-        break;
-    }
+    // switch (lot.crowdLevel) {
+    //   case "high":
+    //     price *= 1.5;
+    //     break;
+    //   case "medium":
+    //     price *= 1.2;
+    //     break;
+    //   default:
+    //     break;
+    // }
 
     // Adjust price based on occupancy
     if (occupancyPercentage >= 75) {
@@ -70,7 +70,7 @@ router.get("/getnearby/:location", async (req, res) => {
       price *= 1.2;
     }
     // console.log(`Original Rate: ${lot.parkingRate}, New Rate: ${price}`);
-    return price;
+    return Math.floor(price);
   }
 
   let lots = await Lots.find({ approved: true, isOpen: true });
@@ -117,6 +117,28 @@ router.get("/getnearby/:location", async (req, res) => {
   lots.sort(distcmp);
   return res.json(lots);
 });
+
+// search parking lots according to location - POST - "/api/lots/searchlot"
+router.post("/searchlot/:searchTerm", async (req, res) => {
+  try {
+    const { searchTerm } = req.params;
+    const { lots } = req.body;
+
+    if (!Array.isArray(lots)) {
+      return res.status(400).json({ error: "Invalid 'lots' array in request body" });
+    }
+
+    const filteredLots = lots.filter((lot) =>
+      lot.location.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    res.json(filteredLots);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 
 // Add a new parking lot - POST - "/api/lots/addlot" - REQUIRES LOGIN

@@ -8,20 +8,25 @@ import { updateCoordinates } from "../../redux/User/userSlice";
 
 export default function Home({ isOverlay, setOverlay }) {
   const dispatch = useDispatch();
-
   const cookies = new Cookies();
-  const host = import.meta.env.VITE_BACKEND_URI;
+  const host = "http://localhost:3001";
   const authtoken = cookies.get("access_token");
 
   const { latitude, longitude } = useSelector((state) => state.user);
 
+  const [allParkingSlots, setAllParkingSlots] = useState([]);
   const [parkingSlots, setParkingSlots] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearchTermChange = (term) => {
+    console.log("Received searchTerm from Header:", term);
+    setSearchTerm(term);
+  };
 
   const checkLocationPermission = async () => {
     const permissionStatus = await navigator.permissions.query({
       name: "geolocation",
     });
-
     return permissionStatus.state;
   };
 
@@ -66,7 +71,6 @@ export default function Home({ isOverlay, setOverlay }) {
   useEffect(() => {
     fetchParkingSlots();
     const intervalId = setInterval(fetchParkingSlots, 1000);
-
     return () => clearInterval(intervalId);
   }, []);
 
@@ -81,16 +85,45 @@ export default function Home({ isOverlay, setOverlay }) {
     });
     if (res.ok) {
       const data = await res.json();
-      // console.log(data);
-      setParkingSlots(data);
+      console.log(data);
+      setAllParkingSlots(data);
     } else {
-      console.log("Error");
+      console.log("Error fetching parking slots");
+    }
+  };
+  useEffect(() => {
+    console.log("searchTerm in Home:", searchTerm);
+    if (searchTerm) {
+      fetchFilteredParkingSlots();
+    } else {
+      setParkingSlots(allParkingSlots);
+    }
+  }, [searchTerm]);
+
+  const fetchFilteredParkingSlots = async () => {
+    try {
+      const res = await fetch(`${host}/api/lots/searchlot/${searchTerm}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": authtoken,
+        },
+        body: JSON.stringify({ lots: allParkingSlots }),
+      });
+      if (res.ok) {
+        const filteredData = await res.json();
+        setParkingSlots(filteredData);
+      } else {
+        console.log("Error fetching filtered parking slots");
+      }
+    } catch (error) {
+      console.error("Error fetching filtered data:", error);
     }
   };
 
   return (
     <div className="relative min-h-screen">
-      <Header />
+      <Header onSearch={handleSearchTermChange} />
       <div
         className={`absolute h-screen flex justify-center items-center inset-0 bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg ${
           !latitude && !longitude ? "z-40" : "hidden"
@@ -101,7 +134,7 @@ export default function Home({ isOverlay, setOverlay }) {
         </div>
       </div>
       <div className="mt-14 ml-4 mr-4 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10">
-        {parkingSlots.map((lot) => (
+        {(searchTerm ? parkingSlots : allParkingSlots).map((lot) => (
           <ParkingCard key={lot.id} lot={lot} />
         ))}
       </div>

@@ -2,13 +2,15 @@ import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import HeaderCSS from "./header.module.css";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 
-export default function Header() {
+export default function Header({ onSearch }) { 
   const { currentUser } = useSelector((state) => state.user);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const getProfileLink = () => {
     if (!currentUser) {
-      return "/sign-in"; // Redirect to sign-in if user is not logged in
+      return "/sign-in"; 
     } else {
       switch (currentUser.role) {
         case "Admin":
@@ -23,9 +25,15 @@ export default function Header() {
     }
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    console.log(searchTerm)
+    onSearch(searchTerm); 
+  };
+
   return (
     <header
-      className={`top-0 sticky w-full z-30 bg-white border-y-2 border-slate-300 ${HeaderCSS.head} `}
+      className={`top-0 sticky w-full z-30 bg-white border-y-2 border-slate-300 ${HeaderCSS.head}`}
     >
       <div className="flex w-full justify-between items-center max-w-6xl mx-auto p-3 h-16">
         <Link to="/">
@@ -34,29 +42,27 @@ export default function Header() {
             <span className="text-blue-400">SmartPark</span>
           </h1>
         </Link>
-        {/* <div className="hidden">
+        <div className="">
           <form className="bg-slate-100 p-3 rounded-lg flex items-center">
             <input
               type="text"
               placeholder="Search..."
               className="bg-transparent focus:outline-none w-24 sm:w-64"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <FaSearch className="text-slate-600" />
+            <button onClick={handleSearch}>
+              <FaSearch className="text-slate-600" />
+            </button>
           </form>
-        </div> */}
-        
+        </div>
         <ul className="flex gap-4">
           <Link to="/">
-            <li className="hidden sm:inline text-black hover:underline">
-              Home
-            </li>
+            <li className="hidden sm:inline text-black hover:underline">Home</li>
           </Link>
           <Link to="/about">
-            <li className="hidden sm:inline text-black hover:underline">
-              About
-            </li>
+            <li className="hidden sm:inline text-black hover:underline">About</li>
           </Link>
-
           <Link to={getProfileLink()}>
             <li className="text-black hover:underline">
               {currentUser ? "Profile" : "Sign In"}

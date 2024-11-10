@@ -40,7 +40,7 @@ const lotSchema = new mongoose.Schema({
   currentRate: { type: Number, required: false, default: 30 },              // dynamically updated rate
 
   // Fields for dynamic pricing factors
-  crowdLevel: { type: String, enum: ['low', 'medium', 'high'], required: false },  // Crowdedness of the area 
+  // crowdLevel: { type: String, enum: ['low', 'medium', 'high'], required: false },  // Crowdedness of the area 
   // occupancyPercentage: { type: Number, required: false },  // Percentage of lot filled
 
 });
