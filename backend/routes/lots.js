@@ -5,6 +5,7 @@ const fetchuser = require("../middleware/fetchuser");
 const router = express.Router();
 const Lots = require("../models/Lots");
 const User = require("../models/Users");
+const axios = require('axios'); // Add this import
 const { body, validationResult, check } = require("express-validator");
 // const multer = require("multer");
 // const fs = require("fs");
@@ -311,6 +312,30 @@ router.get("/getlot/:id", async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
+  }
+});
+
+
+router.post('/ocr', async (req, res) => {
+  const { image_url } = req.body;
+
+  if (!image_url) {
+    return res.status(400).json({ error: "'image_url' is required." });
+  }
+
+  try {
+    const response = await axios.post('http://localhost:5000/ocr', {  // Changed URL to match Flask route
+      image_url: image_url,
+    });
+
+    res.json(response.data);  // Using res.json for consistency
+  } catch (error) {
+    console.error('Error calling OCR API:', error);
+    res.status(500).json({   // Using json response for consistency
+      success: false,
+      error: 'Error processing image',
+      details: error.message
+    });
   }
 });
 
