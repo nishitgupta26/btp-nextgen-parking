@@ -6,6 +6,7 @@ const router = express.Router();
 const Lots = require("../models/Lots");
 const User = require("../models/Users");
 const axios = require('axios'); // Add this import
+const Booking = require("../models/Booking");
 const { body, validationResult, check } = require("express-validator");
 // const multer = require("multer");
 // const fs = require("fs");
@@ -336,6 +337,30 @@ router.post('/ocr', async (req, res) => {
       error: 'Error processing image',
       details: error.message
     });
+  }
+});
+
+// get the number of bookings in last 15 days - GET - "/api/lots/getbookingcount" - DOES NOT REQUIRES LOGIN
+router.get("/getbookingcount", fetchuser, async (req, res) => {
+  try {
+    // Get user ID from fetchuser middleware
+    const userId = req.user.id;
+
+    // Calculate the date 15 days ago
+    const fifteenDaysAgo = new Date();
+    fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+
+    // Query the Booking collection for bookings by the user in the last 15 days
+    const bookingCount = await Booking.countDocuments({
+      driver: userId,
+      BookingTime: { $gte: fifteenDaysAgo },
+    });
+
+    // Return the count
+    res.json({ bookingCount });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
   }
 });
 

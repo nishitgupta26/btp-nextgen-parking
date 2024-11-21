@@ -14,7 +14,7 @@ const bookingSchema = new mongoose.Schema({
     parkingRate: { type: Number, required: true },
     moneyPaid: { type: Number, required: false },
 
-    isCurrent: { type: Boolean, default: true, required: false }, // is this booking currently active
+    isCurrent: { type: Boolean, default: true, required: true }, // is this booking currently active
 });
 
 module.exports = mongoose.model("Booking", bookingSchema);

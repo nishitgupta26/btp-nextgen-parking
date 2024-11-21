@@ -106,7 +106,7 @@ export default function UserProfile() {
         },
       });
       const data = await res.json();
-      console.log(data);
+      console.log("data",data);
       setBookings(data);
     } catch (error) {
       console.log(error);

@@ -157,13 +157,14 @@ router.get("/currentbooking", fetchuser, async (req, res) => {
 router.get("/checkentry/:vehicleNumber", fetchuser, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
-    console.log(user);
     if (!user || user.role !== "Manager") {
+      console.log(user.name, user.role);
       return res.status(403).json({ error: "Access denied" });
     }
+    console.log("check entry is working fine");
 
     const vehicleNumber = req.params.vehicleNumber;
-    const booking = await Booking.findOne({ vehicleNumber });
+    const booking = await Booking.findOne({ vehicleNumber, isCurrent: true });
 
     if (!booking) {
       return res.status(404).json({ error: "Booking not found" });
@@ -194,9 +195,9 @@ router.get("/checkentry/:vehicleNumber", fetchuser, async (req, res) => {
 });
 
 // ROUTE-7 :: MANAGER CHECKING VEHICLE EXIT - DELETE - "/api/booking/exit/:id" - REQUIRES LOGIN
-router.delete("/exit/:id", fetchuser, async (req, res) => {
+router.post("/exit/:id", fetchuser, async (req, res) => {
   try {
-    // Fetch the user from the token
+    console.log("HAPPY Happy");
     const user = await User.findById(req.user.id);
 
     // Check if the user is a manager
@@ -204,35 +205,31 @@ router.delete("/exit/:id", fetchuser, async (req, res) => {
       return res.status(403).json({ error: "Access denied" });
     }
 
-    // Get booking ID, parking lot ID, and vehicle type from the request body
     const bookingId = req.params.id;
     const { parkingLotId, vehicleType } = req.body;
 
-    // Find and delete the booking
-    const booking = await Booking.findByIdAndDelete(bookingId);
+    // Toggle isCurrent field instead of deleting the booking
+    const booking = await Booking.findByIdAndUpdate(
+      bookingId,
+      { isCurrent: false },
+      { new: true } // Returns the updated document
+    );
+    console.log(booking);
+
     if (!booking) {
       return res.status(404).json({ error: "Booking not found" });
     }
 
-    // Find the parking lot
     const lot = await Lots.findById(parkingLotId);
     if (!lot) {
       return res.status(404).json({ error: "Parking lot not found" });
     }
 
-    let verifyManager = false;
-
-    lot.managers.map((manager) => {
-      if (manager.toString() === req.user.id) {
-        verifyManager = true;
-      }
-    });
-
+    const verifyManager = lot.managers.some((manager) => manager.toString() === req.user.id);
     if (!verifyManager) {
       return res.status(403).json({ error: "Access denied" });
     }
 
-    // Update the available spots count based on the vehicle type
     if (vehicleType.toLowerCase() === "twowheeler") {
       lot.availableSpotsTwoWheeler += 1;
     } else if (vehicleType.toLowerCase() === "fourwheeler") {
@@ -241,14 +238,13 @@ router.delete("/exit/:id", fetchuser, async (req, res) => {
       return res.status(400).json({ error: "Invalid vehicle type" });
     }
 
-    // Save the updated lot
     await lot.save();
-
     res.json({ message: "Allow user exit" });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 module.exports = router;

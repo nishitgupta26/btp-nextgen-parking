@@ -85,7 +85,7 @@ export default function CheckExit() {
       const response = await fetch(
         `${host}/api/booking/exit/${parkingDetails._id}`,
         {
-          method: "DELETE",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
             "auth-token": authToken,
@@ -98,6 +98,7 @@ export default function CheckExit() {
       );
 
       const data = await response.json();
+      console.log(data);
       if (data.error) {
         toast.error(data.error, {
           position: "top-center",

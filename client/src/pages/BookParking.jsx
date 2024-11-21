@@ -17,13 +17,16 @@ export default function BookParking() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pin, setPin] = useState("");
   const [vehicleNumber, setVehicleNumber] = useState("");
-  const host = import.meta.env.VITE_BACKEND_URI;
-  const cookies = new Cookies();
   const navigate = useNavigate();
   const params = useParams();
   const listingId = params.listingId;
   const dispatch = useDispatch();
   const [booked, setBooked] = useState(false);
+  const [bookingDiscount, setBookingDiscount] = useState(100);
+  const host = import.meta.env.VITE_BACKEND_URI;
+  console.log(host);
+  const cookies = new Cookies();
+  const authToken = cookies.get("access_token");
 
   const [parkingBoxesFourWheeler, setParkingBoxesFourWheeler] = useState(() =>
     Array.from({ length: formData.fourWheelerCapacity }, (_, index) => (
@@ -63,6 +66,39 @@ export default function BookParking() {
 
     fetchListing();
   }, []);
+
+  useEffect(() => {
+    const fetchDiscount = async () => {
+      try {
+        const res = await fetch(`${host}/api/lots/getbookingcount`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": authToken,
+          },
+        });
+        const data = await res.json();
+        if (data.success === false) {
+          console.log(data.message);
+          return;
+        }
+        if (data.bookingCount >= 12) {
+          setBookingDiscount(85);
+        } else if (data.bookingCount >= 9) {
+          setBookingDiscount(90);
+        } else if (data.bookingCount >= 5) {
+          setBookingDiscount(95);
+          console.log("hello",bookingDiscount);
+        }
+
+        console.log(data,bookingDiscount);
+      } catch (error) {
+        console.error("Error fetching listing:", error);
+      }
+    };
+
+    fetchDiscount();
+  })
 
   const d = new Date();
   const hr = d.getHours();
@@ -436,12 +472,12 @@ export default function BookParking() {
         <div className="flex items-center font-medium gap-2 mt-8">
           <p>Total Charge:</p>
           {difference >= 0 && vehicleType === "fourWheeler" ? (
-            <span>Rs. {difference * formData.parkingRate}/-</span>
+            <span>Rs. {(difference * formData.parkingRate * bookingDiscount) / 100} /-</span>
           ) : (
             <span></span>
           )}
           {difference >= 0 && vehicleType === "twoWheeler" ? (
-            <span>Rs. {(difference * formData.parkingRate) / 2}/-</span>
+            <span>Rs. {(difference * formData.parkingRate * bookingDiscount)/200}/-</span>
           ) : (
             <span></span>
           )}

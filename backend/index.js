@@ -28,6 +28,7 @@ const port = process.env.PORT || 3001;
 connectDB();
 
 //   available routes
+console.log("indexjs");
 app.use("/api/auth", require("./routes/auth.js"));
 app.use("/api/lots", require("./routes/lots.js"));
 app.use("/api/manager", require("./routes/manager.js"));
